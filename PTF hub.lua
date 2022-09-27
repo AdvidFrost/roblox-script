@@ -198,18 +198,10 @@ Event:FireServer(A_1, A_2, A_3)
 Section3:Button({
    Text = "Inf coins",
    Callback = function()
-       local items = {"item3"}
-for i,v in pairs(items) do
-  local dielan = {
-      [1] = v,
-      [2] = {
-          [1] = -99999999, -- coins, change this if u want to be safe
-          [2] = "GameCoin",
-         },
-      [3] = 100000 -- items, change this if u want more or less
-    }
-game:GetService("ReplicatedStorage").Remotes.ItemBuy:FireServer(unpack(dielan))
-end
+   	local A_1 = "getmoney"
+local A_2 = 99999999999
+local Event = game:GetService("ReplicatedStorage").Remotes.NoobEvent
+Event:FireServer(A_1, A_2)
    end
  })
  
