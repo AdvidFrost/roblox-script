@@ -5934,7 +5934,7 @@ AddCommand("orbit", {}, "orbits a yourself around another player", {3, "1"}, fun
         return "You cannot orbit yourself."
     end
     local Radius = tonumber(Args[3]) or 7
-    local Speed = tonumber(Args[2]) or 1
+    local Speed = tonumber(Args[2]) or 4
     local random = random(tick() / 2, tick());
     local Root, TRoot = GetRoot(), GetRoot(Target);
     AddConnection(CConnect(Heartbeat, function()
