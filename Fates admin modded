@@ -8656,7 +8656,6 @@ getgenv().F_A = {
     GetConfig = GetConfig
 }
 
-Utils.Notify(LocalPlayer, "Modded Version", "You are using a modded fates admin version by Advid#1471", 10);
 Utils.Notify(LocalPlayer, "Loaded", format("script loaded in %.3f seconds", (tick()) - _L.start));
 Utils.Notify(LocalPlayer, "Welcome", "'cmds' to see all of the commands, 'config' to customise the script");
 if (debug.info(2, "f") == nil) then
@@ -8665,3 +8664,4 @@ end
 _L.LatestCommit = JSONDecode(Services.HttpService, game.HttpGetAsync(game, "https://api.github.com/repos/fatesc/fates-admin/commits?per_page=1&path=main.lua"))[1]
 wait(1);
 Utils.Notify(LocalPlayer, "Newest Update", format("%s - %s", _L.LatestCommit.commit.message, _L.LatestCommit.commit.author.name));
+Utils.Notify(LocalPlayer, "Modded Version", "You are using a modded fates admin version by Advid#1471", 10);
