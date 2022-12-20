@@ -2670,7 +2670,7 @@ AddCommand("walkspeed", {"ws", "speed"}, "changes your walkspeed to the second a
     return "your walkspeed is now " .. Humanoid.WalkSpeed
 end)
 
-AddCommand("trueinvisible", {"trueinvis"}, "Make you truly invisible and people can see your chat Requirment: Must be wearly ONLY an internal fedora", {}, function(Caller, Args, CEnv)
+AddCommand("trueinvisible", {"trueinvis"}, "Makes you truly invisible and people can see your chat Requirment: Must be wearly ONLY the pal hair", {}, function(Caller, Args, CEnv)
    loadstring(game:HttpGet("https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Invisible%20r6",true))()
 end)
 
