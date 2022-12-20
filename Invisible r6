@@ -3,7 +3,7 @@ wait(0.3)
 loadstring(game:HttpGet('https://raw.githubusercontent.com/AdvidFrost/reanimate-not-mine/main/headlessr6'))()
 wait(4)
 game.Players.LocalPlayer.Character.Torso.Position = Vector3.new(0,-2,0)
-wait(0.5)
+wait(0.4)
 game["Run Service"].RenderStepped:connect(function()
    settings().Physics.AllowSleep = false
    setsimulationradius(math.huge*math.huge,math.huge*math.huge)
