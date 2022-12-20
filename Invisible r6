@@ -63,6 +63,6 @@ joints.rightleg:Destroy()
 pos(limbs.rightleg, limbs.torso, Vector3.new(0,-20,0))
 wait(0.5)
 loadstring(game:HttpGet("https://pastebin.com/raw/vFvGu2yB",true))()
-local hat = game.Players.LocalPlayer.Character.HTTYD2_HiccupMask
+local hat = game.Players.LocalPlayer.Character.InternationalFedora
 
 makemovers(hat.Handle,CFrame.new(10,-1,0),game.Players.LocalPlayer.Character["Torso"],false,false)
