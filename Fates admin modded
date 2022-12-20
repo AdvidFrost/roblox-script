@@ -4985,7 +4985,7 @@ end)
 AddCommand("loopgoto", {"loopto"}, "loop teleports yourself to the other character", {3, "1"}, function(Caller, Args, CEnv)
     local Target = GetPlayer(Args[1])[1]
     local Connection = CConnect(Heartbeat, function()
-        GetRoot().CFrame = GetRoot(Target).CFrame * CFrameNew(0, 0, 2);
+        GetRoot().CFrame = GetRoot(Target).CFrame * CFrameNew(0, 0, 0);
     end)
 
     CEnv[Target.Name] = Connection
