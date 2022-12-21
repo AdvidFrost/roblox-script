@@ -1,8 +1,11 @@
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(10,4,0)
-wait(0.3)
 loadstring(game:HttpGet('https://raw.githubusercontent.com/AdvidFrost/reanimate-not-mine/main/headlessr6'))()
 wait(4)
-game.Players.LocalPlayer.Character.Torso.Position = Vector3.new(10,-2,0)
+local player = game.Players.LocalPlayer
+local torso = player.Character.Torso
+local originalPosition = torso.Position
+local offset = Vector3.new(0, -20, 0)
+local newPosition = originalPosition + offset
+torso.Position = newPosition
 wait(0.4)
 game["Run Service"].RenderStepped:connect(function()
    settings().Physics.AllowSleep = false
