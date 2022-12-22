@@ -4039,9 +4039,8 @@ AddCommand("fling2", {"stan2"}, "another variant of fling", {}, function(Caller,
 end)
 
 AddCommand("antitkill", {}, "anti tkill :troll:", {3}, function(Caller, Args)
-    Destroy(GetCharacter()["Right Arm"]);
-game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
-    return "lol"
+    game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
+    game:GetService'Players'.LocalPlayer.Character['RightArm']:Destroy()
 end)
 
 AddCommand("antiattach", {"anticlaim"}, "enables antiattach", {3}, function(Caller, Args)
