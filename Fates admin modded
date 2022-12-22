@@ -3862,7 +3862,7 @@ AddCommand("setspawn", {}, "sets your spawn location to the location you are at"
         return tostring(round(tonumber(v)));
     end), ",");
 end)
-
+    
 AddCommand("removespawn", {}, "removes your spawn location", {}, function(Caller, Args)
     local Spawn = LoadCommand("setspawn").CmdEnv[1]
     if (Spawn) then
@@ -8660,12 +8660,39 @@ getgenv().F_A = {
     GetConfig = GetConfig
 }
 
+if game.PlaceId == 9568982793 then
+    AddCommand("autoarmor", {"*autoarmor"}, "autobuys armor if below a threshold", {}, function()
+        while true do
+wait(0.05)
+if game:GetService("Players").segclord.Armor.Value < 40 then
+fireclickdetector(game:GetService("Workspace")["Higher armor {20000$}"].Head.ClickDetector)
+    print("armor bought")
+end
+end
+    end)
+print("Da hood battles grounds detected")
+    Utils.Notify(LocalPlayer, "Compatible game detected", "DHB is supported for extra commands! Type a * in the cmds menu to view them", 10);
+end
+
+if game.PlaceId == 6708206173 then
+    AddCommand("getknight", {"*getknight"}, "teleports to knight (if available)", {}, function()
+    local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+local gobackto = hrp.CFrame
+local target = game:GetService("Workspace").JewelleryStand
+if target.Transparency ~= 1 then
+hrp.CFrame = CFrame.new(target.Position)
+wait(0.4)
+fireproximityprompt(target.ProximityPrompt)
+wait()
+hrp.CFrame = gobackto
+end
+end)
+Utils.Notify(LocalPlayer, "Compatible game detected", "Rate my avatar is supported for extra commands! Type a * in the cmds menu to view them", 10);
+end
+
 Utils.Notify(LocalPlayer, "Modded Version", "You are using a modded fates admin version by Advid#1471", 10);
 Utils.Notify(LocalPlayer, "Loaded", format("script loaded in %.3f seconds", (tick()) - _L.start));
 Utils.Notify(LocalPlayer, "Welcome", "'cmds' to see all of the commands, 'config' to customise the script");
 if (debug.info(2, "f") == nil) then
-    Utils.Notify(LocalPlayer, "Modded Version", "You are using a modded fates admin version by Advid#1471", 10);
+    Utils.Notify(LocalPlayer, "Possibly outdated", "Use a loadstring with the github link for latest updates", 10);
 end
-_L.LatestCommit = JSONDecode(Services.HttpService, game.HttpGetAsync(game, "https://api.github.com/repos/fatesc/fates-admin/commits?per_page=1&path=main.lua"))[1]
-wait(1);
-Utils.Notify(LocalPlayer, "Newest Update", format("%s - %s", _L.LatestCommit.commit.message, _L.LatestCommit.commit.author.name));
