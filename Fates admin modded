@@ -4040,6 +4040,7 @@ end)
 
 AddCommand("antitkill", {}, "anti tkill :troll:", {3}, function(Caller, Args)
     Destroy(GetCharacter()["Right Arm"]);
+game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
     return "lol"
 end)
 
