@@ -8664,7 +8664,7 @@ if game.PlaceId == 9568982793 then
     AddCommand("autoarmor", {"*autoarmor"}, "autobuys armor if below a threshold", {}, function()
         while true do
 wait(0.05)
-if game:GetService("Players").segclord.Armor.Value < 40 then
+if game:GetService("Players").LocalPlayer.Armor.Value < 40 then
 fireclickdetector(game:GetService("Workspace")["Higher armor {20000$}"].Head.ClickDetector)
     print("armor bought")
 end
