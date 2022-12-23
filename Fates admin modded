@@ -8723,7 +8723,7 @@ if game.PlaceId == 9568982793 then
     local Root = GetRoot();
     local RootPos = Root.Position
     for i = 1, 3 do
-        Root.Position = Vector3New(468, 202, -636);
+        Root.Position = Vector3New(477, 202, -635);
         wait();
     end
     wait(.2);
