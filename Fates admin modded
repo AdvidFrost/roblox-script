@@ -2662,14 +2662,6 @@ AddCommand("commandcount", {"cc"}, "shows you how many commands there is in fate
     end)))
 end)
 
-AddCommand("walkspeed", {"ws", "speed"}, "changes your walkspeed to the second argument", {}, function(Caller, Args, CEnv)
-    local Humanoid = GetHumanoid();
-    CEnv[1] = Humanoid.WalkSpeed
-    SpoofProperty(Humanoid, "WalkSpeed");
-    Humanoid.WalkSpeed = tonumber(Args[1]) or 16
-    return "your walkspeed is now " .. Humanoid.WalkSpeed
-end)
-
 AddCommand("trueinvisible", {"trueinvis"}, "Makes you truly invisible and people can see your chat Requirment: Must be wearly ONLY the pal hair", {}, function(Caller, Args, CEnv)
    loadstring(game:HttpGet("https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Invisible%20r6",true))()
 end)
@@ -4599,6 +4591,12 @@ AddCommand("age", {}, "ages a player", {"1"}, function(Caller, Args)
         t.day = t.day - tonumber(AccountAge);
         local CreatedAt = os.date("%d/%m/%y", os.time(t));
         Utils.Notify(Caller, "Command", format("%s's age is %s (%s)", v.Name, AccountAge, CreatedAt));
+    end
+end)
+
+AddCommand("print", {"consolesay"}, "prints smth in console", {}, function(Caller, Args, CEnv)
+    for i = 1,(Args[1]) do
+    print("real")
     end
 end)
 
@@ -8746,6 +8744,41 @@ wait(3)
 game:GetService'Players'.LocalPlayer.Character['Head']:Destroy()
 game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("crash/lag attempted","All")
     return "crash attempted"
+end)
+
+AddCommand("mgtool", {"*mgtool"}, "uses all moneyguns in your inventory, use buymg (amount) to get some", {}, function()
+       local player = game.Players.LocalPlayer
+local character = player.Character
+local mouse = player:GetMouse()
+
+local tool = Instance.new("Tool")
+tool.Name = "Megamoneygun"
+tool.Parent = player.Backpack
+
+function onClick()
+  for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
+if obj.Name == "MoneyGun" then
+local equip = game.Players.LocalPlayer.Backpack.MoneyGun
+equip.Parent = game.Players.LocalPlayer.Character
+end
+end
+wait(0.3)
+for i,v in pairs(game:GetService("Players").LocalPlayer.Character:GetChildren())do
+if v.ClassName == "Tool" then
+v:Activate()
+end
+end
+end
+
+
+mouse.Button1Down:Connect(function()
+  if tool.Parent == character then
+    -- The tool is being held
+    onClick()
+  else
+    -- The tool is not being held
+  end
+end)
     end)
     
 AddCommand("prepcrash", {"*prepcrash"}, "prepares to crash the game, once ready you can type crash in the command bar to crash", {}, function()
@@ -8764,12 +8797,29 @@ v.Parent = game.Players.LocalPlayer.Character
 end
     end)
     
+    AddCommand("buymoneygun", {"buymoneygun", "buymg"}, "buys moneyguns. Use the mgtool command to use them all at once", {}, function(Caller, Args, CEnv)
+    for i = 1,(Args[1]) + 1 do
+    fireclickdetector(game:GetService("Workspace")["[MoneyGun] - $100"].ClickDetector)
+    wait(0.1)
+fireclickdetector(game:GetService("Workspace")["[MoneyGun] - $100"].ClickDetector)
+wait(0.1)
+fireclickdetector(game:GetService("Workspace")["[MoneyGun] - $100"].ClickDetector)
+wait(1)
+for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
+if obj.Name == "MoneyGun" then
+local equip = game.Players.LocalPlayer.Backpack.MoneyGun
+equip.Parent = game.Players.LocalPlayer.Character
+end
+end
+end
+    return "Bought moneyguns"
+end)
+
     AddCommand("autoarmor", {"*autoarmor"}, "autobuys armor if below a threshold", {}, function()
         while true do
 wait(0.05)
 if game:GetService("Players").LocalPlayer.Armor.Value < 40 then
 fireclickdetector(game:GetService("Workspace")["Higher armor {20000$}"].Head.ClickDetector)
-    print("armor bought")
 end
 end
 return("Crash ready! Type !crash to finish the job")
