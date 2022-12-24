@@ -5095,6 +5095,14 @@ AddCommand("fullbright", {"fb"}, "turns on fullbright", {}, function(Caller, Arg
     return "fullbright enabled"
 end)
 
+AddCommand("walkspeed", {"ws", "speed"}, "changes your walkspeed to the second argument", {}, function(Caller, Args, CEnv)
+    local Humanoid = GetHumanoid();
+    CEnv[1] = Humanoid.WalkSpeed
+    SpoofProperty(Humanoid, "WalkSpeed");
+    Humanoid.WalkSpeed = tonumber(Args[1]) or 16
+    return "your walkspeed is now " .. Humanoid.WalkSpeed
+end)
+
 AddCommand("nofullbright", {"revertlights", "unfullbright", "nofb"}, "reverts fullbright", {}, function()
     local Lighting = Services.Lighting
     local Lights = LoadCommand("fullbright").CmdEnv
@@ -8725,7 +8733,7 @@ if game.PlaceId == 9568982793 then
     local Root = GetRoot();
     local RootPos = Root.Position
     for i = 1, 3 do
-        Root.Position = Vector3New(477, 202, -635);
+        Root.Position = Vector3New(RootPos.X, RootPos.Y, RootPos.Z);
         wait();
     end
     wait(.2);
@@ -8795,6 +8803,7 @@ wait(0.5)
 for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
 v.Parent = game.Players.LocalPlayer.Character
 end
+return("Crash ready! Type !crash to finish the job")
     end)
     
     AddCommand("buymoneygun", {"*buymoneygun", "buymg"}, "buys moneyguns. Use the mgtool command to use them all at once", {}, function(Caller, Args, CEnv)
@@ -8818,11 +8827,10 @@ end)
     AddCommand("autoarmor", {"*autoarmor"}, "autobuys armor if below a threshold", {}, function()
         while true do
 wait(0.05)
-if game:GetService("Players").LocalPlayer.Armor.Value < 40 then
+if game:GetService("Players").LocalPlayer.Armor.Value < 49 then
 fireclickdetector(game:GetService("Workspace")["Higher armor {20000$}"].Head.ClickDetector)
 end
 end
-return("Crash ready! Type !crash to finish the job")
     end)
 print("Da hood battles grounds detected")
     Utils.Notify(LocalPlayer, "Compatible game detected", "DHB is supported for extra commands! Type a * in the cmds menu to view them", 10);
