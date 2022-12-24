@@ -8797,7 +8797,7 @@ v.Parent = game.Players.LocalPlayer.Character
 end
     end)
     
-    AddCommand("buymoneygun", {"buymoneygun", "buymg"}, "buys moneyguns. Use the mgtool command to use them all at once", {}, function(Caller, Args, CEnv)
+    AddCommand("buymoneygun", {"*buymoneygun", "buymg"}, "buys moneyguns. Use the mgtool command to use them all at once", {}, function(Caller, Args, CEnv)
     for i = 1,(Args[1]) + 1 do
     fireclickdetector(game:GetService("Workspace")["[MoneyGun] - $100"].ClickDetector)
     wait(0.1)
