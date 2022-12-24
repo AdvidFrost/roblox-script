@@ -8791,7 +8791,7 @@ end)
     
 AddCommand("prepcrash", {"*prepcrash"}, "prepares to crash the game, once ready you can type crash in the command bar to crash", {}, function()
      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(214, 288, -763)
-for i = 1,20 do
+for i = 1,30 do
     wait(0.2)
 for i,v in pairs(game:GetDescendants()) do
       if v:IsA("ClickDetector") then
