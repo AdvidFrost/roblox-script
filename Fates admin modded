@@ -1,5 +1,5 @@
 --[[
-	fates admin - 16/11/2022
+	Advid's Admin - 16/11/2022
 ]]
 
 local game = game
@@ -21,7 +21,7 @@ do
         local UserInputService = GetService(game, "UserInputService");
         local CommandBarPrefix = GetConfig().CommandBarPrefix
         local StringKeyCode = UserInputService.GetStringForKeyCode(UserInputService, Enum.KeyCode[CommandBarPrefix]);
-        return Notify(nil, "Loaded", "fates admin is already loaded... use 'killscript' to kill", nil),
+        return Notify(nil, "Loaded", "Advid's Admin is already loaded... use 'killscript' to kill", nil),
         Notify(nil, "Your Prefix is", string.format("%s (%s)", StringKeyCode, CommandBarPrefix));
     end
 end
@@ -182,7 +182,7 @@ do
                 return Ret
             end
             if (Debug) then
-                warn("[FA Error]: " .. debug.traceback(Ret));
+                warn("[AA Error]: " .. debug.traceback(Ret));
             end
         end
     end
@@ -621,7 +621,7 @@ do
             end
         end
 
-        -- ik this is horrible but fates admin v3 has a better way of doing hooks
+        -- ik this is horrible but Advid's Admin v3 has a better way of doing hooks
         if (Method == "children" or Method == "GetChildren" or Method ==  "getChildren" or Method == "GetDescendants" or Method == "getDescendants") then
             return filter(__Namecall(...), function(i, instance)
                 return not isProtected(instance);
@@ -1070,58 +1070,58 @@ local PluginSettings = {
 local WriteConfig = function(Destroy)
     local JSON = JSONEncode(Services.HttpService, Settings);
     local PluginJSON = JSONEncode(Services.HttpService, PluginSettings);
-    if (isfolder("fates-admin") and Destroy) then
-        delfolder("fates-admin");
-        writefile("fates-admin/config.json", JSON);
-        writefile("fates/admin/pluings/plugin-conf.json", PluginJSON);
+    if (isfolder("Advid's-admin") and Destroy) then
+        delfolder("Advid's-admin");
+        writefile("Advid's-admin/config.json", JSON);
+        writefile("Advid's/admin/pluings/plugin-conf.json", PluginJSON);
     else
-        makefolder("fates-admin");
-        makefolder("fates-admin/plugins");
-        makefolder("fates-admin/chatlogs");
-        writefile("fates-admin/config.json", JSON);
-        writefile("fates-admin/plugins/plugin-conf.json", PluginJSON);
+        makefolder("Advid's-admin");
+        makefolder("Advid's-admin/plugins");
+        makefolder("Advid's-admin/chatlogs");
+        writefile("Advid's-admin/config.json", JSON);
+        writefile("Advid's-admin/plugins/plugin-conf.json", PluginJSON);
     end
 end
 
 local GetConfig = function()
-    if (isfolder("fates-admin") and isfile("fates-admin/config.json")) then
-        return JSONDecode(Services.HttpService, readfile("fates-admin/config.json"));
+    if (isfolder("Advid's-admin") and isfile("Advid's-admin/config.json")) then
+        return JSONDecode(Services.HttpService, readfile("Advid's-admin/config.json"));
     else
         WriteConfig();
-        return JSONDecode(Services.HttpService, readfile("fates-admin/config.json"));
+        return JSONDecode(Services.HttpService, readfile("Advid's-admin/config.json"));
     end
 end
 
 local GetPluginConfig = function()
-    if (isfolder("fates-admin") and isfolder("fates-admin/plugins") and isfile("fates-admin/plugins/plugin-conf.json")) then
-        local JSON = JSONDecode(Services.HttpService, readfile("fates-admin/plugins/plugin-conf.json"));
+    if (isfolder("Advid's-admin") and isfolder("Advid's-admin/plugins") and isfile("Advid's-admin/plugins/plugin-conf.json")) then
+        local JSON = JSONDecode(Services.HttpService, readfile("Advid's-admin/plugins/plugin-conf.json"));
         return JSON
     else
         WriteConfig();
-        return JSONDecode(Services.HttpService, readfile("fates-admin/plugins/plugin-conf.json"));
+        return JSONDecode(Services.HttpService, readfile("Advid's-admin/plugins/plugin-conf.json"));
     end
 end
 
 local SetPluginConfig = function(conf)
-    if (isfolder("fates-admin") and isfolder("fates-admin/plugins") and isfile("fates-admin/plugins/plugin-conf.json")) then
+    if (isfolder("Advid's-admin") and isfolder("Advid's-admin/plugins") and isfile("Advid's-admin/plugins/plugin-conf.json")) then
         WriteConfig();
     end
     local NewConfig = GetPluginConfig();
     for i, v in next, conf do
         NewConfig[i] = v
     end
-    writefile("fates-admin/plugins/plugin-conf.json", JSONEncode(Services.HttpService, NewConfig));
+    writefile("Advid's-admin/plugins/plugin-conf.json", JSONEncode(Services.HttpService, NewConfig));
 end
 
 local SetConfig = function(conf)
-    if (not isfolder("fates-admin") and isfile("fates-admin/config.json")) then
+    if (not isfolder("Advid's-admin") and isfile("Advid's-admin/config.json")) then
         WriteConfig();
     end
     local NewConfig = GetConfig();
     for i, v in next, conf do
         NewConfig[i] = v
     end
-    writefile("fates-admin/config.json", JSONEncode(Services.HttpService, NewConfig));
+    writefile("Advid's-admin/config.json", JSONEncode(Services.HttpService, NewConfig));
 end
 
 local CurrentConfig = GetConfig();
@@ -1489,7 +1489,7 @@ local IsSupportedExploit = isfile and isfolder and writefile and readfile
 
 local GetThemeConfig
 local WriteThemeConfig = function(Conf)
-    if (IsSupportedExploit and isfolder("fates-admin")) then
+    if (IsSupportedExploit and isfolder("Advid's-admin")) then
         local ToHSV = Color3.new().ToHSV
         local ValuesToEncode = deepsearchset(Values, function(i, v)
             return typeof(v) == 'Color3'
@@ -1498,14 +1498,14 @@ local WriteThemeConfig = function(Conf)
             return {H, S, V, "Color3"}
         end)
         local Data = JSONEncode(Services.HttpService, ValuesToEncode);
-        writefile("fates-admin/Theme.json", Data);
+        writefile("Advid's-admin/Theme.json", Data);
     end
 end
 
 GetThemeConfig = function()
-    if (IsSupportedExploit and isfolder("fates-admin")) then
-        if (isfile("fates-admin/Theme.json")) then
-            local Success, Data = pcall(JSONDecode, Services.HttpService, readfile("fates-admin/Theme.json"));
+    if (IsSupportedExploit and isfolder("Advid's-admin")) then
+        if (isfile("Advid's-admin/Theme.json")) then
+            local Success, Data = pcall(JSONDecode, Services.HttpService, readfile("Advid's-admin/Theme.json"));
             if (not Success or type(Data) ~= 'table') then
                 WriteThemeConfig();
                 return Values
@@ -2656,7 +2656,7 @@ do
     end));
 end
 
-AddCommand("commandcount", {"cc"}, "shows you how many commands there is in fates admin", {}, function(Caller)
+AddCommand("commandcount", {"cc"}, "shows you how many commands there is in Advid's Admin", {}, function(Caller)
     Utils.Notify(Caller, "Amount of Commands", format("There are currently %s commands.", #filter(CommandsTable, function(i,v)
         return indexOf(CommandsTable, v) == i
     end)))
@@ -2685,7 +2685,7 @@ AddCommand("hipheight", {"hh"}, "changes your hipheight to the second argument",
 end)
 
 _L.KillCam = {};
-AddCommand("kill", {"tkill"}, "kills someone", {"1", 1, 3}, function(Caller, Args)
+AddCommand("kill", {"tkill", "Kill}, "kills someone", {"1", 1, 3}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
     local OldPos = GetRoot().CFrame
     local Humanoid = ReplaceHumanoid();
@@ -3406,10 +3406,10 @@ AddCommand("dupetools2", {"rejoindupe", "dupe2"}, "sometimes a faster dupetools"
         v.Parent = Char
         v.Parent = Workspace
     end
-    writefile("fates-admin/tooldupe.txt", tostring(Amount - 1));
-    writefile("fates-admin/tooldupe.lua", format([[
+    writefile("Advid's-admin/tooldupe.txt", tostring(Amount - 1));
+    writefile("Advid's-admin/tooldupe.lua", format([[
         local OldPos = CFrame.new(%s);
-        local DupeAmount = tonumber(readfile("fates-admin/tooldupe.txt"));
+        local DupeAmount = tonumber(readfile("Advid's-admin/tooldupe.txt"));
         local game = game
         local GetService = game.GetService
         local Players = GetService(game, "Players");
@@ -3434,9 +3434,9 @@ AddCommand("dupetools2", {"rejoindupe", "dupe2"}, "sometimes a faster dupetools"
                     end
                 end
             end
-            delfile("fates-admin/tooldupe.txt");
-            delfile("fates-admin/tooldupe.lua");
-            loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/fatesc/fates-admin/main/main.lua"))();
+            delfile("Advid's-admin/tooldupe.txt");
+            delfile("Advid's-admin/tooldupe.lua");
+            loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/Advid'sc/Advid's-admin/main/main.lua"))();
             RootPart.CFrame = OldPos
             repeat wait() RootPart.CFrame = OldPos until RootPart.CFrame == OldPos
             getgenv().F_A.PluginLibrary.ExecuteCommand("dp", {"1"}, LocalPlayer);
@@ -3447,14 +3447,14 @@ AddCommand("dupetools2", {"rejoindupe", "dupe2"}, "sometimes a faster dupetools"
                 v.Parent = Char
                 v.Parent = Workspace
             end
-            writefile("fates-admin/tooldupe.txt", tostring(DupeAmount - 1));
+            writefile("Advid's-admin/tooldupe.txt", tostring(DupeAmount - 1));
             local queue_on_teleport = syn and syn.queue_on_teleport or queue_on_teleport
-            queue_on_teleport(readfile("fates-admin/tooldupe.lua"));
+            queue_on_teleport(readfile("Advid's-admin/tooldupe.lua"));
             TeleportService.TeleportToPlaceInstance(TeleportService, game.PlaceId, game.JobId);
         end
     ]], tostring(OldPos)));
     local TeleportService = Services.TeleportService
-    queue_on_teleport(readfile("fates-admin/tooldupe.lua"));
+    queue_on_teleport(readfile("Advid's-admin/tooldupe.lua"));
     TeleportService.TeleportToPlaceInstance(TeleportService, game.PlaceId, game.JobId);
 end)
 
@@ -4476,8 +4476,8 @@ AddCommand("notruesightguis", {"untruesightguis", "notsg"}, "removes truesight o
     return "truesight for guis are now off"
 end)
 
-AddCommand("esp", {"aimbot", "cameralock", "silentaim", "aimlock", "tracers"}, "loads fates esp", {}, function(Caller, Args, CEnv)
-    CEnv.KillEsp = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/fatesc/fates-esp/main/main.lua"))();
+AddCommand("esp", {"aimbot", "cameralock", "silentaim", "aimlock", "tracers"}, "loads Advid's esp", {}, function(Caller, Args, CEnv)
+    CEnv.KillEsp = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/Advid'sc/Advid's-esp/main/main.lua"))();
     return "esp enabled"
 end)
 
@@ -4492,7 +4492,7 @@ end)
 local EspLib;
 AddCommand("trace", {"locate"}, "traces a player", {"1"}, function(Caller, Args, CEnv)
     if (not EspLib) then
-        EspLib = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/fatesc/fates-esp/main/esp-lib/esplibmain.lua"))();
+        EspLib = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/Advid'sc/Advid's-esp/main/esp-lib/esplibmain.lua"))();
     end
     local Target = GetPlayer(Args[1]);
     local New = EspLib.new
@@ -4515,7 +4515,7 @@ AddCommand("trace", {"locate"}, "traces a player", {"1"}, function(Caller, Args,
 end)
 AddCommand("untrace", {"unlocate"}, "untraces a player", {"1"}, function(Caller, Args)
     if (not EspLib) then
-        EspLib = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/fatesc/fates-esp/main/esp-lib/esplibmain.lua"))();
+        EspLib = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/Advid'sc/Advid's-esp/main/esp-lib/esplibmain.lua"))();
     end
     local Target = GetPlayer(Args[1]);
     local Remove = EspLib.Remove
@@ -4778,7 +4778,7 @@ AddCommand("globalchatlogs", {"globalclogs"}, "enables globalchatlogs", {}, func
 
     _L.GlobalChatLogsEnabled = true
     if (not Socket) then
-        Socket = (syn and syn.websocket or WebSocket).connect("ws://fate0.xyz:8080/scripts/fates-admin/chat?username=" .. LocalPlayer.Name);
+        Socket = (syn and syn.websocket or WebSocket).connect("ws://fate0.xyz:8080/scripts/Advid's-admin/chat?username=" .. LocalPlayer.Name);
 
         local MakeMessage = function(Message, Color)
             Clone.Text = Message
@@ -5488,10 +5488,10 @@ end)
 
 AddCommand("advertise", {}, "advertises the script", {}, function()
     local ChatRemote = Services.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest
-    ChatRemote.FireServer(ChatRemote, "I am using fates admin, join the server 5epGRYR", "All");
+    ChatRemote.FireServer(ChatRemote, "I am using Advid's Admin, join 4JtAr7rYA2", "All");
 end)
 
-AddCommand("joinserver", {"discord"}, "joins the fates admin discord server", {}, function()
+AddCommand("joinserver", {"discord"}, "joins the Advid's Admin discord server", {}, function()
     local Request = syn and syn.request or request
     local HttpService = Services.HttpService
     if (Request({
@@ -5504,12 +5504,12 @@ AddCommand("joinserver", {"discord"}, "joins the fates admin discord server", {}
         Body = JSONEncode(HttpService, {
             cmd = "INVITE_BROWSER",
             args = {
-                code = "5epGRYR"
+                code = "4JtAr7rYA2"
             },
             nonce = GenerateGUID(HttpService, false)
         }),
     }).StatusCode == 200) then
-        return "joined fates admin discord server"
+        return "joined Advid's Admin discord server"
     else
         return "discord isn't open"
     end
@@ -5678,7 +5678,7 @@ AddCommand("serverhop", {"sh"}, "switches servers (optional: min, max (default: 
 
         local queue_on_teleport = syn and syn.queue_on_teleport or queue_on_teleport
         if (queue_on_teleport and not Args[2]) then
-            queue_on_teleport("loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/fatesc/fates-admin/main/main.lua\"))()");
+            queue_on_teleport("loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/Advid'sc/Advid's-admin/main/main.lua\"))()");
         end;
 
         Services.TeleportService:TeleportToPlaceInstance(game.PlaceId, Server.id);    
@@ -5686,20 +5686,8 @@ AddCommand("serverhop", {"sh"}, "switches servers (optional: min, max (default: 
     end
 end);
 
-AddCommand("changelogs", {"cl"}, "shows you the updates on fates admin", {}, function()
-    local ChangeLogs = JSONDecode(Services.HttpService, game.HttpGetAsync(game, "https://api.github.com/repos/fatesc/fates-admin/commits?per_page=100&path=main.lua"));
-    ChangeLogs = map(ChangeLogs, function(i, v)
-        return {
-            ["Author"] = v.commit.author.name,
-            ["Date"] = gsub(v.commit.committer.date, "[T|Z]", " "),
-            ["Message"] = v.commit.message
-        }
-    end)
-    for i, v in next, ChangeLogs do
-        Utils.Print(format("Author: %s\nDate: %s\nMessage: %s", v.Author, v.Date, v.Message));
-    end
-
-    return "changelogs loaded, press f9"
+AddCommand("changelogs", {"cl"}, "shows you the updates on Advid's Admin", {}, function()
+    return "Released!!!"
 end)
 
 AddCommand("whitelist", {"wl"}, "whitelists a user so they can use commands", {"1"}, function(Caller, Args)
@@ -5745,7 +5733,7 @@ AddCommand("clearexceptions", {}, "removes users from exceptions list", {}, func
     return "exceptions list cleared"
 end)
 local CommandsLoaded = false
-AddCommand("commands", {"cmds"}, "shows you all the commands listed in fates admin", {}, function()
+AddCommand("commands", {"cmds"}, "shows you all the commands listed in Advid's Admin", {}, function()
     if (not CommandsLoaded) then
         local CommandsList = Commands.Frame.List
         Utils.SmoothScroll(CommandsList, .14);
@@ -5806,7 +5794,7 @@ end)
 AddCommand("reloadscript", {}, "kills the script and reloads it", {}, function(Caller)
     if (Caller == LocalPlayer) then
         ExecuteCommand("killscript", {}, LocalPlayer);
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Fates%20admin%20modded"))();
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Advid's%20admin%20modded"))();
     end
 end)
 
@@ -6542,7 +6530,7 @@ AddCommand("nojumpcooldown", {}, "removes a jumpcooldown if any in games", {}, f
 end)
 
 local LoadConfig, ConfigLoaded;
-AddCommand("config", {"conf"}, "shows fates admin config", {}, function(Caller, Args, CEnv)
+AddCommand("config", {"conf"}, "shows Advid's Admin config", {}, function(Caller, Args, CEnv)
     if (not ConfigLoaded) then
         if (not CEnv[1]) then
             LoadConfig();
@@ -6579,7 +6567,7 @@ AddCommand("rejoinre", {"rje"}, "rejoins and tps you to your old position", {3},
     local Pos = GetRoot().CFrame
     local queue_on_teleport = syn and syn.queue_on_teleport or queue_on_teleport
     if (queue_on_teleport) then
-        queue_on_teleport(format("game.Loaded:Wait();game:GetService('ReplicatedFirst'):SetDefaultLoadingGuiRemoved();local LocalPlayer = game:GetService('Players').LocalPlayer;LocalPlayer.CharacterAdded:Wait():WaitForChild('HumanoidRootPart').CFrame = CFrame.new(%s);loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/fatesc/fates-admin/main/main.lua\"))()", tostring(Pos)));
+        queue_on_teleport(format("game.Loaded:Wait();game:GetService('ReplicatedFirst'):SetDefaultLoadingGuiRemoved();local LocalPlayer = game:GetService('Players').LocalPlayer;LocalPlayer.CharacterAdded:Wait():WaitForChild('HumanoidRootPart').CFrame = CFrame.new(%s);loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/Advid'sc/Advid's-admin/main/main.lua\"))()", tostring(Pos)));
     end
     ExecuteCommand("rejoin", {}, LocalPlayer);
 end)
@@ -6781,7 +6769,7 @@ end)
 
 --AddCommand("dex", {"darkdex"}, "A quick way to execute dark dex from the synapse script hub.", {}, loadstring(game:HttpGet("https://cdn.synapse.to/synapsedistro/hub/DarkDex.lua")));
 
-AddCommand("console", {"errors", "warns", "outputs"}, "shows the outputs fates admin has made", {}, function()
+AddCommand("console", {"errors", "warns", "outputs"}, "shows the outputs Advid's Admin has made", {}, function()
     local MessageClone = Clone(Console.Frame.List);
     
     Utils.ClearAllObjects(Console.Frame.List)
@@ -7176,9 +7164,9 @@ end), Connections.UI, true);
 
 AddConnection(CConnect(ChatLogs.Save.MouseButton1Click, function()
     local GameName = Services.MarketplaceService.GetProductInfo(Services.MarketplaceService, game.PlaceId).Name
-    local String =  format("Fates Admin Chatlogs for %s (%s)\n\n", GameName, os.date());
+    local String =  format("Advid's Admin Chatlogs for %s (%s)\n\n", GameName, os.date());
     local TimeSaved = gsub(tostring(os.date("%x")), "/", "-") .. " " .. gsub(tostring(os.date("%X")), ":", "-");
-    local Name = format("fates-admin/chatlogs/%s (%s).txt", GameName, TimeSaved);
+    local Name = format("Advid's-admin/chatlogs/%s (%s).txt", GameName, TimeSaved);
     local Children = GetChildren(ChatLogs.Frame.List);
     for i = 1, #Children do
         local v = Children[i]
@@ -7192,17 +7180,17 @@ end), Connections.UI, true);
 
 AddConnection(CConnect(HttpLogs.Save.MouseButton1Click, function()
     local Children = GetChildren(HttpLogs.Frame.List);
-    local Logs =  format("Fates Admin HttpLogs for %s\n\n", os.date());
+    local Logs =  format("Advid's Admin HttpLogs for %s\n\n", os.date());
     for i = 1, #Children do
         local v = Children[i]
         if (not IsA(v, "UIListLayout")) then
             Logs = format("%s%s\n", Logs, v.Text);
         end
     end
-    if (not isfolder("fates-admin/httplogs")) then
-        makefolder("fates-admin/httplogs");
+    if (not isfolder("Advid's-admin/httplogs")) then
+        makefolder("Advid's-admin/httplogs");
     end
-    writefile(format("fates-admin/httplogs/HttpLogs for %s", gsub(tostring(os.date("%X")), ":", "-")) .. ".txt", gsub(Logs, "%b<>", ""));
+    writefile(format("Advid's-admin/httplogs/HttpLogs for %s", gsub(tostring(os.date("%X")), ":", "-")) .. ".txt", gsub(Logs, "%b<>", ""));
     Utils.Notify(LocalPlayer, "Saved", "Http logs saved!");
 end), Connections.UI, true);
 
@@ -7210,7 +7198,7 @@ AddConnection(CConnect(Console.Save.MouseButton1Click, function()
     local GameName = Services.MarketplaceService.GetProductInfo(Services.MarketplaceService, game.PlaceId).Name
     local TimeSaved = gsub(tostring(os.date("%x")), "/", "-") .. " " .. gsub(tostring(os.date("%X")), ":", "-");
     local Children = GetChildren(Console.Frame.List);
-    local String =  format("Fates Admin logs %s\nGame: %s - %d\n\n", TimeSaved, GameName, game.PlaceId);
+    local String =  format("Advid's Admin logs %s\nGame: %s - %d\n\n", TimeSaved, GameName, game.PlaceId);
     local Names = { ["P"] = "OUTPUT", ["W"] = "WARNING", ["E"] = "ERROR" }
     for i = 1, #Children do
         local v = Children[i]
@@ -7218,7 +7206,7 @@ AddConnection(CConnect(Console.Save.MouseButton1Click, function()
             String = format("%s[%s] %s\n", String, Names[sub(v.Name, 1, 1)] or "", v.Text);
         end
     end
-    writefile("fates-admin/logs.txt", String);
+    writefile("Advid's-admin/logs.txt", String);
     Utils.Notify(LocalPlayer, "Saved", "Console Logs saved!");
 end), Connections.UI, true);
 
@@ -8138,12 +8126,12 @@ PluginLibrary = {
 do
     local IsDebug = IsSupportedExploit and PluginConf.PluginDebug
 
-    Plugins = IsSupportedExploit and map(filter(listfiles("fates-admin/plugins"), function(i, v)
+    Plugins = IsSupportedExploit and map(filter(listfiles("Advid's-admin/plugins"), function(i, v)
         return lower(split(v, ".")[#split(v, ".")]) == "lua"
     end), function(i, v)
         local splitted = split(v, "\\");
         if (identifyexecutor and identifyexecutor() == "ScriptWare") then
-            return {splitted[#splitted], loadfile("fates-admin/plugins/" .. v)}
+            return {splitted[#splitted], loadfile("Advid's-admin/plugins/" .. v)}
         else
             return {splitted[#splitted], loadfile(v)}
         end
@@ -8233,7 +8221,7 @@ do
         end
         
         if (IsSupportedExploit) then
-            if (not isfolder("fates-admin") and not isfolder("fates-admin/plugins") and not isfolder("fates-admin/plugin-conf.json") or not isfolder("fates-admin/chatlogs")) then
+            if (not isfolder("Advid's-admin") and not isfolder("Advid's-admin/plugins") and not isfolder("Advid's-admin/plugin-conf.json") or not isfolder("Advid's-admin/chatlogs")) then
                 WriteConfig();
             end
         end
@@ -8264,7 +8252,7 @@ do
             PluginConf = GetPluginConfig();
             IsDebug = PluginConf.PluginDebug
             
-            Plugins = map(filter(listfiles("fates-admin/plugins"), function(i, v)
+            Plugins = map(filter(listfiles("Advid's-admin/plugins"), function(i, v)
                 return lower(split(v, ".")[#split(v, ".")]) == "lua"
             end), function(i, v)
                 return {split(v, "\\")[2], loadfile(v)}
@@ -8768,6 +8756,48 @@ end)
  AddCommand("ungod", {"*ungod"}, "disables semigod", {}, function()
         getgenv().Godmode = false
 	return "god mode disabled. reset for it to take effect"
+ end)
+    
+    AddCommand("rapidfire", {"*rapidfire"}, "autobuys armor if below a threshold", {}, function()
+    if not game:IsLoaded() then 
+   game.Loaded:Wait();
+end
+
+local players, replicatedStorage, runService, userInputService = game:GetService("Players"), game:GetService("ReplicatedStorage"), game:GetService("RunService"), game:GetService("UserInputService");
+local client, mouse = players.LocalPlayer, players.LocalPlayer:GetMouse();
+
+local toolRemoteEvents = replicatedStorage:FindFirstChild("ToolRemoteEvents");
+local reloadWeapon = replicatedStorage:FindFirstChild("ReloadWeapon");
+
+local keyHeld = false
+
+userInputService.InputBegan:Connect(function(key)
+   if userInputService:GetFocusedTextBox() then return end 
+
+   if key.KeyCode == Enum.KeyCode.E then 
+       keyHeld = true
+   end
+end);
+
+userInputService.InputEnded:Connect(function(key)
+   if userInputService:GetFocusedTextBox() then return end 
+
+   if key.KeyCode == Enum.KeyCode.E then 
+       keyHeld = false
+   end
+end);
+
+runService.RenderStepped:Connect(function()
+   if keyHeld == true then 
+       if client.Character and client.Character:FindFirstChildOfClass("Tool") then
+           local tool = client.Character:FindFirstChildOfClass("Tool");
+
+           toolRemoteEvents[((tool.Name ~= "Revolver" and tool.Name) or "Rev")]:FireServer(mouse.Hit.Position, tool);
+           reloadWeapon:FireServer();
+       end
+   end
+end);
+return "enabled! hold e to fire quick with weapon in hand"
     end)
     
     AddCommand("autoarmor", {"*autoarmor"}, "autobuys armor if below a threshold", {}, function()
@@ -8799,7 +8829,7 @@ end)
 Utils.Notify(LocalPlayer, "Compatible game detected", "Rate my avatar is supported for extra commands! Type a * in the cmds menu to view them", 10);
 end
 
-Utils.Notify(LocalPlayer, "Modded Version", "You are using a modded fates admin version by Advid#1471", 10);
+Utils.Notify(LocalPlayer, "Modded Version", "You are using a modded admin by Advid#1471", 10);
 Utils.Notify(LocalPlayer, "Loaded", format("script loaded in %.3f seconds", (tick()) - _L.start));
 Utils.Notify(LocalPlayer, "Welcome", "'cmds' to see all of the commands, 'config' to customise the script");
 if (debug.info(2, "f") == nil) then
