@@ -5806,7 +5806,7 @@ end)
 AddCommand("reloadscript", {}, "kills the script and reloads it", {}, function(Caller)
     if (Caller == LocalPlayer) then
         ExecuteCommand("killscript", {}, LocalPlayer);
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/fatesc/fates-admin/main/main.lua"))();
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Fates%20admin%20modded"))();
     end
 end)
 
@@ -8824,6 +8824,22 @@ end
     return "Bought moneyguns"
 end)
 
+AddCommand("semigod", {"*semigod"}, "Enables a pretty good godmode", {}, function()
+getgenv().Godmode = true
+game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(Character)
+if getgenv().Godmode then
+    wait(2)
+    game.Players.LocalPlayer.Character.Ragdolled:Destroy()
+end
+end)
+return "enabled! (only weakness is a punch at low health)"
+end)
+
+ AddCommand("ungod", {"*ungod"}, "disables semigod", {}, function()
+        getgenv().Godmode = false
+	return "god mode disabled. reset for it to take effect"
+    end)
+    
     AddCommand("autoarmor", {"*autoarmor"}, "autobuys armor if below a threshold", {}, function()
         while true do
 wait(0.05)
@@ -8832,6 +8848,7 @@ fireclickdetector(game:GetService("Workspace")["Higher armor {20000$}"].Head.Cli
 end
 end
     end)
+    
 print("Da hood battles grounds detected")
     Utils.Notify(LocalPlayer, "Compatible game detected", "DHB is supported for extra commands! Type a * in the cmds menu to view them", 10);
 end
