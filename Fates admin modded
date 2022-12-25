@@ -8742,7 +8742,7 @@ return("Crash ready! Type !crash to finish the job")
 fireclickdetector(game:GetService("Workspace")["[MoneyGun] - $100"].ClickDetector)
 wait(0.1)
 fireclickdetector(game:GetService("Workspace")["[MoneyGun] - $100"].ClickDetector)
-wait(0.5)
+wait(1)
 for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
 if obj.Name == "MoneyGun" then
 local equip = game.Players.LocalPlayer.Backpack.MoneyGun
