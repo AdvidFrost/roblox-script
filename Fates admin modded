@@ -8825,6 +8825,7 @@ end
 end)
 
 AddCommand("semigod", {"*semigod"}, "Enables a pretty good godmode", {}, function()
+game.Players.LocalPlayer.Character.Ragdolled:Destroy()
 getgenv().Godmode = true
 game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(Character)
 if getgenv().Godmode then
