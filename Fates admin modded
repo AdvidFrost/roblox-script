@@ -2685,7 +2685,7 @@ AddCommand("hipheight", {"hh"}, "changes your hipheight to the second argument",
 end)
 
 _L.KillCam = {};
-AddCommand("kill", {"tkill", "Kill"}, "kills someone", {"1", 1, 3}, function(Caller, Args)
+AddCommand("kill", {"tkill"}, "kills someone", {"1", 1, 3}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
     local OldPos = GetRoot().CFrame
     local Humanoid = ReplaceHumanoid();
