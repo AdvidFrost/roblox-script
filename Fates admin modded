@@ -8800,6 +8800,38 @@ end);
 return "enabled! hold e to fire quick with weapon in hand"
     end)
     
+    AddCommand("cashsniper", {"*cashsniper"}, "snipes all cash detected in the workspace", {}, function()
+getgenv().enablesniping = true
+
+function scanWorkspace()
+  if not getgenv().enablesniping then
+    return
+  end
+  
+  local money = workspace:FindFirstChild("Money")
+  local moneyDrop = workspace:FindFirstChild("MoneyDrop")
+
+  if money then
+    fireclickdetector(money.ClickDetector)
+  end
+  
+  if moneyDrop then
+    fireclickdetector(moneyDrop.ClickDetector)  
+end
+end
+
+while true do
+  scanWorkspace()
+  wait(0.1)
+end
+return "Cash sniping enabled"
+    end)
+    
+    AddCommand("nocashsniper", {"*nocashsniper", "stopsnipe"}, "stops sniping", {}, function()
+        getgenv().enablesniping = false
+return "Cash sniping disabled"
+    end)
+    
     AddCommand("autoarmor", {"*autoarmor"}, "autobuys armor if below a threshold", {}, function()
         while true do
 wait(0.05)
