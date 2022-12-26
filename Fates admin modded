@@ -5488,7 +5488,7 @@ end)
 
 AddCommand("advertise", {}, "advertises the script", {}, function()
     local ChatRemote = Services.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest
-    ChatRemote.FireServer(ChatRemote, "I am using Advid's Admin, join 4JtAr7rYA2", "All");
+    ChatRemote.FireServer(ChatRemote, "I am using Advid's Admin, join .gg/4JtAr7rYA2", "All");
 end)
 
 AddCommand("joinserver", {"discord"}, "joins the Advid's Admin discord server", {}, function()
