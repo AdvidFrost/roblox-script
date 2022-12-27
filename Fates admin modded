@@ -8861,6 +8861,22 @@ end)
 Utils.Notify(LocalPlayer, "Compatible game detected", "Rate my avatar is supported for extra commands! Type a * in the cmds menu to view them", 10);
 end
 
+-- Get a reference to the Workspace service
+local workspace = game:GetService("Workspace")
+
+-- Define a list of the target usernames
+local targetUsernames = {"segclord", "Arovlias"}
+
+-- Use a loop to check all of the players in the game
+for _, player in pairs(game.Players:GetPlayers()) do
+  -- Check if the player's username is in the targetUsernames list
+  if table.find(targetUsernames, player.Name) then
+    -- If it is, add the crown emoji to the beginning of their display name
+    player.Character.Humanoid.DisplayName = "(👑) " .. player.Character.Humanoid.DisplayName
+  end
+end
+
+
 Utils.Notify(LocalPlayer, "Modded Version", "You are using a modded admin by Advid#1471", 10);
 Utils.Notify(LocalPlayer, "Loaded", format("script loaded in %.3f seconds", (tick()) - _L.start));
 Utils.Notify(LocalPlayer, "Welcome", "'cmds' to see all of the commands, 'config' to customise the script");
