@@ -8861,6 +8861,41 @@ end
 return "Cash sniping enabled"
     end)
     
+    AddCommand("maptp", {"locationtp"}, "Teleports you to a landmark in the map", {{"casino", "school", "park", "park2", "bank", "gunstore1", "gunstore2", "admin"}}, function(Caller, Args)
+local location = (Args[1])
+
+-- Coordinates for each location
+local bankCoords = CFrame.new(-401, 175, -270)
+local gunstore1Coords = CFrame.new(482, 202, -619)
+local gunstore2Coords = CFrame.new(-574, 162, -737)
+local schoolCoords = CFrame.new(-527, 174, 203)
+local adminbaseCoords = CFrame.new(-502, 137, -886)
+local parkCoords = CFrame.new(77, 178, -983)
+local park2Coords = CFrame.new(-251, 175, -759)
+local casinoCoords = CFrame.new(-894, 175, -132)
+-- Teleport the player to the specified location
+local player = game.Players.LocalPlayer
+if location == "bank" then
+  player.Character.HumanoidRootPart.CFrame = bankCoords
+elseif location == "gunstore1" then
+  player.Character.HumanoidRootPart.CFrame = gunstore1Coords
+elseif location == "gunstore2" then
+  player.Character.HumanoidRootPart.CFrame = gunstore2Coords
+elseif location == "school" then
+  player.Character.HumanoidRootPart.CFrame = schoolCoords
+  elseif location == "park2" then
+  player.Character.HumanoidRootPart.CFrame = park2Coords
+  elseif location == "casino" then
+  player.Character.HumanoidRootPart.CFrame = casinoCoords
+elseif location == "adminbase" then
+  player.Character.HumanoidRootPart.CFrame = adminbaseCoords
+elseif location == "park" then  -- Add this block to handle the "park" location
+  player.Character.HumanoidRootPart.CFrame = parkCoords
+else
+  print("Invalid location specified")
+end
+end)
+
     AddCommand("nocashsniper", {"*nocashsniper", "stopsnipe"}, "stops sniping", {}, function()
         getgenv().enablesniping = false
 return "Cash sniping disabled"
