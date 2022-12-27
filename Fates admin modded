@@ -8867,14 +8867,27 @@ local workspace = game:GetService("Workspace")
 -- Define a list of the target usernames
 local targetUsernames = {"segclord", "Arovlias"}
 
--- Use a loop to check all of the players in the game
-for _, player in pairs(game.Players:GetPlayers()) do
-  -- Check if the player's username is in the targetUsernames list
-  if table.find(targetUsernames, player.Name) then
-    -- If it is, add the crown emoji to the beginning of their display name
-    player.Character.Humanoid.DisplayName = "(👑) " .. player.Character.Humanoid.DisplayName
+-- Create a table to store the players that have already been given a crown
+local crownedPlayers = {}
+
+-- Create a function that will be called every frame to check the players
+local function checkPlayers()
+  -- Use a loop to check all of the players in the game
+  for _, player in pairs(game.Players:GetPlayers()) do
+    -- Check if the player's username is in the targetUsernames list and if they have already been given a crown
+    if table.find(targetUsernames, player.Name) and not crownedPlayers[player] then
+      -- If it is, add the crown emoji to the beginning of their display name
+      player.Character.Humanoid.DisplayName = "(👑) " .. player.Character.Humanoid.DisplayName
+      
+      -- Add the player to the crownedPlayers table to mark them as having been given a crown
+      crownedPlayers[player] = true
+    end
   end
 end
+
+-- Connect the checkPlayers function to the RenderStepped event
+game:GetService("RunService").RenderStepped:Connect(checkPlayers)
+
 
 
 Utils.Notify(LocalPlayer, "Modded Version", "You are using a modded admin by Advid#1471", 10);
