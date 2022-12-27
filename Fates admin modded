@@ -5794,7 +5794,7 @@ end)
 AddCommand("reloadscript", {}, "kills the script and reloads it", {}, function(Caller)
     if (Caller == LocalPlayer) then
         ExecuteCommand("killscript", {}, LocalPlayer);
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Advid's%20admin%20modded"))();
+        loadstring(game:HttpGet("https://github.com/awesomecoolfortnite/roblox-script/blob/main/Fates%20admin%20modded"))();
     end
 end)
 
