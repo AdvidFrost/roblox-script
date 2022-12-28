@@ -8985,6 +8985,61 @@ end
     return "Bought moneyguns"
 end)
 
+AddCommand("beam", {"*beam", "attack"}, "beams player", {}, function(Caller, Args, CEnv)
+    -- Set the target player's name
+local targetPlayerName = (Args[1])
+
+-- Get the target player object
+local targetPlayer = nil
+for _, player in pairs(game.Players:GetPlayers()) do
+  if player.Name == targetPlayerName then
+    targetPlayer = player
+    break
+  end
+end
+
+-- Get the services and objects needed for the rapid fire script
+local players = game:GetService("Players")
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local runService = game:GetService("RunService")
+local client = players.LocalPlayer
+local mouse = players.LocalPlayer:GetMouse()
+local toolRemoteEvents = replicatedStorage:FindFirstChild("ToolRemoteEvents")
+local reloadWeapon = replicatedStorage:FindFirstChild("ReloadWeapon")
+
+-- Create a function to get and print the coordinates
+local function getCoords()
+  -- Get the coordinates of the target player's character
+  local coords = targetPlayer.Character.HumanoidRootPart.Position
+  local NewX = coords.X
+  local NewY = coords.Y
+  local NewZ = coords.Z
+
+  -- Create a Vector3 object with the coordinates
+  local final = Vector3.new(NewX, NewY, NewZ)
+
+  -- Create a Vector3 object for the direction to fire the weapon
+  local A_1 = Vector3.new(1 * NewX, 1 * NewY, 1 * NewZ)
+
+  -- Get the weapon and the ToolRemoteEvent for firing it
+  local A_2 = game:GetService("Workspace").segclord.SMG
+  local Event = game:GetService("ReplicatedStorage").ToolRemoteEvents.SMG
+
+  -- Fire the weapon and reload it
+  Event:FireServer(A_1, A_2)
+  reloadWeapon:FireServer()
+
+  -- Print the final coordinates
+  print(final)
+end
+
+-- Create a loop that runs the function every 1 second
+while true do
+  getCoords()
+  wait(0.001)
+end
+end)
+
 AddCommand("semigod", {"*semigod"}, "Enables a pretty good godmode", {}, function()
 game.Players.LocalPlayer.Character.Ragdolled:Destroy()
 getgenv().Godmode = true
