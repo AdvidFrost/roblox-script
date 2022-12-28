@@ -8887,7 +8887,7 @@ elseif location == "school" then
   player.Character.HumanoidRootPart.CFrame = park2Coords
   elseif location == "casino" then
   player.Character.HumanoidRootPart.CFrame = casinoCoords
-elseif location == "adminbase" then
+elseif location == "admin" then
   player.Character.HumanoidRootPart.CFrame = adminbaseCoords
 elseif location == "park" then  -- Add this block to handle the "park" location
   player.Character.HumanoidRootPart.CFrame = parkCoords
