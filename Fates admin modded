@@ -8861,7 +8861,7 @@ end
 return "Cash sniping enabled"
     end)
     
-    AddCommand("maptp", {"*maptp"}, "Teleports you to a landmark in the map", {{"casino", "school", "park", "park2", "bank", "gunstore1", "gunstore2", "admin"}}, function(Caller, Args)
+    AddCommand("maptp", {"*maptp"}, "Teleports you to a landmark in the map", {{"casino", "school", "park", "park2", "bank", "gunstore1", "gunstore2", "adminbase"}}, function(Caller, Args)
 local location = (Args[1])
 
 -- Coordinates for each location
@@ -8887,7 +8887,7 @@ elseif location == "school" then
   player.Character.HumanoidRootPart.CFrame = park2Coords
   elseif location == "casino" then
   player.Character.HumanoidRootPart.CFrame = casinoCoords
-elseif location == "admin" then
+elseif location == "adminbase" then
   player.Character.HumanoidRootPart.CFrame = adminbaseCoords
 elseif location == "park" then  -- Add this block to handle the "park" location
   player.Character.HumanoidRootPart.CFrame = parkCoords
