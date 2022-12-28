@@ -8999,7 +8999,7 @@ end)
 
 AddCommand("jail", {"*jail"}, "tps user to uphill jail", {1,"1"}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
-    local OldPos = GetRoot(Caller).CFrame
+    local OldPos = GetRoot(LocalPlayer).CFrame
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(475, 202, -636)
 wait(0.2)
     ExecuteCommand("bring", {Args[1]}, LocalPlayer)
