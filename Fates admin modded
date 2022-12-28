@@ -8985,7 +8985,7 @@ end
     return "Bought moneyguns"
 end)
 
-AddCommand("beam", {"*beam", "attack"}, "beams player", {}, function(Caller, Args, CEnv)
+AddCommand("beam", {"*beam", "laser"}, "beams player", {}, function(Caller, Args, CEnv)
     -- Set the target player's name
 local targetPlayerName = (Args[1])
 
