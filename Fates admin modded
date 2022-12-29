@@ -9197,7 +9197,7 @@ end
 local player = game.Players.LocalPlayer
 local Event = game:GetService("ReplicatedStorage").UpdateAvatar
 player.Chatted:Connect(function(message)
-    if message:lower() == "Im vengeance" then
+    if message:lower() == "im vengeance" then
         local A_1 = "wear"
 local A_2 = 3049284724
 Event:FireServer(A_1, A_2)
