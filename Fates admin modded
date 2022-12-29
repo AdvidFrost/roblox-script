@@ -9219,6 +9219,9 @@ Event:FireServer(A_1, A_2)
 local A_1 = "wear"
 local A_2 = 3049285265
 Event:FireServer(A_1, A_2)
+local A_1 = "wear"
+local A_2 = 10647971081
+Event:FireServer(A_1, A_2)
     end
 end)
 
