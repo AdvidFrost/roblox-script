@@ -9061,7 +9061,7 @@ wait(0.2)
         WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
 end)
 
-AddCommand("unprotect", {"*stopproect"}, "stops protecting a player", {1,"1"}, function(Caller, Args)
+AddCommand("unprotect", {"*unprotect"}, "stops protecting a player", {}, function(Caller, Args)
     getgenv().ProtectPlayer = false
 end)
 
@@ -9220,12 +9220,6 @@ end
 while getgenv().ProtectPlayer do
   getCoords()
 wait(0.005)
-for _, obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
-    if obj.Name == "Revolver" then
-      local equip = game.Players.LocalPlayer.Backpack.Revolvers
-      equip.Parent = game.Players.LocalPlayer.Character
-    end
-  end
 end
 end)
 
