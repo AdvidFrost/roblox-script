@@ -9061,6 +9061,10 @@ wait(0.2)
         WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
 end)
 
+AddCommand("unprotect", {"*stopproect"}, "stops protecting a player", {1,"1"}, function(Caller, Args)
+    getgenv().ProtectPlayer = false
+end)
+
 AddCommand("housearrest", {"*housearrest"}, "tps user to unto unescapeable house", {1,"1"}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
     local OldPos = GetRoot(LocalPlayer).CFrame
@@ -9145,6 +9149,86 @@ end
 return "Cash sniping enabled"
     end)
     
+    AddCommand("protect", {"*protect", "guard"}, "lasers players within a radius of protected player", {}, function(Caller, Args, CEnv)
+getgenv().ProtectPlayer = true
+fireclickdetector(game:GetService("Workspace")["DB-REV"]["[Revolver]  -  $2100"].ClickDetector)
+wait(0.2)
+fireclickdetector(game:GetService("Workspace")["DB-REV"]["[Revolver]  -  $2100"].ClickDetector)
+wait(0.3)
+local targetPlayerName = Args[1]
+
+print(targetPlayerName)
+local targetPlayerChar = nil
+for _, player in pairs(game.Players:GetPlayers()) do
+  if player.Name == targetPlayerName then
+    targetPlayerChar = player.Character
+    break
+  end
+end
+
+-- If the target player was not found, display an error message
+if not targetPlayerChar then
+  return "Full username required"
+  return
+end
+
+-- Get the local player's character
+local localPlayerChar = game.Players.LocalPlayer.Character
+
+-- Create a function to get and print the coordinates
+local function getCoords()
+  -- Get the target player's coordinates
+  local targetPlayerCoords = targetPlayerChar.HumanoidRootPart.Position
+
+  -- Find the closest player to the target player
+  local closestPlayer = nil
+  local closestDistance = math.huge
+  for _, player in pairs(game.Players:GetPlayers()) do
+    if player.Name ~= targetPlayerName and player ~= game.Players.LocalPlayer then
+      -- Get the player's coordinates
+      local playerCoords = player.Character.HumanoidRootPart.Position
+
+      -- Calculate the distance between the target player and the player
+      local distance = (playerCoords - targetPlayerCoords).Magnitude
+
+      -- If the distance is less than the current closest distance, update the closest player and distance
+      if distance < closestDistance then
+        closestPlayer = player
+        closestDistance = distance
+      end
+    end
+  end
+
+  -- If the closest player is within 20 units of the target player, fire the gun at them
+  if closestPlayer and closestDistance <= 20 then
+    local reloadEvent = game:GetService("ReplicatedStorage").ReloadWeapon
+    local coords = closestPlayer.Character.HumanoidRootPart.Position
+    local NewX = coords.X
+    local NewY = coords.Y
+    local NewZ = coords.Z
+    local final = Vector3.new(NewX, NewY, NewZ)
+    local A_1 = Vector3.new(1 * NewX, 1 * NewY, 1 * NewZ)
+    local A_2 = localPlayerChar:WaitForChild("Revolver")
+    local Event = game:GetService("ReplicatedStorage").ToolRemoteEvents.Rev
+    Event:FireServer(A_1, A_2)
+    reloadEvent:FireServer()
+    print(final)
+  end
+end
+
+-- Create a loop that runs the function every 1 second
+while getgenv().ProtectPlayer do
+  getCoords()
+wait(0.005)
+for _, obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
+    if obj.Name == "Revolver" then
+      local equip = game.Players.LocalPlayer.Backpack.Revolvers
+      equip.Parent = game.Players.LocalPlayer.Character
+    end
+  end
+end
+end)
+
     AddCommand("maptp", {"*maptp"}, "Teleports you to a landmark in the map", {{"casino", "school", "park", "park2", "bank", "gunstore1", "gunstore2", "adminbase"}}, function(Caller, Args)
 local location = (Args[1])
 
