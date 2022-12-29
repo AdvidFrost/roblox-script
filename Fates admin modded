@@ -8985,57 +8985,77 @@ end
     return "Bought moneyguns"
 end)
 
-AddCommand("beam", {"*beam", "laser"}, "beams player", {}, function(Caller, Args, CEnv)
-    -- Set the target player's name
-local targetPlayerName = (Args[1])
+AddCommand("protect", {"*protect", "guard"}, "lasers players within a radius of protected player", {}, function(Caller, Args, CEnv)
+for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
+if obj.Name == "Revolver" then
+local equip = game.Players.LocalPlayer.Backpack.Revolver
+equip.Parent = game.Players.LocalPlayer.Character
+end
+end
+local targetPlayerName = Args[1]
 
--- Get the target player object
-local targetPlayer = nil
+print(targetPlayerName)
+local targetPlayerChar = nil
 for _, player in pairs(game.Players:GetPlayers()) do
   if player.Name == targetPlayerName then
-    targetPlayer = player
+    targetPlayerChar = player.Character
     break
   end
 end
 
--- Get the services and objects needed for the rapid fire script
-local players = game:GetService("Players")
-local replicatedStorage = game:GetService("ReplicatedStorage")
-local runService = game:GetService("RunService")
-local client = players.LocalPlayer
-local mouse = players.LocalPlayer:GetMouse()
-local toolRemoteEvents = replicatedStorage:FindFirstChild("ToolRemoteEvents")
-local reloadWeapon = replicatedStorage:FindFirstChild("ReloadWeapon")
+-- If the target player was not found, display an error message
+if not targetPlayerChar then
+  return "full username required"
+end
+
+-- Get the local player's character
+local localPlayerChar = game.Players.LocalPlayer.Character
 
 -- Create a function to get and print the coordinates
 local function getCoords()
-  -- Get the coordinates of the target player's character
-  local coords = targetPlayer.Character.HumanoidRootPart.Position
-  local NewX = coords.X
-  local NewY = coords.Y
-  local NewZ = coords.Z
+  -- Get the target player's coordinates
+  local targetPlayerCoords = targetPlayerChar.HumanoidRootPart.Position
 
-  -- Create a Vector3 object with the coordinates
-  local final = Vector3.new(NewX, NewY, NewZ)
+  -- Find the closest player to the target player
+  local closestPlayer = nil
+  local closestDistance = math.huge
+  for _, player in pairs(game.Players:GetPlayers()) do
+    if player.Name ~= targetPlayerName and player ~= game.Players.LocalPlayer then
+      -- Get the player's coordinates
+      local playerCoords = player.Character.HumanoidRootPart.Position
 
-  -- Create a Vector3 object for the direction to fire the weapon
-  local A_1 = Vector3.new(1 * NewX, 1 * NewY, 1 * NewZ)
+      -- Calculate the distance between the target player and the player
+      local distance = (playerCoords - targetPlayerCoords).Magnitude
 
-  -- Get the weapon and the ToolRemoteEvent for firing it
-  local A_2 = game:GetService("Workspace").segclord.SMG
-  local Event = game:GetService("ReplicatedStorage").ToolRemoteEvents.SMG
+      -- If the distance is less than the current closest distance, update the closest player and distance
+      if distance < closestDistance then
+        closestPlayer = player
+        closestDistance = distance
+      end
+    end
+  end
 
-  -- Fire the weapon and reload it
-  Event:FireServer(A_1, A_2)
-  reloadWeapon:FireServer()
-
-  -- Print the final coordinates
-  print(final)
+  -- If the closest player is within 20 units of the target player, fire the gun at them
+  if closestPlayer and closestDistance <= 20 then
+    local reloadEvent = game:GetService("ReplicatedStorage").ReloadWeapon
+    local coords = closestPlayer.Character.HumanoidRootPart.Position
+    local NewX = coords.X
+    local NewY = coords.Y
+    local NewZ = coords.Z
+    local final = Vector3.new(NewX, NewY, NewZ)
+    local A_1 = Vector3.new(1 * NewX, 1 * NewY, 1 * NewZ)
+    local A_2 = localPlayerChar:WaitForChild("Revolver")
+    local Event = game:GetService("ReplicatedStorage").ToolRemoteEvents.Rev
+    Event:FireServer(A_1, A_2)
+    reloadEvent:FireServer()
+    print(final)
+  end
 end
+
 -- Create a loop that runs the function every 1 second
 while true do
   getCoords()
-  wait(0.001)
+  wait(0.005)
 end
 end)
 
@@ -9140,7 +9160,7 @@ end
 
 while true do
   scanWorkspace()
-  wait(0.001)
+  wait(0.1)
 end
 return "Cash sniping enabled"
     end)
@@ -9186,45 +9206,19 @@ return "Cash sniping disabled"
     end)
     
     AddCommand("autoarmor", {"*autoarmor"}, "autobuys armor if below a threshold", {}, function()
-        while true do
-wait(0.05)
+        getgenv().autoarmor = true
+        while getgenv().autoarmor do
+            wait(0.01)
 if game:GetService("Players").LocalPlayer.Armor.Value < 49 then
 fireclickdetector(game:GetService("Workspace")["Higher armor {20000$}"].Head.ClickDetector)
 end
 end
     end)
     
-    local player = game.Players.LocalPlayer
-
-player.Chatted:Connect(function(message)
-    if message:lower() == "shazam!" then
-        local A_1 = "wear"
-local A_2 = 2691814355
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2)
-local A_1 = "wear"
-local A_2 = 144055148
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2)
-    end
-end)
+    AddCommand("unautoarmor", {"*unautoarmor"}, "stops buying armor", {}, function()
+        getgenv().autoarmor = false
+    end)
     
-local player = game.Players.LocalPlayer
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-player.Chatted:Connect(function(message)
-    if message:lower() == "im vengeance" then
-        local A_1 = "wear"
-local A_2 = 3049284724
-Event:FireServer(A_1, A_2)
-local A_1 = "wear"
-local A_2 = 3049285265
-Event:FireServer(A_1, A_2)
-local A_1 = "wear"
-local A_2 = 10647971081
-Event:FireServer(A_1, A_2)
-    end
-end)
-
 print("Da hood battles grounds detected")
     Utils.Notify(LocalPlayer, "Compatible game detected", "DHB is supported for extra commands! Type a * in the cmds menu to view them", 10);
 end
