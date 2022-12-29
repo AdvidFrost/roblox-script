@@ -9140,7 +9140,7 @@ end
 
 while true do
   scanWorkspace()
-  wait(0.1)
+  wait(0.001)
 end
 return "Cash sniping enabled"
     end)
