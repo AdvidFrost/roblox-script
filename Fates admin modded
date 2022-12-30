@@ -9091,6 +9091,52 @@ wait(0.2)
         WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
 end)
 
+AddCommand("screenglitch", {"*screenglitch"}, "makes everyones screen bug out", {}, function(Caller, Args)
+getgenv().hatglitch = true
+local A_1 = "wear"
+local A_2 = 1158416
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2)
+wait(0.3)
+local A_1 = "scale"
+local A_2 = "BodyHeightScale"
+local A_3 = 105
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2, A_3)
+wait(0.3)
+local A_1 = "scale"
+local A_2 = "BodyWidthScale"
+local A_3 = 100
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2, A_3)
+wait(0.3)
+local A_1 = "scale"
+local A_2 = "HeadScale"
+local A_3 = 100
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2, A_3)
+wait(0.3)
+local A_1 = "scale"
+local A_2 = "BodyProportionScale"
+local A_3 = 100
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2, A_3)
+
+while getgenv().hatglitch do 
+local A_1 = "scale"
+local A_2 = "BodyTypeScale"
+local A_3 = 100
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2, A_3)
+wait(0.001)
+local A_1 = "scale"
+local A_2 = "BodyTypeScale"
+local A_3 = 0
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2, A_3)
+end
+end)
+
  AddCommand("ungod", {"*ungod"}, "disables semigod", {}, function()
         getgenv().Godmode = false
 	return "god mode disabled. reset for it to take effect"
