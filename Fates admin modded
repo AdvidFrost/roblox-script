@@ -9071,7 +9071,7 @@ end)
 return "enabled! (only weakness is a punch at low health)"
 end)
 
-AddCommand("crashdropper", {"*cashdropper"}, "turns on a cash dropper", {}, function()
+AddCommand("cashdropper", {"*cashdropper"}, "turns on a cash dropper", {}, function()
 local screenGui = Instance.new("ScreenGui")
 local frame = Instance.new("Frame")
 local textBox = Instance.new("TextBox")
