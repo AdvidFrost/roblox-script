@@ -9059,7 +9059,7 @@ while true do
 end
 end)
 
-AddCommand("semigod", {"*semigod"}, "Enables a pretty good godmode", {}, function()
+AddCommand("cashdropper", {"*cashdropper"}, "turns on a cash dropper", {}, function()
 game.Players.LocalPlayer.Character.Ragdolled:Destroy()
 getgenv().Godmode = true
 game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(Character)
@@ -9069,6 +9069,62 @@ if getgenv().Godmode then
 end
 end)
 return "enabled! (only weakness is a punch at low health)"
+end)
+
+AddCommand("semigod", {"*semigod"}, "Enables a pretty good godmode", {}, function()
+local screenGui = Instance.new("ScreenGui")
+local frame = Instance.new("Frame")
+local textBox = Instance.new("TextBox")
+local button1 = Instance.new("TextButton")
+local button2 = Instance.new("TextButton")
+
+screenGui.Name = "CashDropper"
+screenGui.Parent = game.Players.LocalPlayer.PlayerGui
+
+frame.Name = "CashDropperFrame"
+frame.Parent = screenGui
+frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+frame.Position = UDim2.new(0, 250, 0, 250) -- position the frame near the middle left of the screen
+frame.Size = UDim2.new(0, 200, 0, 200)
+
+textBox.Name = "AmountTextBox"
+textBox.Parent = frame
+textBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+textBox.Position = UDim2.new(0, 10, 0, 10)
+textBox.Size = UDim2.new(0, 180, 0, 30)
+textBox.Text = "Enter amount"
+
+button1.Name = "NotificationButton"
+button1.Parent = frame
+button1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+button1.Position = UDim2.new(0, 10, 0, 50)
+button1.Size = UDim2.new(0, 180, 0, 30)
+button1.Text = "How much"
+
+button2.Name = "DropCashButton"
+button2.Parent = frame
+button2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+button2.Position = UDim2.new(0, 10, 0, 90)
+button2.Size = UDim2.new(0, 180, 0, 30)
+button2.Text = "Drop cash"
+
+-- Button 1 script
+button1.MouseButton1Click:Connect(function()
+   local amount = tonumber(textBox.Text)
+   local neededAmount = amount / 0.7 -- accounting for the 30% deduction
+   game.StarterGui:SetCore("SendNotification", {
+      Title = "Amount needed";
+      Text = "You need to drop $" .. neededAmount .. " to get $" .. amount;
+   })
+end)
+
+-- Button 2 script
+button2.MouseButton1Click:Connect(function()
+   local amount = tonumber(textBox.Text)
+   local neededAmount = amount / 0.7 -- accounting for the 30% deduction
+   local event = game:GetService("ReplicatedStorage").WalletRemotes.DropCash
+   event:FireServer(neededAmount)
+end)
 end)
 
 AddCommand("jail", {"*jail"}, "tps user to uphill jail", {1,"1"}, function(Caller, Args)
