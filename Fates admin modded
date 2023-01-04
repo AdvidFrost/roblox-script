@@ -3469,7 +3469,7 @@ AddCommand("stopdupe", {}, "stops the dupe", {}, function()
     return "dupetools stopped"
 end)
 
-AddCommand("autoclick", {}, "autoclicks at a speed", {}, function(Caller, Args)
+AddCommand("autoclick", {}, "autoclicks at a speed", {}, function(Cl)
     local time = (Args[1]) --decrease if too slow increase if too fast
 
 click = false
@@ -4264,9 +4264,15 @@ AddCommand("fling2", {"stan2"}, "another variant of fling", {}, function(Caller,
     Root.CFrame = OldPos
 end)
 
-AddCommand("antitkill", {}, "anti tkill :troll:", {3}, function(Caller, Args)
-    game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
+AddCommand("antikill", {}, "anti tkill :troll:", {3}, function(Caller, Args)
+    local character = game.Players.LocalPlayer.Character
+local humanoid = character:WaitForChild("Humanoid")
+
+if humanoid.RigType == Enum.HumanoidRigType.R6 then
     game:GetService'Players'.LocalPlayer.Character['RightArm']:Destroy()
+elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
+    game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
+end
 end)
 
 AddCommand("antiattach", {"anticlaim"}, "enables antiattach", {3}, function(Caller, Args)
@@ -9503,10 +9509,14 @@ end
 end
 end)
 
-AddCommand("leavebooth", {"*abandonbooth"}, "abandons the booth you own", {}, function(Caller, Args)
-local A_1 = "Abandon"
+AddCommand("boothupdate", {"*boothupdate"}, "sets the text and/or of ur booth", {}, function(Caller, Args)
+local A_1 = "Update"
+local A_2 =  {
+	["DescriptionText"] = Args[1], 
+	["ImageId"] = Args[2] or 0
+}
 local Event = game:GetService("ReplicatedStorage").CustomiseBooth
-Event:FireServer(A_1)
+Event:FireServer(A_1, A_2)
 end)
 
 AddCommand("crash", {"*crash", "serverlag"}, "lots of swords needed to crash", {}, function(Caller, Args)
