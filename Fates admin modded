@@ -5709,6 +5709,25 @@ AddCommand("spamsilentchat", {"spamchatlogs"}, "spams sending messages with what
     return "spamming chat sliently"
 end)
 
+AddCommand("reanimate", {"*reanimate"}, "reanimates you", {{"r6", "r15", "convertr15", "headlessr6", "headlessr15"}}, function(Caller, Args)
+local reanimate = (Args[1])
+
+local player = game.Players.LocalPlayer
+if reanimate == "r6" then
+  loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r6"))()
+elseif reanimate == "r15" then
+  loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r15"))()
+elseif reanimate == "convertr15" then
+  loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/convertr15"))()
+elseif reanimate == "headlessr6" then
+  loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/headlessr6"))()
+  elseif reanimate == "headlessr15" then
+  loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r15headless"))()
+else
+  print("reanimate type not found")
+end
+end)
+
 AddCommand("unspamsilentchat", {"nospamsilentchat", "unspamchatlogs", "nospamchatlogs", "unspamchat", "unspam"}, "stops the spam of chat", {}, function()
     local Spamming = LoadCommand("spamsilentchat").CmdEnv
     local Spamming1 = LoadCommand("spam").CmdEnv
