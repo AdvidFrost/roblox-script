@@ -1,3 +1,4 @@
+wait(5)
 --[[
 	Advid's Admin - 16/11/2022
 ]]
@@ -3468,7 +3469,7 @@ AddCommand("stopdupe", {}, "stops the dupe", {}, function()
     return "dupetools stopped"
 end)
 
-AddCommand("autoclick", {}, "autoclicks at a speed", {}, function(Caller, Args)
+AddCommand("autoclick", {}, "autoclicks at a speed", {}, function(Cl)
     local time = (Args[1]) --decrease if too slow increase if too fast
 
 click = false
@@ -3479,6 +3480,14 @@ if key == "v" then
         click = false
     elseif click == false then 
         click = true
+    end
+end
+end)
+
+while true do 
+    wait(time)
+    if click then 
+        mouse1click()
     end
 end
 end)
