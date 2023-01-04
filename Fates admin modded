@@ -3468,6 +3468,21 @@ AddCommand("stopdupe", {}, "stops the dupe", {}, function()
     return "dupetools stopped"
 end)
 
+AddCommand("autoclick", {}, "autoclicks at a speed", {}, function(Caller, Args)
+    local time = (Args[1]) --decrease if too slow increase if too fast
+
+click = false
+m = game.Players.LocalPlayer:GetMouse()
+m.KeyDown:connect(function(key)
+if key == "v" then
+    if click == true then 
+        click = false
+    elseif click == false then 
+        click = true
+    end
+end
+end)
+
 AddCommand("savetools", {"st"}, "saves your tools", {1,3}, function(Caller, Args)
     UnequipTools(GetHumanoid());
     local Tools = GetChildren(LocalPlayer.Backpack);
@@ -9388,6 +9403,115 @@ wait(0.4)
 fireproximityprompt(target.ProximityPrompt)
 wait()
 hrp.CFrame = gobackto
+end
+end)
+
+AddCommand("respawntool", {"*respawntool"}, "gives you a tool upon respawn", {{"image", "text", "stopsign", "sword"}}, function(Caller, Args)
+local respawnwith = (Args[1])
+-- Teleport the player to the specified location
+local player = game.Players.LocalPlayer
+if respawnwith == "stopsign" then
+    game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(Character)
+    wait(0.2)
+local A_1 = 17290248
+local Event = game:GetService("ReplicatedStorage").RequestGamepassTool
+Event:FireServer(A_1)
+end)
+
+elseif respawnwith == "sword" then
+  game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(Character)
+      wait(0.2)
+local A_1 = "ClassicSword"
+local Event = game:GetService("ReplicatedStorage").RequestTool
+Event:FireServer(A_1) 
+end)
+elseif respawnwith == "text" then
+    game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(Character)
+    wait(0.2)
+local A_1 = 17291420
+local Event = game:GetService("ReplicatedStorage").RequestGamepassTool
+Event:FireServer(A_1)
+end)
+
+elseif respawnwith == "image" then
+   game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(Character)
+       wait(0.2)
+local A_1 = 17291427
+local Event = game:GetService("ReplicatedStorage").RequestGamepassTool
+Event:FireServer(A_1)
+end)
+else
+  print("tool not found")
+end
+end)
+
+AddCommand("loopgivesword", {"*loopgivesword"}, "loop duplicates swords", {}, function(Caller, Args)
+getgenv().sworddupe = true
+while getgenv().sworddupe do
+local args = {
+    	[1] = "ClassicSword",
+		}
+		game:GetService("ReplicatedStorage").RequestTool:FireServer(unpack(args))
+		wait(0.05)
+		for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+v.Parent = game.Players.LocalPlayer.Character
+end
+end
+end)
+
+AddCommand("crash", {"*loopgivesword", "serverlag"}, "lots of swords needed to crash", {}, function(Caller, Args)
+for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
+if obj.Name == "ClassicSword" then
+local equip = game.Players.LocalPlayer.Backpack.ClassicSword
+equip.Parent = game.Players.LocalPlayer.Character
+end
+end
+wait(2)
+game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
+wait(0.001)
+game:GetService'Players'.LocalPlayer.Character['RightLowerArm']:Destroy()
+wait(0.001)
+game:GetService'Players'.LocalPlayer.Character['RightUpperArm']:Destroy()
+wait(3)
+game:GetService'Players'.LocalPlayer.Character['Head']:Destroy()
+game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("crash/lag attempted","All")
+    return "crash attempted, if nothing happened you need swords dummy"
+end)
+
+AddCommand("unloopgivesword", {"*unloopgivesword"}, "stops duping swords", {}, function(Caller, Args)
+getgenv().sworddupe = false
+end)
+
+--Github imports
+AddCommand("sus", {"*sus"}, "AMOGUS", {}, function(Caller, Args)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/rouxhaver/scripts/main/sus.lua"))()
+end)
+AddCommand("rickroll", {"*rickroll"}, "never gonna give you up never gonna let you downnn", {}, function(Caller, Args)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/rouxhaver/scripts/main/rickroll.Lua"))()
+end)
+
+AddCommand("boothchat", {"*boothchat"}, "display a live chat on ur booth", {}, function(Caller, Args)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/rouxhaver/scripts/main/rate_my_avatar_public_chat.lua"))()
+end)
+
+AddCommand("snake", {"*snake"}, "lets you play snake with ur booth", {}, function(Caller, Args)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/rouxhaver/scripts/main/WORM!!_2D_RatemyAvatarSnakeGame.lua"))()
+end)
+
+AddCommand("pong", {"*pong"}, "wow", {}, function(Caller, Args)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/rouxhaver/scripts/main/RateMyAvatarPong.Lua"))()
+end)
+
+AddCommand("paint", {"*paint"}, "paint with ur booth", {}, function(Caller, Args)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/rouxhaver/scripts/main/RateMyAvatar_MS_Paint.lua"))()
+end)
+
+AddCommand("antiblacklist", {"*antiblacklist"}, "cool", {}, function(Caller, Args)
+--stupidly simple
+while task.wait() do
+    for i,v in pairs(Workspace:GetDescendants()) do
+        if v.Name:match("Barrier") then v:Destroy() end
+    end
 end
 end)
 Utils.Notify(LocalPlayer, "Compatible game detected", "Rate my avatar is supported for extra commands! Type a * in the cmds menu to view them", 10);
