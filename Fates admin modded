@@ -3469,7 +3469,7 @@ AddCommand("stopdupe", {}, "stops the dupe", {}, function()
     return "dupetools stopped"
 end)
 
-AddCommand("autoclick", {}, "autoclicks at a speed", {}, function(Cl)
+AddCommand("autoclick", {}, "autoclicks at a speed", {}, function(Caller, Args)
     local time = (Args[1]) --decrease if too slow increase if too fast
 
 click = false
