@@ -9468,7 +9468,7 @@ end
 end
 end)
 
-AddCommand("crash", {"*loopgivesword", "serverlag"}, "lots of swords needed to crash", {}, function(Caller, Args)
+AddCommand("crash", {"*crash", "serverlag"}, "lots of swords needed to crash", {}, function(Caller, Args)
 for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
 if obj.Name == "ClassicSword" then
 local equip = game.Players.LocalPlayer.Backpack.ClassicSword
