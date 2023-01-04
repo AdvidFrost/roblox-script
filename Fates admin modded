@@ -3469,7 +3469,7 @@ AddCommand("stopdupe", {}, "stops the dupe", {}, function()
     return "dupetools stopped"
 end)
 
-AddCommand("autoclick", {}, "autoclicks at a speed", {}, function(Cl)
+AddCommand("autoclick", {}, "autoclicks at a speed", {}, function(Caller, Args)
     local time = (Args[1]) --decrease if too slow increase if too fast
 
 click = false
@@ -5335,6 +5335,22 @@ AddCommand("walkspeed", {"ws", "speed"}, "changes your walkspeed to the second a
     SpoofProperty(Humanoid, "WalkSpeed");
     Humanoid.WalkSpeed = tonumber(Args[1]) or 16
     return "your walkspeed is now " .. Humanoid.WalkSpeed
+end)
+
+AddCommand("loopwalkspeed", {"loopws", "loopspeed"}, "loops your walkspeed to the second argument", {}, function(Caller, Args, CEnv)
+    getgenv().loopspeed = true
+    while getgenv().loopspeed do
+        wait(0.01)
+    local Humanoid = GetHumanoid();
+    CEnv[1] = Humanoid.WalkSpeed
+    SpoofProperty(Humanoid, "WalkSpeed");
+    Humanoid.WalkSpeed = tonumber(Args[1]) or 16
+    end
+    print("looping your walkspeed to " .. Humanoid.WalkSpeed)
+end)
+
+AddCommand("unloopwalkspeed", {"unloopws", "unloopspeed"}, "unloops your walkspeed", {}, function(Caller, Args, CEnv)
+    getgenv().loopspeed = false
 end)
 
 AddCommand("nofullbright", {"revertlights", "unfullbright", "nofb"}, "reverts fullbright", {}, function()
@@ -9485,6 +9501,12 @@ local args = {
 v.Parent = game.Players.LocalPlayer.Character
 end
 end
+end)
+
+AddCommand("leavebooth", {"*abandonbooth"}, "abandons the booth you own", {}, function(Caller, Args)
+local A_1 = "Abandon"
+local Event = game:GetService("ReplicatedStorage").CustomiseBooth
+Event:FireServer(A_1)
 end)
 
 AddCommand("crash", {"*crash", "serverlag"}, "lots of swords needed to crash", {}, function(Caller, Args)
