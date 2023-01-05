@@ -4162,6 +4162,10 @@ AddCommand("displaynames", {}, "enables/disables display names (on/off)", {{"on"
     end
 end)
 
+AddCommand("blockhats", {"demesh}, "deletes the meshes of ur hats", {}, function(Caller, Args, CEnv)
+    
+end)
+
 AddCommand("time", {"settime"}, "sets the games time", {{"night", "day", "dawn"}}, function(Caller, Args)
     local Lighting = Services.Lighting
     local Time = Args[1] and lower(Args[1]) or 14
