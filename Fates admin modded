@@ -3297,6 +3297,10 @@ AddCommand("uninvisible", {"uninvis", "noinvis", "visible", "vis"}, "gives you b
     return "you are already visible"
 end)
 
+AddCommand("antivoid", {"antivoid", "novoid"}, "makes u unable to die in the void", {}, function()
+        workspace.FallenPartsDestroyHeight = 0/1/0
+end)
+
 AddCommand("dupetools", {"dp"}, "dupes your tools", {"1", 1, {"protect"}}, function(Caller, Args, CEnv)
     local Amount = tonumber(Args[1])
     local Protected = Args[2] == "protect"
@@ -4269,7 +4273,7 @@ AddCommand("antikill", {}, "anti tkill :troll:", {3}, function(Caller, Args)
 local humanoid = character:WaitForChild("Humanoid")
 
 if humanoid.RigType == Enum.HumanoidRigType.R6 then
-    game:GetService'Players'.LocalPlayer.Character['RightArm']:Destroy()
+    game:GetService'Players'.LocalPlayer.Character['Right Arm']:Destroy()
 elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
     game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
 end
@@ -9536,6 +9540,14 @@ wait(3)
 game:GetService'Players'.LocalPlayer.Character['Head']:Destroy()
 game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("crash/lag attempted","All")
     return "crash attempted, if nothing happened you need swords dummy"
+end)
+
+AddCommand("rate", {"*rate"}, "!rate (player) (stars)", {}, function(Caller, Args)
+local Target = Args[1]
+local A_1 = game:GetService("Players")[Args[1]]
+local A_2 = Args[2]
+local Event = game:GetService("ReplicatedStorage").PostRating
+Event:FireServer(A_1, A_2)
 end)
 
 AddCommand("unloopgivesword", {"*unloopgivesword"}, "stops duping swords", {}, function(Caller, Args)
