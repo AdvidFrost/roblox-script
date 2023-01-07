@@ -6130,6 +6130,38 @@ AddCommand("setcommandbarprefix", {"setcprefix"}, "sets your command bar prefix 
     local CloseNotif = Utils.Notify(LocalPlayer, "New Prefix", "Input the new prefix you would like to have", 7);
 end)
 
+AddCommand("blockhats", {"blockhats"}, "makes ur hats into blocks, r6 only", {}, function()
+local character = game.Players.LocalPlayer.Character
+local humanoid = character:WaitForChild("Humanoid")
+
+if humanoid.RigType == Enum.HumanoidRigType.R6 then
+    local player = game.Players.LocalPlayer
+local character = player.Character
+
+-- Find all the accessories in the character
+local accessories = character:GetChildren()
+
+-- Iterate through each accessory
+for _, accessory in pairs(accessories) do
+    if accessory:IsA("Accessory") then
+        -- Find the Mesh or SpecialMesh object in the accessory's handle
+        local mesh = accessory.Handle:FindFirstChild("Mesh")
+        if not mesh then
+            mesh = accessory.Handle:FindFirstChild("SpecialMesh")
+        end
+        
+        -- Check if the mesh exists
+        if mesh then
+            -- Delete the mesh
+            mesh:Destroy()
+        end
+    end
+end
+elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
+    return "r6 only"
+end
+end)
+
 AddCommand("saveprefix", {}, "saves your prefix", {}, function(Caller, Args)
     if (GetConfig().Prefix == Prefix and Enum.KeyCode[GetConfig().CommandBarPrefix] == CommandBarPrefix) then
         return "nothing to save, prefix is the same"
