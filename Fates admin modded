@@ -9478,6 +9478,7 @@ print("Da hood battles grounds detected")
     Utils.Notify(LocalPlayer, "Compatible game detected", "DHB is supported for extra commands! Type a * in the cmds menu to view them", 10);
 end
 
+-- DV HOOD
 if game.PlaceId == 9431306429 then   
 AddCommand("crash", {"*crash"}, "crashes the game, prepcrash command must be used first", {}, function()
        game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
@@ -9527,7 +9528,7 @@ end)
     end)
     
 AddCommand("prepcrash", {"*prepcrash"}, "prepares to crash the game, once ready you can type crash in the command bar to crash", {}, function()
-     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(214, 288, -763)
+     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-761, 185, 267)
 for i = 1,30 do
     wait(0.2)
 for i,v in pairs(game:GetDescendants()) do
