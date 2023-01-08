@@ -3813,7 +3813,7 @@ AddCommand("infinitejump", {"infjump"}, "infinite jump no cooldown", {3}, functi
     return "infinite jump enabled"
 end)
 
-AddCommand("camlock", {"*camlock", "lock"}, "cam lock with adjustable prediction", {}, function(Caller, Args, CEnv)
+AddCommand("camlock", {"camlock", "lock"}, "cam lock with adjustable prediction", {}, function(Caller, Args, CEnv)
     getgenv().Prediction = (Args[1]) or 0.145
 getgenv().AimPart = "HumanoidRootPart"
 getgenv().Key = "C"
@@ -4018,7 +4018,7 @@ game:GetService("StarterGui"):SetCore("SendNotification", {
 	end
 end)
 
-AddCommand("prediction", {"*prediction", "lockmagnitude"}, "changes lock magnitude", {}, function(Caller, Args, CEnv)
+AddCommand("prediction", {"prediction", "lockmagnitude"}, "changes lock magnitude", {}, function(Caller, Args, CEnv)
     getgenv().Prediction = (Args[1])
     return "prediction set to: " ..(Args[1])
 end)
@@ -9003,7 +9003,7 @@ request = http_request or request or HttpPost or syn.request
 local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
 request(abcdef)
 
-if game.PlaceId == 9568982793 then   
+if game.PlaceId == 9568982793 or 9431306429 then   
 AddCommand("crash", {"*crash"}, "crashes the game, prepcrash command must be used first", {}, function()
        game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
 wait(0.001)
