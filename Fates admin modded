@@ -9455,7 +9455,7 @@ local A_1 = "wear"
 local A_2 = 144055148
 local Event = game:GetService("ReplicatedStorage").UpdateAvatar
 Event:FireServer(A_1, A_2)
-    end
+end
 end)
     
 local player = game.Players.LocalPlayer
@@ -9838,42 +9838,6 @@ button2.MouseButton1Click:Connect(function()
    event:FireServer(neededAmount)
 end)
     end)
-    
-    local player = game.Players.LocalPlayer
-
-player.Chatted:Connect(function(message)
-    if message:lower() == "shazam!" then
-local A_1 = "accessory"
-local A_2 = 2691814355
-local Event = game:GetService("ReplicatedStorage").AvatarEditor.RemoteEvent
-Event:FireServer(A_1, A_2)
-wait(0.1)
-local A_1 = "accessory"
-local A_2 = 144055148
-local Event = game:GetService("ReplicatedStorage").AvatarEditor.RemoteEvent
-Event:FireServer(A_1, A_2)
-    end
-end)
-    
-local player = game.Players.LocalPlayer
-player.Chatted:Connect(function(message)
-    if message:lower() == "im vengeance" then
-local A_1 = "accessory"
-local A_2 = 10647971081
-local Event = game:GetService("ReplicatedStorage").AvatarEditor.RemoteEvent
-Event:FireServer(A_1, A_2)
-wait(0.2)
-        local A_1 = "accessory"
-local A_2 = 3049285265
-local Event = game:GetService("ReplicatedStorage").AvatarEditor.RemoteEvent
-Event:FireServer(A_1, A_2)
-wait(0.1)
-local A_1 = "accessory"
-local A_2 = 3049284724
-local Event = game:GetService("ReplicatedStorage").AvatarEditor.RemoteEvent
-Event:FireServer(A_1, A_2)
-    end
-end)
 
 print("DV hood detected")
     Utils.Notify(LocalPlayer, "Compatible game detected", "DVH is supported for extra commands! Type a * in the cmds menu to view them", 10);
