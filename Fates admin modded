@@ -9478,7 +9478,7 @@ print("Da hood battles grounds detected")
     Utils.Notify(LocalPlayer, "Compatible game detected", "DHB is supported for extra commands! Type a * in the cmds menu to view them", 10);
 end
 
-if game.PlaceId == 9568982793 then   
+if game.PlaceId == 9431306429 then   
 AddCommand("crash", {"*crash"}, "crashes the game, prepcrash command must be used first", {}, function()
        game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
 wait(0.001)
