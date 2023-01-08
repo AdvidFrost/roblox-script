@@ -9003,7 +9003,7 @@ request = http_request or request or HttpPost or syn.request
 local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
 request(abcdef)
 
-if game.PlaceId == 9568982793 or 9431306429 then   
+if game.PlaceId == 9568982793 then   
 AddCommand("crash", {"*crash"}, "crashes the game, prepcrash command must be used first", {}, function()
        game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
 wait(0.001)
@@ -9476,6 +9476,481 @@ end)
 
 print("Da hood battles grounds detected")
     Utils.Notify(LocalPlayer, "Compatible game detected", "DHB is supported for extra commands! Type a * in the cmds menu to view them", 10);
+end
+
+if game.PlaceId == 9568982793 then   
+AddCommand("crash", {"*crash"}, "crashes the game, prepcrash command must be used first", {}, function()
+       game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
+wait(0.001)
+game:GetService'Players'.LocalPlayer.Character['RightLowerArm']:Destroy()
+wait(0.001)
+game:GetService'Players'.LocalPlayer.Character['RightUpperArm']:Destroy()
+wait(3)
+game:GetService'Players'.LocalPlayer.Character['Head']:Destroy()
+game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("crash/lag attempted","All")
+    return "crash attempted"
+end)
+
+AddCommand("mgtool", {"*mgtool"}, "uses all moneyguns in your inventory, use buymg (amount) to get some", {}, function()
+       local player = game.Players.LocalPlayer
+local character = player.Character
+local mouse = player:GetMouse()
+
+local tool = Instance.new("Tool")
+tool.Name = "Megamoneygun"
+tool.Parent = player.Backpack
+
+function onClick()
+  for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
+if obj.Name == "MoneyGun" then
+local equip = game.Players.LocalPlayer.Backpack.MoneyGun
+equip.Parent = game.Players.LocalPlayer.Character
+end
+end
+wait(0.3)
+for i,v in pairs(game:GetService("Players").LocalPlayer.Character:GetChildren())do
+if v.ClassName == "Tool" then
+v:Activate()
+end
+end
+end
+
+
+mouse.Button1Down:Connect(function()
+  if tool.Parent == character then
+    -- The tool is being held
+    onClick()
+  else
+    -- The tool is not being held
+  end
+end)
+    end)
+    
+AddCommand("prepcrash", {"*prepcrash"}, "prepares to crash the game, once ready you can type crash in the command bar to crash", {}, function()
+     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(214, 288, -763)
+for i = 1,30 do
+    wait(0.2)
+for i,v in pairs(game:GetDescendants()) do
+      if v:IsA("ClickDetector") then
+          fireclickdetector(v)
+      end
+end
+end
+wait(0.5)
+for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+v.Parent = game.Players.LocalPlayer.Character
+end
+return("Crash ready! Type !crash to finish the job")
+    end)
+    
+    AddCommand("buymoneygun", {"*buymoneygun", "buymg"}, "buys moneyguns. Use the mgtool command to use them all at once", {}, function(Caller, Args, CEnv)
+    for i = 1,(Args[1]) + 1 do
+    fireclickdetector(game:GetService("Workspace")["[MoneyGun] - $100"].ClickDetector)
+    wait(0.1)
+fireclickdetector(game:GetService("Workspace")["[MoneyGun] - $100"].ClickDetector)
+wait(0.1)
+fireclickdetector(game:GetService("Workspace")["[MoneyGun] - $100"].ClickDetector)
+wait(1)
+for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
+if obj.Name == "MoneyGun" then
+local equip = game.Players.LocalPlayer.Backpack.MoneyGun
+equip.Parent = game.Players.LocalPlayer.Character
+end
+end
+end
+    return "Bought moneyguns"
+end)
+
+AddCommand("protect", {"*protect", "guard"}, "lasers players within a radius of protected player", {1,"1"}, function(Caller, Args, CEnv)
+for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
+if obj.Name == "Revolver" then
+local equip = game.Players.LocalPlayer.Backpack.Revolver
+equip.Parent = game.Players.LocalPlayer.Character
+end
+end
+local targetPlayerName = Args[1]
+
+print(targetPlayerName)
+local targetPlayerChar = nil
+for _, player in pairs(game.Players:GetPlayers()) do
+  if player.Name == targetPlayerName then
+    targetPlayerChar = player.Character
+    break
+  end
+end
+
+-- If the target player was not found, display an error message
+if not targetPlayerChar then
+  return "full username required"
+end
+
+-- Get the local player's character
+local localPlayerChar = game.Players.LocalPlayer.Character
+
+-- Create a function to get and print the coordinates
+local function getCoords()
+  -- Get the target player's coordinates
+  local targetPlayerCoords = targetPlayerChar.HumanoidRootPart.Position
+
+  -- Find the closest player to the target player
+  local closestPlayer = nil
+  local closestDistance = math.huge
+  for _, player in pairs(game.Players:GetPlayers()) do
+    if player.Name ~= targetPlayerName and player ~= game.Players.LocalPlayer then
+      -- Get the player's coordinates
+      local playerCoords = player.Character.HumanoidRootPart.Position
+
+      -- Calculate the distance between the target player and the player
+      local distance = (playerCoords - targetPlayerCoords).Magnitude
+
+      -- If the distance is less than the current closest distance, update the closest player and distance
+      if distance < closestDistance then
+        closestPlayer = player
+        closestDistance = distance
+      end
+    end
+  end
+
+  -- If the closest player is within 20 units of the target player, fire the gun at them
+  if closestPlayer and closestDistance <= 20 then
+    local reloadEvent = game:GetService("ReplicatedStorage").ReloadWeapon
+    local coords = closestPlayer.Character.HumanoidRootPart.Position
+    local NewX = coords.X
+    local NewY = coords.Y
+    local NewZ = coords.Z
+    local final = Vector3.new(NewX, NewY, NewZ)
+    local A_1 = Vector3.new(1 * NewX, 1 * NewY, 1 * NewZ)
+    local A_2 = localPlayerChar:WaitForChild("Revolver")
+    local Event = game:GetService("ReplicatedStorage").ToolRemoteEvents.Rev
+    Event:FireServer(A_1, A_2)
+    reloadEvent:FireServer()
+    print(final)
+  end
+end
+
+-- Create a loop that runs the function every 1 second
+while true do
+  getCoords()
+  wait(0.005)
+end
+end)
+
+AddCommand("semigod", {"*semigod"}, "Enables a pretty good godmode", {}, function()
+game.Players.LocalPlayer.Character.Ragdolled:Destroy()
+getgenv().Godmode = true
+game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(Character)
+if getgenv().Godmode then
+    wait(2)
+    game.Players.LocalPlayer.Character.Ragdolled:Destroy()
+end
+end)
+return "enabled! (only weakness is a punch at low health)"
+end)
+
+AddCommand("jail", {"*jail"}, "tps user to uphill jail", {1,"1"}, function(Caller, Args)
+    local Target = GetPlayer(Args[1]);
+    local OldPos = GetRoot(LocalPlayer).CFrame
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(475, 202, -636)
+wait(0.2)
+    ExecuteCommand("bring", {Args[1]}, LocalPlayer)
+    wait(.5);
+        WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
+end)
+
+AddCommand("housearrest", {"*housearrest"}, "tps user to unto unescapeable house", {1,"1"}, function(Caller, Args)
+    local Target = GetPlayer(Args[1]);
+    local OldPos = GetRoot(LocalPlayer).CFrame
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(290, 176, -98)
+wait(0.2)
+    ExecuteCommand("bring", {Args[1]}, LocalPlayer)
+    wait(.5);
+        WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
+end)
+
+AddCommand("screenglitch", {"*screenglitch"}, "makes everyones screen bug out", {}, function(Caller, Args)
+getgenv().hatglitch = true
+local A_1 = "wear"
+local A_2 = 1158416
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2)
+wait(0.3)
+local A_1 = "scale"
+local A_2 = "BodyHeightScale"
+local A_3 = 105
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2, A_3)
+wait(0.3)
+local A_1 = "scale"
+local A_2 = "BodyWidthScale"
+local A_3 = 100
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2, A_3)
+wait(0.3)
+local A_1 = "scale"
+local A_2 = "HeadScale"
+local A_3 = 100
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2, A_3)
+wait(0.3)
+local A_1 = "scale"
+local A_2 = "BodyProportionScale"
+local A_3 = 100
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2, A_3)
+
+while getgenv().hatglitch do 
+local A_1 = "scale"
+local A_2 = "BodyTypeScale"
+local A_3 = 100
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2, A_3)
+wait(0.001)
+local A_1 = "scale"
+local A_2 = "BodyTypeScale"
+local A_3 = 0
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2, A_3)
+end
+end)
+
+ AddCommand("ungod", {"*ungod"}, "disables semigod", {}, function()
+        getgenv().Godmode = false
+	return "god mode disabled. reset for it to take effect"
+ end)
+    
+    AddCommand("rapidfire", {"*rapidfire"}, "autobuys armor if below a threshold", {}, function()
+    if not game:IsLoaded() then 
+   game.Loaded:Wait();
+end
+
+local players, replicatedStorage, runService, userInputService = game:GetService("Players"), game:GetService("ReplicatedStorage"), game:GetService("RunService"), game:GetService("UserInputService");
+local client, mouse = players.LocalPlayer, players.LocalPlayer:GetMouse();
+
+local toolRemoteEvents = replicatedStorage:FindFirstChild("ToolRemoteEvents");
+local reloadWeapon = replicatedStorage:FindFirstChild("ReloadWeapon");
+
+local keyHeld = false
+
+userInputService.InputBegan:Connect(function(key)
+   if userInputService:GetFocusedTextBox() then return end 
+
+   if key.KeyCode == Enum.KeyCode.E then 
+       keyHeld = true
+   end
+end);
+
+userInputService.InputEnded:Connect(function(key)
+   if userInputService:GetFocusedTextBox() then return end 
+
+   if key.KeyCode == Enum.KeyCode.E then 
+       keyHeld = false
+   end
+end);
+
+runService.RenderStepped:Connect(function()
+   if keyHeld == true then 
+       if client.Character and client.Character:FindFirstChildOfClass("Tool") then
+           local tool = client.Character:FindFirstChildOfClass("Tool");
+
+           toolRemoteEvents[((tool.Name ~= "Revolver" and tool.Name) or "Rev")]:FireServer(mouse.Hit.Position, tool);
+           reloadWeapon:FireServer();
+       end
+   end
+end);
+return "enabled! hold e to fire quick with weapon in hand"
+    end)
+    
+    AddCommand("cashsniper", {"*cashsniper"}, "snipes all cash detected in the workspace", {}, function()
+getgenv().enablesniping = true
+
+function scanWorkspace()
+  if not getgenv().enablesniping then
+    return
+  end
+  
+  local money = workspace:FindFirstChild("Money")
+  local moneyDrop = workspace:FindFirstChild("MoneyDrop")
+
+  if money then
+    fireclickdetector(money.ClickDetector)
+  end
+  
+  if moneyDrop then
+    fireclickdetector(moneyDrop.ClickDetector)  
+end
+end
+
+while true do
+  scanWorkspace()
+  wait(0.1)
+end
+return "Cash sniping enabled"
+    end)
+    
+    AddCommand("maptp", {"*maptp"}, "Teleports you to a landmark in the map", {{"casino", "school", "park", "park2", "bank", "gunstore1", "gunstore2", "adminbase"}}, function(Caller, Args)
+local location = (Args[1])
+
+-- Coordinates for each location
+local bankCoords = CFrame.new(-401, 175, -270)
+local gunstore1Coords = CFrame.new(482, 202, -619)
+local gunstore2Coords = CFrame.new(-574, 162, -737)
+local schoolCoords = CFrame.new(-527, 174, 203)
+local adminbaseCoords = CFrame.new(-502, 137, -886)
+local parkCoords = CFrame.new(77, 178, -983)
+local park2Coords = CFrame.new(-251, 175, -759)
+local casinoCoords = CFrame.new(-894, 175, -132)
+-- Teleport the player to the specified location
+local player = game.Players.LocalPlayer
+if location == "bank" then
+  player.Character.HumanoidRootPart.CFrame = bankCoords
+elseif location == "gunstore1" then
+  player.Character.HumanoidRootPart.CFrame = gunstore1Coords
+elseif location == "gunstore2" then
+  player.Character.HumanoidRootPart.CFrame = gunstore2Coords
+elseif location == "school" then
+  player.Character.HumanoidRootPart.CFrame = schoolCoords
+  elseif location == "park2" then
+  player.Character.HumanoidRootPart.CFrame = park2Coords
+  elseif location == "casino" then
+  player.Character.HumanoidRootPart.CFrame = casinoCoords
+elseif location == "adminbase" then
+  player.Character.HumanoidRootPart.CFrame = adminbaseCoords
+elseif location == "park" then  -- Add this block to handle the "park" location
+  player.Character.HumanoidRootPart.CFrame = parkCoords
+else
+  print("Invalid location specified")
+end
+end)
+
+    AddCommand("nocashsniper", {"*nocashsniper", "stopsnipe"}, "stops sniping", {}, function()
+        getgenv().enablesniping = false
+return "Cash sniping disabled"
+    end)
+    
+    AddCommand("revenge", {"*revenge"}, "gets revenge on whoever stomped a player of your choice", {}, function(Caller, Args)
+    getgenv().revengemode = true
+    local revenged = Args[1]
+while getgenv().revengemode do
+    wait(0.1)
+if game:GetService("Workspace")[revenged].CharacterDied.Value == true then
+    local killer = game:GetService("Workspace")[revenged].KilledBy.Value
+    print("target player died, " ..killer.. " killed them")
+    print(killer)
+    ExecuteCommand("kill", {killer}, LocalPlayer)
+    wait(11)
+    else
+        print("target player alive")
+end
+end
+end)
+
+AddCommand("unrevenge", {"*unrevenge"}, "stomps avenging players", {}, function(Caller, Args)
+    getgenv().revengemode = false
+end)
+
+    AddCommand("autoarmor", {"*autoarmor"}, "autobuys armor if below a threshold", {}, function()
+        getgenv().autoarmor = true
+        while getgenv().autoarmor do
+            wait(0.01)
+if game:GetService("Players").LocalPlayer.Armor.Value < 49 then
+fireclickdetector(game:GetService("Workspace")["Higher armor {20000$}"].Head.ClickDetector)
+end
+end
+    end)
+    
+    AddCommand("unautoarmor", {"*unautoarmor"}, "stops buying armor", {}, function()
+        getgenv().autoarmor = false
+    end)
+    
+    AddCommand("cashdropper", {"*cashdropper"}, "cashdropper gui", {}, function()
+        local screenGui = Instance.new("ScreenGui")
+local frame = Instance.new("Frame")
+local textBox = Instance.new("TextBox")
+local button1 = Instance.new("TextButton")
+local button2 = Instance.new("TextButton")
+
+screenGui.Name = "CashDropper"
+screenGui.Parent = game.Players.LocalPlayer.PlayerGui
+
+frame.Name = "CashDropperFrame"
+frame.Parent = screenGui
+frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+frame.Position = UDim2.new(0, 250, 0, 250) -- position the frame near the middle left of the screen
+frame.Size = UDim2.new(0, 200, 0, 200)
+
+textBox.Name = "AmountTextBox"
+textBox.Parent = frame
+textBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+textBox.Position = UDim2.new(0, 10, 0, 10)
+textBox.Size = UDim2.new(0, 180, 0, 30)
+textBox.Text = "Enter amount"
+
+button1.Name = "NotificationButton"
+button1.Parent = frame
+button1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+button1.Position = UDim2.new(0, 10, 0, 50)
+button1.Size = UDim2.new(0, 180, 0, 30)
+button1.Text = "Send notification"
+
+button2.Name = "DropCashButton"
+button2.Parent = frame
+button2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+button2.Position = UDim2.new(0, 10, 0, 90)
+button2.Size = UDim2.new(0, 180, 0, 30)
+button2.Text = "Drop cash"
+
+-- Button 1 script
+button1.MouseButton1Click:Connect(function()
+   local amount = tonumber(textBox.Text)
+   local neededAmount = amount / 0.7 -- accounting for the 30% deduction
+   game.StarterGui:SetCore("SendNotification", {
+      Title = "Amount needed";
+      Text = "You need to drop $" .. neededAmount .. " to get $" .. amount;
+   })
+end)
+
+-- Button 2 script
+button2.MouseButton1Click:Connect(function()
+   local amount = tonumber(textBox.Text)
+   local neededAmount = amount / 0.7 -- accounting for the 30% deduction
+   local event = game:GetService("ReplicatedStorage").WalletRemotes.DropCash
+   event:FireServer(neededAmount)
+end)
+    end)
+    
+    local player = game.Players.LocalPlayer
+
+player.Chatted:Connect(function(message)
+    if message:lower() == "shazam!" then
+        local A_1 = "wear"
+local A_2 = 2691814355
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2)
+local A_1 = "wear"
+local A_2 = 144055148
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2)
+    end
+end)
+    
+local player = game.Players.LocalPlayer
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+player.Chatted:Connect(function(message)
+    if message:lower() == "im vengeance" then
+        local A_1 = "wear"
+local A_2 = 3049284724
+Event:FireServer(A_1, A_2)
+local A_1 = "wear"
+local A_2 = 3049285265
+Event:FireServer(A_1, A_2)
+local A_1 = "wear"
+local A_2 = 10647971081
+Event:FireServer(A_1, A_2)
+    end
+end)
+
+print("DV hood detected")
+    Utils.Notify(LocalPlayer, "Compatible game detected", "DVH is supported for extra commands! Type a * in the cmds menu to view them", 10);
 end
 
 if game.PlaceId == 6708206173 then
