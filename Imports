@@ -8912,3 +8912,56 @@ do
     end)
 end
 --END IMPORT [config]
+AddConnection(CConnect(CommandBar.Input.FocusLost, function()
+    local Text = trim(CommandBar.Input.Text);
+    local CommandArgs = split(Text, " ");
+
+    CommandBarOpen = false
+
+    if (not Draggable) then
+        Utils.TweenAllTrans(CommandBar, .5)
+        Utils.Tween(CommandBar, "Quint", "Out", .5, {
+            Position = UDim2.new(0.5, WideBar and -200 or -100, 1, 5); -- tween 5
+        })
+    end
+
+    local Command = CommandArgs[1]
+    local Args = shift(CommandArgs);
+
+    if (Command ~= "") then
+        ExecuteCommand(Command, Args, LocalPlayer);
+    end
+end), Connections.UI, true);
+
+local PlayerAdded = function(plr)
+    RespawnTimes[plr.Name] = tick();
+    AddConnection(CConnect(plr.CharacterAdded, function()
+        RespawnTimes[plr.Name] = tick();
+    end));
+end
+
+forEach(GetPlayers(Players), function(i,v)
+    PlayerAdded(v);
+end);
+
+AddConnection(CConnect(Players.PlayerAdded, function(plr)
+    PlayerAdded(plr);
+end))
+
+AddConnection(CConnect(Players.PlayerRemoving, function(plr)
+    if (Connections.Players[plr.Name]) then
+        if (Connections.Players[plr.Name].ChatCon) then
+            Disconnect(Connections.Players[plr.Name].ChatCon);
+        end
+        Connections.Players[plr.Name] = nil
+    end
+    if (RespawnTimes[plr.Name]) then
+        RespawnTimes[plr.Name] = nil
+    end
+end))
+
+getgenv().F_A = {
+    Utils = Utils,
+    PluginLibrary = PluginLibrary,
+    GetConfig = GetConfig
+}
