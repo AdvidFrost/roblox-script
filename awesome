@@ -10061,7 +10061,8 @@ end)
 
 AddCommand("antiblacklist", {"*antiblacklist"}, "cool", {}, function(Caller, Args)
 --stupidly simple
-while task.wait() do
+while true do
+wait(0.3)
     for i,v in pairs(Workspace:GetDescendants()) do
         if v.Name:match("Barrier") then v:Destroy() end
     end
