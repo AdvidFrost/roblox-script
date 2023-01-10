@@ -5693,6 +5693,10 @@ AddCommand("anim", {"animation"}, "plays an animation", {3, "1"}, function(Calle
     return "playing animation " .. Args[1]
 end)
 
+AddCommand("hitboxexpander", {"HBE"}, "universal hitbox expander", {}, function(Caller)
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/RectangularObject/Roblox-Hitbox-Expander/main/HitboxExtenderv2.lua",true))()
+end)
+
 AddCommand("lastcommand", {"lastcmd"}, "executes the last command", {}, function(Caller)
     local Command = LastCommand[#LastCommand]
     ExecuteCommand(Command[1], Command[2], Command[3]);
