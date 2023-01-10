@@ -9811,6 +9811,58 @@ end
         getgenv().autoarmor = false
     end)
     
+    AddCommand("superbat", {"*superbat"}, "a bat that one shots", {}, function()
+        -- Check the player's backpack for the number of items with the name "Bat"
+local player = game.Players.LocalPlayer
+local backpack = player.Backpack
+local numBats = 0
+for _, item in pairs(backpack:GetChildren()) do
+  if item.Name == "Bat" then
+    numBats = numBats + 1
+  end
+end
+
+-- If the player has at least 10 bats, execute the rest of the script
+if numBats >= 10 then
+  local player = game.Players.LocalPlayer
+local character = player.Character
+local mouse = player:GetMouse()
+
+local tool = Instance.new("Tool")
+tool.Name = "SuperBat"
+tool.Parent = player.Backpack
+
+function onClick()
+  for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
+if obj.Name == "Bat" then
+local equip = game.Players.LocalPlayer.Backpack.Bat
+equip.Parent = game.Players.LocalPlayer.Character
+end
+end
+wait(0.3)
+for i,v in pairs(game:GetService("Players").LocalPlayer.Character:GetChildren())do
+if v.ClassName == "Tool" then
+v:Activate()
+end
+end
+end
+
+
+mouse.Button1Down:Connect(function()
+  if tool.Parent == character then
+    -- The tool is being held
+    onClick()
+  else
+    -- The tool is not being held
+  end
+end)
+  return "use tha tool to equip all ur bats and swing em"
+else
+  -- If the player does not have at least 10 bats, print a message
+  return "You need atleast 10 bats!"
+end
+    end)
+    
     AddCommand("cashdropper", {"*cashdropper"}, "cashdropper gui", {}, function()
         local screenGui = Instance.new("ScreenGui")
 local frame = Instance.new("Frame")
