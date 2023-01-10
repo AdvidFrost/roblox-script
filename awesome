@@ -4165,6 +4165,36 @@ AddCommand("displaynames", {}, "enables/disables display names (on/off)", {{"on"
     end
 end)
 
+AddCommand("bang", {"rape"}, "makes you have sexy wexy with whoever u want", {}, function(Caller, Args)
+Target = Args[1]
+ExecuteCommand("loopgoto", {Target}, LocalPlayer)
+local player = game.Players.LocalPlayer
+local character = player.Character
+local humanoid = character:WaitForChild("Humanoid")
+
+if humanoid.RigType == Enum.HumanoidRigType.R6 then
+  AnimationId = "148840371"
+elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
+  AnimationId = "5918726674"
+end
+
+local Anim = Instance.new("Animation")
+Anim.AnimationId = "rbxassetid://"..AnimationId
+local k = humanoid:LoadAnimation(Anim)
+k:Play() --Play the animation
+k:AdjustSpeed(3)
+end)
+
+AddCommand("unbang", {"unrape"}, "no sex :(", {}, function()
+	ExecuteCommand("unloopgoto", {}, LocalPlayer)
+	local player = game.Players.LocalPlayer
+local character = player.Character
+local humanoid = character:WaitForChild("Humanoid")
+
+humanoid.Health = 0
+return "script was rushed so to stop the animation u gotta reset for now"
+end)
+
 AddCommand("time", {"settime"}, "sets the games time", {{"night", "day", "dawn"}}, function(Caller, Args)
     local Lighting = Services.Lighting
     local Time = Args[1] and lower(Args[1]) or 14
@@ -5230,7 +5260,7 @@ end)
 AddCommand("loopgoto", {"loopto"}, "loop teleports yourself to the other character", {3, "1"}, function(Caller, Args, CEnv)
     local Target = GetPlayer(Args[1])[1]
     local Connection = CConnect(Heartbeat, function()
-        GetRoot().CFrame = GetRoot(Target).CFrame * CFrameNew(0, 0, 0);
+        GetRoot().CFrame = GetRoot(Target).CFrame * CFrameNew(0, 0, 0.5);
     end)
 
     CEnv[Target.Name] = Connection
@@ -6666,6 +6696,8 @@ AddCommand("freecamgoto", {"fcgoto"}, "takes your freecam to t hem", {"1"}, func
         Camera.CFrame = GetRoot(v).CFrame * CFrameNew(0, 10, 10);
     end
 end)
+
+
 
 AddCommand("plastic", {"fpsboost"}, "changes everything to a plastic material", {}, function(Caller, Args, CEnv)
     local time = tick();
