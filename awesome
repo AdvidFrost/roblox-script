@@ -9524,41 +9524,6 @@ game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(
     return "crash attempted"
 end)
 
-AddCommand("mgtool", {"*mgtool"}, "uses all moneyguns in your inventory, use buymg (amount) to get some", {}, function()
-       local player = game.Players.LocalPlayer
-local character = player.Character
-local mouse = player:GetMouse()
-
-local tool = Instance.new("Tool")
-tool.Name = "Megamoneygun"
-tool.Parent = player.Backpack
-
-function onClick()
-  for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
-if obj.Name == "MoneyGun" then
-local equip = game.Players.LocalPlayer.Backpack.MoneyGun
-equip.Parent = game.Players.LocalPlayer.Character
-end
-end
-wait(0.3)
-for i,v in pairs(game:GetService("Players").LocalPlayer.Character:GetChildren())do
-if v.ClassName == "Tool" then
-v:Activate()
-end
-end
-end
-
-
-mouse.Button1Down:Connect(function()
-  if tool.Parent == character then
-    -- The tool is being held
-    onClick()
-  else
-    -- The tool is not being held
-  end
-end)
-    end)
-    
 AddCommand("prepcrash", {"*prepcrash"}, "prepares to crash the game, once ready you can type crash in the command bar to crash", {}, function()
      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(435, 639, 124)
 for i = 1,30 do
@@ -9575,24 +9540,6 @@ v.Parent = game.Players.LocalPlayer.Character
 end
 return("Crash ready! Type !crash to finish the job")
     end)
-    
-    AddCommand("buymoneygun", {"*buymoneygun", "buymg"}, "buys moneyguns. Use the mgtool command to use them all at once", {}, function(Caller, Args, CEnv)
-    for i = 1,(Args[1]) + 1 do
-    fireclickdetector(game:GetService("Workspace")["[MoneyGun] - $100"].ClickDetector)
-    wait(0.1)
-fireclickdetector(game:GetService("Workspace")["[MoneyGun] - $100"].ClickDetector)
-wait(0.1)
-fireclickdetector(game:GetService("Workspace")["[MoneyGun] - $100"].ClickDetector)
-wait(1)
-for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
-if obj.Name == "MoneyGun" then
-local equip = game.Players.LocalPlayer.Backpack.MoneyGun
-equip.Parent = game.Players.LocalPlayer.Character
-end
-end
-end
-    return "Bought moneyguns"
-end)
 
 AddCommand("protect", {"*protect", "guard"}, "lasers players within a radius of protected player", {1,"1"}, function(Caller, Args, CEnv)
 for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
@@ -9700,52 +9647,6 @@ wait(0.2)
         WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
 end)
 
-AddCommand("screenglitch", {"*screenglitch"}, "makes everyones screen bug out", {}, function(Caller, Args)
-getgenv().hatglitch = true
-local A_1 = "wear"
-local A_2 = 1158416
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2)
-wait(0.3)
-local A_1 = "scale"
-local A_2 = "BodyHeightScale"
-local A_3 = 105
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2, A_3)
-wait(0.3)
-local A_1 = "scale"
-local A_2 = "BodyWidthScale"
-local A_3 = 100
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2, A_3)
-wait(0.3)
-local A_1 = "scale"
-local A_2 = "HeadScale"
-local A_3 = 100
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2, A_3)
-wait(0.3)
-local A_1 = "scale"
-local A_2 = "BodyProportionScale"
-local A_3 = 100
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2, A_3)
-
-while getgenv().hatglitch do 
-local A_1 = "scale"
-local A_2 = "BodyTypeScale"
-local A_3 = 100
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2, A_3)
-wait(0.001)
-local A_1 = "scale"
-local A_2 = "BodyTypeScale"
-local A_3 = 0
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2, A_3)
-end
-end)
-
  AddCommand("ungod", {"*ungod"}, "disables semigod", {}, function()
         getgenv().Godmode = false
 	return "god mode disabled. reset for it to take effect"
@@ -9801,18 +9702,12 @@ function scanWorkspace()
     return
   end
   
-  local money = workspace:FindFirstChild("Money")
-  local moneyDrop = workspace:FindFirstChild("MoneyDrop")
+  local money = workspace:FindFirstChild("Currency")
 
   if money then
     fireclickdetector(money.ClickDetector)
   end
   
-  if moneyDrop then
-    fireclickdetector(moneyDrop.ClickDetector)  
-end
-end
-
 while true do
   scanWorkspace()
   wait(0.1)
