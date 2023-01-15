@@ -9919,6 +9919,36 @@ end
 return("Crash ready! Type !crash to finish the job")
     end)
 
+AddCommand("pp", {"*pp", "batpp"}, "if u have bat u can have pp", {}, function()
+     local player = game.Players.LocalPlayer
+local backpack = player.Backpack
+local bat = backpack:FindFirstChild("Bat")
+if bat then
+    player.Character.Humanoid:EquipTool(bat)
+else
+    print("Tool 'Bat' not found in backpack.")
+end
+     local player = game.Players.LocalPlayer
+local tool = player.Character:FindFirstChildOfClass("Tool")
+
+if tool then
+    tool.Grip = tool.Grip - Vector3.new(-1.15, -1.3, 1.5)
+    tool.Parent = player.Backpack
+    tool.Parent = player.Character
+else
+    return "where yo bat at bro"
+end
+
+wait(0.1)
+local player = game.Players.LocalPlayer
+local tool = player.Character:FindFirstChildOfClass("Tool")
+
+if tool then
+    tool.Grip = tool.Grip * CFrame.Angles(math.rad(80), 0, 0)
+    return "Bat made into pp! No need to rexecute every unequip, just equip it again"
+end
+end)
+
 AddCommand("protect", {"*protect", "guard"}, "lasers players within a radius of protected player", {1,"1"}, function(Caller, Args, CEnv)
 for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
 if obj.Name == "Revolver" then
