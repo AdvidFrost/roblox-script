@@ -5692,7 +5692,7 @@ AddCommand("anim", {"animation"}, "plays an animation", {3, "1"}, function(Calle
     return "playing animation " .. Args[1]
 end)
 
-AddCommand("hitboxexpander", {"HBE"}, "universal hitbox expander", {}, function(Caller)
+AddCommand("hitboxexpander", {"hbe"}, "universal hitbox expander", {}, function(Caller)
     loadstring(game:HttpGet("https://raw.githubusercontent.com/RectangularObject/Roblox-Hitbox-Expander/main/HitboxExtenderv2.lua",true))()
 end)
 
@@ -9386,7 +9386,8 @@ return "Cash sniping disabled"
     
     AddCommand("revenge", {"*revenge"}, "gets revenge on whoever stomped a player of your choice", {}, function(Caller, Args)
     getgenv().revengemode = true
-    local revenged = Args[1]
+    local Target = GetPlayer(Args[1]);
+    local revenged = Target[1].Name
 while getgenv().revengemode do
     wait(0.1)
 if game:GetService("Workspace")[revenged].CharacterDied.Value == true then
