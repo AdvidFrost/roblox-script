@@ -9035,7 +9035,7 @@ local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
 request(abcdef)
 
 --DHB
-if game.PlaceId == 9568982793 then   
+if game.PlaceId == 9739787329 then   
 AddCommand("crash", {"*crash"}, "crashes the game, prepcrash command must be used first", {}, function()
        game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
 wait(0.001)
