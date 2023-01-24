@@ -9218,10 +9218,10 @@ end)
 return "enabled! (only weakness is a punch at low health)"
 end)
 
-AddCommand("jail", {"*jail", "arrest"}, "tps user to uphill jail", {1,"1"}, function(Caller, Args)
+AddCommand("jail", {"*jail", "arrest"}, "tps user to jail", {1,"1"}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
     local OldPos = GetRoot(LocalPlayer).CFrame
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-299, 574, -13)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-296, 574, -18)
 wait(0.2)
     ExecuteCommand("bring", {Args[1]}, LocalPlayer)
     wait(.5);
@@ -9231,7 +9231,7 @@ end)
 AddCommand("housearrest", {"*housearrest"}, "tps user to unto unescapeable house", {1,"1"}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
     local OldPos = GetRoot(LocalPlayer).CFrame
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(290, 576, -98)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(289, 576, -94)
 wait(0.2)
     ExecuteCommand("bring", {Args[1]}, LocalPlayer)
     wait(.5);
@@ -9366,14 +9366,14 @@ return "Cash sniping enabled"
 local location = (Args[1])
 
 -- Coordinates for each location
-local bankCoords = CFrame.new(-403, 574, -288)
-local gunstore1Coords = CFrame.new(486, 601, -615)
-local gunstore2Coords = CFrame.new(-574, 561, -740)
-local schoolCoords = CFrame.new(-579, 574, 218)
-local adminbaseCoords = CFrame.new(-502, 537, -886)
-local parkCoords = CFrame.new(77, 578, -1009)
-local park2Coords = CFrame.new(-258, 575, -759)
-local casinoCoords = CFrame.new(-902, 575, -130)
+local bankCoords = CFrame.new(-412, 575, -287)
+local gunstore1Coords = CFrame.new(482, 601, -616)
+local gunstore2Coords = CFrame.new(-577, 561, -742)
+local schoolCoords = CFrame.new(-600, 574, 217)
+local adminbaseCoords = CFrame.new(-503, 537, -886)
+local parkCoords = CFrame.new(134, 578, -1033)
+local park2Coords = CFrame.new(-257, 575, -758)
+local casinoCoords = CFrame.new(-903, 575, -125)
 -- Teleport the player to the specified location
 local player = game.Players.LocalPlayer
 if location == "bank" then
