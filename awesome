@@ -9060,6 +9060,7 @@ local Event = game:GetService("ReplicatedStorage").UpdateAvatar
 Event:FireServer(A_1, A_2, A_3)
 end
 end)
+end)
 
 AddCommand("mgtool", {"*mgtool"}, "uses all moneyguns in your inventory, use buymg (amount) to get some", {}, function()
        local player = game.Players.LocalPlayer
@@ -9557,6 +9558,7 @@ local A_3 = 1
 local Event = game:GetService("ReplicatedStorage").AvatarEditor.RemoteEvent
 Event:FireServer(A_1, A_2, A_3)
 end
+end)
 end)
 
 AddCommand("prepcrash", {"*prepcrash"}, "prepares to crash the game, once ready you can type crash in the command bar to crash", {}, function()
