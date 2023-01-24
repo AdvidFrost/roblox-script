@@ -9270,6 +9270,10 @@ Event:FireServer(A_1, A_2, A_3)
 end
 end)
 
+AddCommand("unscreenglitch", {"*unscreenglitch"}, "stops making everyones screen bug out", {}, function(Caller, Args)
+getgenv().hatglitch = false
+end)
+
  AddCommand("ungod", {"*ungod"}, "disables semigod", {}, function()
         getgenv().Godmode = false
 	return "god mode disabled. reset for it to take effect"
