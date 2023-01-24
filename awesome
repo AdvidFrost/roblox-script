@@ -9665,7 +9665,7 @@ end)
 return "enabled! (only weakness is a punch at low health)"
 end)
 
-AddCommand("jail", {"*jail"}, "tps user to uphill jail", {1,"1"}, function(Caller, Args)
+AddCommand("jail", {"*jail", "arrest"}, "tps user to uphill jail", {1,"1"}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
     local OldPos = GetRoot(LocalPlayer).CFrame
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(475, 202, -636)
