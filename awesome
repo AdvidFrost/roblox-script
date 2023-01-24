@@ -9048,6 +9048,19 @@ game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(
     return "crash attempted"
 end)
 
+AddCommand("killfix", {"*killfix"}, "makes you fat but fixes ur kill, void, and other commands", {}, function()
+       getgenv().killfix = true
+game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(Character)
+if getgenv().killfix then
+    wait(3)
+    local A_1 = "scale"
+local A_2 = "BodyWidthScale"
+local A_3 = 100
+local Event = game:GetService("ReplicatedStorage").UpdateAvatar
+Event:FireServer(A_1, A_2, A_3)
+end
+end)
+
 AddCommand("mgtool", {"*mgtool"}, "uses all moneyguns in your inventory, use buymg (amount) to get some", {}, function()
        local player = game.Players.LocalPlayer
 local character = player.Character
@@ -9527,6 +9540,25 @@ game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(
     return "crash attempted"
 end)
     
+    AddCommand("killfix", {"*killfix"}, "makes you fat but fixes ur kill, void, and other commands", {}, function()
+       getgenv().killfix = true
+game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(Character)
+if getgenv().killfix then
+    wait(3)
+    local A_1 = "scale"
+local A_2 = "ProportionScale"
+local A_3 = 1
+local Event = game:GetService("ReplicatedStorage").AvatarEditor.RemoteEvent
+Event:FireServer(A_1, A_2, A_3)
+
+local A_1 = "scale"
+local A_2 = "BodyTypeScale"
+local A_3 = 1
+local Event = game:GetService("ReplicatedStorage").AvatarEditor.RemoteEvent
+Event:FireServer(A_1, A_2, A_3)
+end
+end)
+
 AddCommand("prepcrash", {"*prepcrash"}, "prepares to crash the game, once ready you can type crash in the command bar to crash", {}, function()
      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(435, 639, 124)
 for i = 1,30 do
