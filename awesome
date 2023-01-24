@@ -2867,7 +2867,7 @@ AddCommand("unloopkill", {"unlkill"}, "unloopkills a user", {3,"1"}, function(Ca
     return "loopkill disabled"
 end)
 
-AddCommand("bring", {}, "brings a user", {1}, function(Caller, Args)
+AddCommand("bring", {"retrieve"}, "brings a user", {1}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
     local Target2 = Args[2] and GetPlayer(Args[2]);
     local OldPos = GetRoot(Caller).CFrame
@@ -2935,7 +2935,7 @@ AddCommand("bring", {}, "brings a user", {1}, function(Caller, Args)
     end
 end)
 
-AddCommand("bring2", {}, "another variant of bring", {1, 3, "1"}, function(Caller, Args)
+AddCommand("bring2", {"retrieve"}, "another variant of bring", {1, 3, "1"}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
     local Target2 = Args[2] and GetPlayer(Args[2]);
     local TempRespawnTimes = {}
