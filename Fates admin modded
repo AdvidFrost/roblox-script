@@ -9000,6 +9000,26 @@ getgenv().F_A = {
     GetConfig = GetConfig
 }
 
+if game.PlaceId == 5991163185 then
+    AddCommand("vote", {"*vote"}, "vote yes or no on a vk, works good for avoiding kicks or kicking someone if u got alts", {{"yes", "no"}}, function(Caller, Args)
+local vote = (Args[1])
+if vote == "yes" then
+local A_1 = "Vote"
+local A_2 = true
+local Event = game:GetService("ReplicatedStorage").VoteKick
+Event:FireServer(A_1, A_2)
+end
+if vote == "no" then
+local A_1 = "Vote"
+local A_2 = false
+local Event = game:GetService("ReplicatedStorage").VoteKick
+Event:FireServer(A_1, A_2)
+end
+end)
+
+Utils.Notify(LocalPlayer, "Compatible game detected", "Spray paint has some commands type * in command list to view", 10);
+end
+
 --DHB
 if game.PlaceId == 9739787329 then   
 AddCommand("crash", {"*crash"}, "crashes the game, prepcrash command must be used first", {}, function()
