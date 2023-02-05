@@ -6047,22 +6047,31 @@ AddCommand("spamsilentchat", {"spamchatlogs"}, "spams sending messages with what
     return "spamming chat sliently"
 end)
 
-AddCommand("reanimate", {"*reanimate"}, "reanimates you", {{"r6", "r15", "convertr15", "headlessr6", "headlessr15"}}, function(Caller, Args)
-local reanimate = (Args[1])
+AddCommand("reanimate", {"reanimate"}, "reanimates you", {}, function(Caller, Args)
+local headless = (Args[1])
+local character = game.Players.LocalPlayer.Character
+local humanoid = character:WaitForChild("Humanoid")
 
-local player = game.Players.LocalPlayer
-if reanimate == "r6" then
-  loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r6"))()
-elseif reanimate == "r15" then
-  loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r15"))()
-elseif reanimate == "convertr15" then
-  loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/convertr15"))()
-elseif reanimate == "headlessr6" then
-  loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/headlessr6"))()
-  elseif reanimate == "headlessr15" then
-  loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r15headless"))()
-else
-  print("reanimate type not found")
+if humanoid.RigType == Enum.HumanoidRigType.R6 then
+    if headless then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/headlessr6"))()
+    else
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r6"))()
+    end
+elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
+    if headless then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r15headless"))()
+    else
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r15"))()
+    end
+end
+end)
+
+AddCommand("r15tor6", {"r15convert"}, "makes ur r15 character to r6", {}, function(Caller, Args)
+if humanoid.RigType == Enum.HumanoidRigType.R6 then
+    return "need to be in r15 silly"
+elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/convertr15"))()
 end
 end)
 
