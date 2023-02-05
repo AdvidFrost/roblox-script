@@ -1,4 +1,3 @@
-wait(2)
 --[[
 	Advid's Admin - 16/11/2022
 ]]
@@ -6073,11 +6072,6 @@ AddCommand("unspamsilentchat", {"nospamsilentchat", "unspamchatlogs", "nospamcha
     return "stopped spamming chat"
 end)
 
-AddCommand("serverip", {"serverinfo", "copyip", "copyport", "serverport"}, "stops the spam of chat", {}, function()
-    setclipboard(getgenv().peers);
-    return "script must be in autoexecute for info to copy"
-end)
-
 AddCommand("advertise", {}, "advertises the script", {}, function()
     local ChatRemote = Services.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest
     ChatRemote.FireServer(ChatRemote, "I am using Advid's Admin, join .gg/4JtAr7rYA2", "All");
@@ -6386,7 +6380,7 @@ end)
 AddCommand("reloadscript", {}, "kills the script and reloads it", {}, function(Caller)
     if (Caller == LocalPlayer) then
         ExecuteCommand("killscript", {}, LocalPlayer);
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/roblox-script/main/Fates%20admin%20modded"))()
+        loadstring(game:HttpGet("https://github.com/awesomecoolfortnite/roblox-script/blob/main/Fates%20admin%20modded"))();
     end
 end)
 
@@ -7193,7 +7187,7 @@ AddCommand("rejoinre", {"rje"}, "rejoins and tps you to your old position", {3},
     local Pos = GetRoot().CFrame
     local queue_on_teleport = syn and syn.queue_on_teleport or queue_on_teleport
     if (queue_on_teleport) then
-        queue_on_teleport(format("game.Loaded:Wait();game:GetService('ReplicatedFirst'):SetDefaultLoadingGuiRemoved();local LocalPlayer = game:GetService('Players').LocalPlayer;LocalPlayer.CharacterAdded:Wait():WaitForChild('HumanoidRootPart').CFrame = CFrame.new(%s);loadstring(game.HttpGet(game, \"loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/roblox-script/main/Fates%20admin%20modded\"))()", tostring(Pos)));
+        queue_on_teleport(format("game.Loaded:Wait();game:GetService('ReplicatedFirst'):SetDefaultLoadingGuiRemoved();local LocalPlayer = game:GetService('Players').LocalPlayer;LocalPlayer.CharacterAdded:Wait():WaitForChild('HumanoidRootPart').CFrame = CFrame.new(%s);loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/Advid'sc/Advid's-admin/main/main.lua\"))()", tostring(Pos)));
     end
     ExecuteCommand("rejoin", {}, LocalPlayer);
 end)
