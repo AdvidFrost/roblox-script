@@ -4730,7 +4730,7 @@ TypeOfFling = 1 -- Default
 DeleteArm = true
 -- Prevent killing from other exploitors
 
-SayDramaticStuff = true
+SayDramaticStuff = false
 -- Say dramatic stuff like in anime lol
 
 -- Meaning of the option TypeOfFling
