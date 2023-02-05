@@ -6079,8 +6079,7 @@ end);
 
 AddCommand("serverip", {"serverinfo", "copyip", "copyport", "serverport"}, "stops the spam of chat", {}, function()
     setclipboard(getgenv().peers);
-    else
-    return "only grabs info if this script is in autoexecute"
+    return "script must be in autoexecute for info to copy"
 end)
 
 AddCommand("advertise", {}, "advertises the script", {}, function()
