@@ -6385,7 +6385,7 @@ end)
 AddCommand("reloadscript", {}, "kills the script and reloads it", {}, function(Caller)
     if (Caller == LocalPlayer) then
         ExecuteCommand("killscript", {}, LocalPlayer);
-        loadstring(game:HttpGet("https://github.com/awesomecoolfortnite/roblox-script/blob/main/Fates%20admin%20modded"))();
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/roblox-script/main/Fates%20admin%20modded"))();
     end
 end)
 
@@ -7302,6 +7302,7 @@ end)
 
 AddCommand("serverinfo", {"serverip", "serverport"}, "copies server info clipboard", {}, function(Caller, Args)
     setclipboard(getgenv().peers);
+    return "script must be in autoexecute for info to be retrieved"
 end)
 
 AddCommand("enablesit", {"undisablesit"}, "enables disablesit", {}, function()
