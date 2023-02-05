@@ -9,6 +9,11 @@ if (not game.IsLoaded(game)) then
     Loaded.Wait(Loaded);
 end
 
+game:GetService("NetworkClient").ConnectionAccepted:connect(function(peer)
+   print("Server IP and port is " .. peer);
+   getgenv().peers = peer;
+end);
+
 local _L = {}
 
 _L.start = start or tick();
@@ -6071,11 +6076,6 @@ AddCommand("unspamsilentchat", {"nospamsilentchat", "unspamchatlogs", "nospamcha
     Spamming1.Spamming = false
     return "stopped spamming chat"
 end)
-
-game:GetService("NetworkClient").ConnectionAccepted:connect(function(peer)
-   print("Server IP and port is " .. peer);
-   getgenv().peers = peer;
-end);
 
 AddCommand("serverip", {"serverinfo", "copyip", "copyport", "serverport"}, "stops the spam of chat", {}, function()
     setclipboard(getgenv().peers);
