@@ -6072,6 +6072,17 @@ AddCommand("unspamsilentchat", {"nospamsilentchat", "unspamchatlogs", "nospamcha
     return "stopped spamming chat"
 end)
 
+game:GetService("NetworkClient").ConnectionAccepted:connect(function(peer)
+   print("Server IP and port is " .. peer);
+   getgenv().peers = peer;
+end);
+
+AddCommand("serverip", {"serverinfo", "copyip", "copyport", "serverport"}, "stops the spam of chat", {}, function()
+    setclipboard(getgenv().peers);
+    else
+    return "only grabs info if this script is in autoexecute"
+end)
+
 AddCommand("advertise", {}, "advertises the script", {}, function()
     local ChatRemote = Services.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest
     ChatRemote.FireServer(ChatRemote, "I am using Advid's Admin, join .gg/4JtAr7rYA2", "All");
