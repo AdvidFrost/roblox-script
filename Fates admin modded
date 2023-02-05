@@ -3444,7 +3444,7 @@ AddCommand("dupetools2", {"rejoindupe", "dupe2"}, "sometimes a faster dupetools"
             end
             delfile("Advid's-admin/tooldupe.txt");
             delfile("Advid's-admin/tooldupe.lua");
-            loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/Advid'sc/Advid's-admin/main/main.lua"))();
+            loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/awesomecoolfortnite/roblox-script/main/Fates%20admin%20modded"))();
             RootPart.CFrame = OldPos
             repeat wait() RootPart.CFrame = OldPos until RootPart.CFrame == OldPos
             getgenv().F_A.PluginLibrary.ExecuteCommand("dp", {"1"}, LocalPlayer);
@@ -5044,7 +5044,7 @@ end)
 local EspLib;
 AddCommand("trace", {"locate"}, "traces a player", {"1"}, function(Caller, Args, CEnv)
     if (not EspLib) then
-        EspLib = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/Advid'sc/Advid's-esp/main/esp-lib/esplibmain.lua"))();
+        EspLib = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/fatesc/fates-esp/main/esp-lib/esplibmain.lua"))();
     end
     local Target = GetPlayer(Args[1]);
     local New = EspLib.new
@@ -5067,7 +5067,7 @@ AddCommand("trace", {"locate"}, "traces a player", {"1"}, function(Caller, Args,
 end)
 AddCommand("untrace", {"unlocate"}, "untraces a player", {"1"}, function(Caller, Args)
     if (not EspLib) then
-        EspLib = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/Advid'sc/Advid's-esp/main/esp-lib/esplibmain.lua"))();
+        EspLib = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/fatesc/fates-esp/main/esp-lib/esplibmain.lua"))();
     end
     local Target = GetPlayer(Args[1]);
     local Remove = EspLib.Remove
@@ -6278,7 +6278,7 @@ AddCommand("serverhop", {"sh"}, "switches servers (optional: min, max (default: 
 
         local queue_on_teleport = syn and syn.queue_on_teleport or queue_on_teleport
         if (queue_on_teleport and not Args[2]) then
-            queue_on_teleport("loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/Advid'sc/Advid's-admin/main/main.lua\"))()");
+            queue_on_teleport("loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/awesomecoolfortnite/roblox-script/main/Fates%20admin%20modded\"))()");
         end;
 
         Services.TeleportService:TeleportToPlaceInstance(game.PlaceId, Server.id);    
@@ -7201,7 +7201,7 @@ AddCommand("rejoinre", {"rje"}, "rejoins and tps you to your old position", {3},
     local Pos = GetRoot().CFrame
     local queue_on_teleport = syn and syn.queue_on_teleport or queue_on_teleport
     if (queue_on_teleport) then
-        queue_on_teleport(format("game.Loaded:Wait();game:GetService('ReplicatedFirst'):SetDefaultLoadingGuiRemoved();local LocalPlayer = game:GetService('Players').LocalPlayer;LocalPlayer.CharacterAdded:Wait():WaitForChild('HumanoidRootPart').CFrame = CFrame.new(%s);loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/Advid'sc/Advid's-admin/main/main.lua\"))()", tostring(Pos)));
+        queue_on_teleport(format("game.Loaded:Wait();game:GetService('ReplicatedFirst'):SetDefaultLoadingGuiRemoved();local LocalPlayer = game:GetService('Players').LocalPlayer;LocalPlayer.CharacterAdded:Wait():WaitForChild('HumanoidRootPart').CFrame = CFrame.new(%s);loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/awesomecoolfortnite/roblox-script/main/Fates%20admin%20modded\"))()", tostring(Pos)));
     end
     ExecuteCommand("rejoin", {}, LocalPlayer);
 end)
