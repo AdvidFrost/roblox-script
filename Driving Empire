@@ -1,0 +1,59 @@
+local Atlas = loadstring(game:HttpGet("https://siegehub.net/Atlas.lua"))()
+
+local UI = Atlas.new({
+    Name = "Driving Empire"; -- script name (required)
+    ConfigFolder = "DrivingEmpire"; -- folder name to save configs to, set this to nil if you want to disable configs saving
+    Credit = "Made By RoadToGlory#9879"; -- text to appear if player presses the "i" button on their UI (optional)
+    Color = Color3.fromRGB(255,0,0); -- theme color for UI (required)
+    Bind = "RightShift"; -- keybind for toggling the UI, must be a valid KeyCode name
+    -- Atlas Loader:
+    UseLoader = false; -- whether to use Atlas Loader or not, if set to false than CheckKey and Discord are ignored
+    FullName = "Driving Empire script"; -- works if UseLoader is set to true, can be same as Name argument, shown on loader frame
+    CheckKey = function(inputtedKey) -- works if UseLoader is set to true, where inputtedKey is the key inputted by the player
+        return inputtedKey=="key1234"
+    end;
+    Discord = "https://discord.gg/4JtAr7rYA2"; -- works if UseLoader is set to true, will be copied to clipboard if player presses "Copy Invite" button
+})
+
+local MainPage = UI:CreatePage("Main")
+local MainSection = MainPage:CreateSection("Main")
+local MyParagraph = MainSection:CreateParagraph("Placeoftheholders")
+MainSection:CreateButton({
+    Name = "Destroy UI"; -- required: name of element
+    Callback = function() -- required: function to be called when button is pressed
+        UI:Destroy()
+    end
+})
+
+local AutoSection = MainPage:CreateSection("Auto")
+local RaceDropdown = AutoSection:CreateDropdown({
+    Name = "Pick race"; -- required: name of element
+    Callback = function(racemap) -- required: function to be called an item in the dropdown is activated
+        print("Dropdown button pressed:",racemap)
+    end;
+    Options = {"Drag", "Circuit", "real", "fake", "pick"}; -- required: dropdown options
+    ItemSelecting = true; -- optional: whether to control item selecting behavior in dropdowns (see showcase video), is false by default
+    DefaultItemSelected = "pick"; -- optional: default item selected, will not run the callback and does not need to be from options table. This will be ignored if ItemSelecting is not true.
+    AutoSection:CreateToggle({ -- IMPORTANT: This function does not return anything, please modify flags directly in order to read or update toggle values. SCROLL TO BOTTOM OF PAGE TO SEE HOW TO MODIFY FLAGS
+    Name = "AutoRace"; -- required: name of element
+    Flag = "autorace"; -- required: unique flag name to use
+    Default = false; -- optional: default value for toggle, will be used if config saving is disabled and there is no saved data, will be false if left nil
+    Callback = function(autoracevalue) -- optional: function that will be called when toggled, it is reccomended to modify flags directly
+        print(autoracevalue)
+        while autoracevalue == true do
+            wait(0.1)
+            print(racemap)
+        end
+    end;
+    SavingDisabled = true;
+    Warning = "This can get u banned so reccomend u use in private server"; -- optional: this argument is used in all elements (except for Body) and will indicate text that will appear when the player hovers over the warning icon
+    WarningIcon = 7249251729; -- optional: ImageAssetId for warning icon, will only be used if Warning is not nil, default is yellow warning icon.
+})
+})
+
+
+local CredsPage = UI:CreatePage("Credits")
+local CredsSection = CredsPage:CreateSection("Credits")
+local MyParagraph = CredsSection:CreateParagraph("Credits") -- creates a paragraph element with "Hello world!" as the text content
+              
+MyParagraph.Set("Credits to me and all the femboys") -- updates the paragraph element with new text. Note how you do not use namecalling (MyParagraph:Set) and instead we use MyParagraph.Set
