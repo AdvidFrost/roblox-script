@@ -5708,6 +5708,10 @@ AddCommand("unswim", {"noswim"}, "removes swim", {}, function(Caller, Args)
     return "swimming disabled"
 end)
 
+AddCommand("translator", {"googletranslator"}, "activates translator", {}, function(Caller, Args)
+   loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/x114/RobloxScripts/main/UpdatedChatTranslator"))()
+end)
+
 AddCommand("disableanims", {"noanims"}, "disables character animations", {3}, function(Caller, Args)
     local Animate = FindFirstChild(GetCharacter(), "Animate");
     SpoofProperty(Animate, "Disabled");
