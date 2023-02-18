@@ -1,0 +1,49 @@
+-- get local player
+local player = game.Players.LocalPlayer
+
+-- function to find the closest player
+local function findClosestPlayer()
+    local closestDistance = math.huge
+    local closestPlayer = nil
+    
+    -- loop through all players and find the closest one
+    for _,p in pairs(game.Players:GetPlayers()) do
+        if p ~= player and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+            local distance = (p.Character.HumanoidRootPart.Position - player.Character.HumanoidRootPart.Position).Magnitude
+            if distance < closestDistance and distance <= 40 then
+                closestDistance = distance
+                closestPlayer = p
+            end
+        end
+    end
+    
+    return closestPlayer, closestDistance
+end
+
+-- follow the closest player
+while true do
+    local closestPlayer, closestDistance = findClosestPlayer()
+    if closestPlayer and closestDistance <= 6 then
+        local A_1 =  {
+            ["Goal"] = "LeftClick"
+        }
+        local Event = game:GetService("Workspace").Live[player.Name].Communicate
+        Event:FireServer(A_1)
+        wait(0.04)
+        local A_1 =  {
+            ["Goal"] = "LeftClickRelease"
+        }
+        Event:FireServer(A_1)
+    elseif closestPlayer and closestDistance <= 30 then
+        print("dashing")
+        local A_1 = {
+            ["Dash"] = Enum.KeyCode.W, 
+            ["Key"] = Enum.KeyCode.Q, 
+            ["Goal"] = "KeyPress"
+        }
+        local Event = game:GetService("Workspace").Live[player.Name].Communicate
+        Event:FireServer(A_1)
+    end
+    wait(0.1)
+end
+
