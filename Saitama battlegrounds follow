@@ -1,0 +1,24 @@
+local myPlayer = game.Players.LocalPlayer
+local myHumanoid = myPlayer.Character:WaitForChild("Humanoid")
+local myRootPart = myPlayer.Character:WaitForChild("HumanoidRootPart")
+
+while true do
+    local closest = nil
+    local closestDist = math.huge
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        if player ~= myPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local dist = (player.Character.HumanoidRootPart.Position - myRootPart.Position).Magnitude
+            if dist < closestDist and dist <= 80 then
+                closest = player
+                closestDist = dist
+            end
+        end
+    end
+    
+    if closest then
+        local target = closest.Character.HumanoidRootPart
+        local direction = (target.Position - myRootPart.Position).Unit
+        myHumanoid:MoveTo(myRootPart.Position + direction * 3)
+    end
+    wait(0.1)
+end
