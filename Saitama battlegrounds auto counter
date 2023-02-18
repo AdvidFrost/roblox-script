@@ -1,0 +1,83 @@
+-- Define a table to hold the animations to detect
+local animationsToDetect = {
+    12272894210,
+    12107656616,
+    12296882427,
+    10468665991,
+    10466974800,
+    10471336737,
+    12510170988,
+    10469493270,
+    10469610950,
+    10469639222,
+    10469643643,
+    10470104242,
+    10479335397
+}
+
+-- Define a table to hold the whitelisted players
+local whitelistedPlayers = {}
+
+-- Define a function to check if a playing animation matches one of the animations to detect
+local function checkPlayingAnimations(player, distanceThreshold)
+    if player == game.Players.LocalPlayer or whitelistedPlayers[player.UserId] then -- Ignore the local player and whitelisted players
+        return
+    end
+    
+    local playingTracks = player.Character.Humanoid:GetPlayingAnimationTracks()
+    for _, track in ipairs(playingTracks) do
+        for _, animationId in ipairs(animationsToDetect) do
+            if track.Animation.AnimationId == "rbxassetid://" .. tostring(animationId) then
+                local distance = (player.Character.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+                if distance <= distanceThreshold then
+                    print(player.Name .. " is playing animation: " .. animationId .. " and is within " .. distance .. " studs")
+                    wait(0.05)
+                    local player = game:GetService("Players").LocalPlayer
+                    local tool = game:GetService("Players").LocalPlayer.Backpack["Prey's Peril"]
+player.Character.Humanoid:EquipTool(tool)
+wait(2)
+for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+     if v:IsA'Tool' then
+          v.Parent = game.Players.LocalPlayer.Backpack;
+     end;
+end;
+                end
+            end
+        end
+    end
+end
+
+-- Loop over all players in the game and check their playing animation tracks
+for _, player in ipairs(game.Players:GetPlayers()) do
+    if player.Character then
+        checkPlayingAnimations(player, 7)
+    end
+end
+
+-- Connect the checkPlayingAnimations function to the CharacterAdded event for new players
+game.Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        checkPlayingAnimations(player, 7)
+    end)
+end)
+
+-- Call the checkPlayingAnimations function every frame to continuously check for playing animations
+game:GetService("RunService").RenderStepped:Connect(function()
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        if player.Character then
+            checkPlayingAnimations(player, 7)
+        end
+    end
+end)
+
+-- Function to add a player to the whitelist
+local function addPlayerToWhitelist(player)
+    whitelistedPlayers[player.UserId] = true
+    print("Player " .. player.Name .. " added to the whitelist")
+end
+
+-- Function to remove a player from the whitelist
+local function removePlayerFromWhitelist(player)
+    whitelistedPlayers[player.UserId] = nil
+    print("Player " .. player.Name .. " removed from the whitelist")
+end
