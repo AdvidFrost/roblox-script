@@ -10657,10 +10657,26 @@ local character = player.Character
     end
 end)
 end)
-AddCommand("tpheight", {"*tpheight"}, "press r to tp to the void", {}, function(Caller, Args)
+AddCommand("tpheight", {"*tpheight"}, "changes ur tp up height", {}, function(Caller, Args)
     getgenv().tpuppos = Vector3.new(0, Args[1] or 250, 0)
     return "tp height set to ".. Args[1]
 end)
+
+AddCommand("autocounter", {"*autocounter"}, "auto counters with garou", {}, function(Caller, Args)
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Saitama%20battlegrounds%20auto%20counter"))()
+    return "Must be using garou and have autouse on"
+end)
+
+AddCommand("unautocounter", {"*unautocounter"}, "turns auto counter off", {}, function(Caller, Args)
+    getgenv().autocountering = false
+    return "autocounter is off"
+end)
+
+AddCommand("fightbot", {"*fightbot"}, "enables a fight bot", {}, function(Caller, Args)
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Saitama%20battlegrounds%20fight%20bot"))()
+    return "rejoin to turn off"
+end)
+
 AddCommand("autorefresh", {"*autorefresh"}, "autorefreshes ur player at low health", {}, function(Caller, Args)
     getgenv().autorefresh = true
     local player = game.Players.LocalPlayer
