@@ -1,4 +1,4 @@
-getgenv().autocountering = true
+-- Define a table to hold the animations to detect
 local animationsToDetect = {
     12272894210,
     12107656616,
@@ -30,11 +30,10 @@ local function checkPlayingAnimations(player, distanceThreshold)
             if track.Animation.AnimationId == "rbxassetid://" .. tostring(animationId) then
                 local distance = (player.Character.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
                 if distance <= distanceThreshold then
-                if getgenv().autocountering then
                     print(player.Name .. " is playing animation: " .. animationId .. " and is within " .. distance .. " studs")
                     wait(0.05)
                     local player = game:GetService("Players").LocalPlayer
-                    local tool = game:GetService("Players").LocalPlayer.Backpack["Prey's Peril"]
+                    local tool = game:GetService("Players").LocalPlayer.Backpack["Prey's Peril" or "Doomed Prey"]
 player.Character.Humanoid:EquipTool(tool)
 wait(2)
 for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
@@ -42,9 +41,6 @@ for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
           v.Parent = game.Players.LocalPlayer.Backpack;
      end;
 end;
-else
-    return
-    end
                 end
             end
         end
