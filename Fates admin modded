@@ -10623,6 +10623,8 @@ end
 
 if game.PlaceId == 10449761463 then
     AddCommand("heaven", {"*heaven"}, "sends target to heaven", {}, function(Caller, Args)
+    local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+local gobackto = hrp.CFrame
     local Target = GetPlayer(Args[1]);
     local player = game.Players.LocalPlayer
 local tool = game:GetService("Players").LocalPlayer.Backpack["Lethal Whirlwind Stream"]
