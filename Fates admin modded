@@ -10622,6 +10622,43 @@ print("DV hood detected")
 end
 
 if game.PlaceId == 10449761463 then
+    AddCommand("heaven", {"*heaven"}, "sends target to heaven", {}, function(Caller, Args)
+    local Target = GetPlayer(Args[1]);
+    local player = game.Players.LocalPlayer
+local tool = game:GetService("Players").LocalPlayer.Backpack["Lethal Whirlwind Stream"]
+player.Character.Humanoid:EquipTool(tool)
+wait(0.2)
+
+local targetPlayerName = Target[1].Name
+
+-- Define a function to teleport the current player to a position behind the target player and face them
+local function teleportBehindTargetPlayer()
+    local targetPlayer = game.Players:FindFirstChild(targetPlayerName)
+    if targetPlayer and targetPlayer.Character then
+        local targetPosition = targetPlayer.Character.HumanoidRootPart.Position
+        local teleportPosition = targetPosition - (targetPlayer.Character.HumanoidRootPart.CFrame.LookVector * 1)
+        for i = 1, 5 do
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(teleportPosition, targetPosition)
+        wait(0.01)
+        end
+        wait(0.5)
+        local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+local gobackto = hrp.CFrame
+hrp.CFrame = CFrame.new(33568400, 516012800, 219472768)
+wait(2)
+hrp.CFrame = gobackto
+    end
+end
+-- Call the teleportBehindTargetPlayer function when the script is executed
+teleportBehindTargetPlayer()
+wait(1)
+for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+     if v:IsA'Tool' then
+          v.Parent = game.Players.LocalPlayer.Backpack;
+     end;
+end;
+end)
+
     AddCommand("tpmoves", {"*tpmoves"}, "press r and t during grab moves for stuff to happen", {}, function(Caller, Args)
     getgenv().tpuppos = Vector3.new(0, Args[1] or 250, 0)
 
