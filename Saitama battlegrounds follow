@@ -3,22 +3,34 @@ local myHumanoid = myPlayer.Character:WaitForChild("Humanoid")
 local myRootPart = myPlayer.Character:WaitForChild("HumanoidRootPart")
 
 while true do
-    local closest = nil
-    local closestDist = math.huge
-    for _, player in ipairs(game.Players:GetPlayers()) do
-        if player ~= myPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            local dist = (player.Character.HumanoidRootPart.Position - myRootPart.Position).Magnitude
-            if dist < closestDist and dist <= 80 then
-                closest = player
-                closestDist = dist
+    local closestPlayer, closestDistance = nil, math.huge
+    for _, otherPlayer in ipairs(game.Players:GetPlayers()) do
+        if otherPlayer ~= myPlayer and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local distance = (otherPlayer.Character.HumanoidRootPart.Position - myRootPart.Position).Magnitude
+            if distance < closestDistance and distance <= 80 then
+                closestPlayer = otherPlayer
+                closestDistance = distance
             end
         end
     end
     
-    if closest then
-        local target = closest.Character.HumanoidRootPart
+    if closestPlayer then
+        local target = closestPlayer.Character.HumanoidRootPart
         local direction = (target.Position - myRootPart.Position).Unit
-        myHumanoid:MoveTo(myRootPart.Position + direction * 3)
+        
+        -- check if we're close to the target, and stop moving towards them if so
+        if closestDistance <= 2 then
+            myHumanoid:MoveTo(myRootPart.Position)
+        else
+            -- move using :MoveTo()
+            myHumanoid:MoveTo(target.Position)
+        end
+        
+        -- add a chance to jump
+        if math.random() < 0.02 then
+            myHumanoid.Jump = true
+        end
     end
+    
     wait(0.1)
 end
