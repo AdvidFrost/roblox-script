@@ -1,10 +1,6 @@
 -- get local player
 local player = game.Players.LocalPlayer
 
--- initialize last action times
-local lastLeftClickTime = 0
-local lastDashTime = 0
-
 -- function to find the closest player
 local function findClosestPlayer()
     local closestDistance = math.huge
@@ -27,7 +23,7 @@ end
 -- follow the closest player
 while true do
     local closestPlayer, closestDistance = findClosestPlayer()
-    if closestPlayer and closestDistance <= 6 and (tick() - lastLeftClickTime) > 0.5 then
+    if closestPlayer and closestDistance <= 6 then
         local A_1 =  {
             ["Goal"] = "LeftClick"
         }
@@ -38,8 +34,7 @@ while true do
             ["Goal"] = "LeftClickRelease"
         }
         Event:FireServer(A_1)
-        lastLeftClickTime = tick()
-    elseif closestPlayer and closestDistance >= 30 and (tick() - lastDashTime) > 10 then
+    elseif closestPlayer and closestDistance <= 30 then
         print("dashing")
         local A_1 = {
             ["Dash"] = Enum.KeyCode.W, 
@@ -48,23 +43,35 @@ while true do
         }
         local Event = game:GetService("Workspace").Live[player.Name].Communicate
         Event:FireServer(A_1)
-        wait(0.1)
-        lastDashTime = tick()
-    elseif closestPlayer and closestDistance <= 10 and player.Character and player.Character:FindFirstChild("PlayerGui") and player.Character.PlayerGui:FindFirstChild("ScreenGui") and player.Character.PlayerGui.ScreenGui:FindFirstChild("MagicHealth") and player.Character.PlayerGui.ScreenGui.MagicHealth:FindFirstChild("Ult") and player.Character.PlayerGui.ScreenGui.MagicHealth.Ult.Visible and (tick() - lastLeftClickTime) > 0.5 then
-        print("Using ultimate")
-        local A_1 = {
-            ["Goal"] = "KeyPress", 
-            ["Key"] = Enum.KeyCode.G
-        }
-        local Event = game:GetService("Workspace").Live[player.Name].Communicate
-        Event:FireServer(A_1)
-        wait(0.1)
-        local A_1 = {
-            ["Goal"] = "KeyRelease", 
-            ["Key"] = Enum.KeyCode.G
-        }
-        Event:FireServer(A_1)
-        lastLeftClickTime = tick()
     end
+
+    if closestPlayer and closestDistance <= 10 then
+        local playerGui = player:FindFirstChild("PlayerGui")
+        if playerGui then
+            local screenGui = playerGui:FindFirstChild("ScreenGui")
+            if screenGui then
+                local magicHealth = screenGui:FindFirstChild("MagicHealth")
+                if magicHealth then
+                    local ult = magicHealth:FindFirstChild("Ult")
+                    if ult and ult.Visible then
+                        print("Using ultimate")
+                        local A_1 = {
+                            ["Goal"] = "KeyPress",
+                            ["Key"] = Enum.KeyCode.G,
+                        }
+                        local Event = game:GetService("Workspace").Live[player.Name].Communicate
+                        Event:FireServer(A_1)
+                        wait(0.1)
+                        local A_2 = {
+                            ["Goal"] = "KeyRelease",
+                            ["Key"] = Enum.KeyCode.G,
+                        }
+                        Event:FireServer(A_2)
+                    end
+                end
+            end
+        end
+    end
+
     wait(0.1)
 end
