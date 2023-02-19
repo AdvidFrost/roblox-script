@@ -35,7 +35,7 @@ local function checkPlayingAnimations(player, distanceThreshold)
                     local player = game:GetService("Players").LocalPlayer
                     local tool = game:GetService("Players").LocalPlayer.Backpack["Prey's Peril" or "Doomed Prey"]
 player.Character.Humanoid:EquipTool(tool)
-wait(2)
+wait(0.1)
 for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
      if v:IsA'Tool' then
           v.Parent = game.Players.LocalPlayer.Backpack;
