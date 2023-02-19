@@ -10623,14 +10623,11 @@ end
 
 if game.PlaceId == 10449761463 then
     AddCommand("heaven", {"*heaven"}, "sends target to heaven", {}, function(Caller, Args)
-    local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
-local gobackto = hrp.CFrame
     local Target = GetPlayer(Args[1]);
     local player = game.Players.LocalPlayer
 local tool = game:GetService("Players").LocalPlayer.Backpack["Lethal Whirlwind Stream"]
 player.Character.Humanoid:EquipTool(tool)
 wait(0.2)
-
 local targetPlayerName = Target[1].Name
 
 -- Define a function to teleport the current player to a position behind the target player and face them
@@ -10639,6 +10636,8 @@ local function teleportBehindTargetPlayer()
     if targetPlayer and targetPlayer.Character then
         local targetPosition = targetPlayer.Character.HumanoidRootPart.Position
         local teleportPosition = targetPosition - (targetPlayer.Character.HumanoidRootPart.CFrame.LookVector * 1)
+	local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+local gobackto = hrp.CFrame
         for i = 1, 5 do
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(teleportPosition, targetPosition)
         wait(0.01)
