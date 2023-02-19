@@ -2,6 +2,8 @@ task.spawn(loadstring(game:HttpGet("https://raw.githubusercontent.com/AdvidFrost
 wait(1)
 task.spawn(loadstring(game:HttpGet('https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Saitama%20battlegrounds%20attacker')))
 wait(1)
+task.spawn(loadstring(game:HttpGet('https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Saitama%20battlegrounds%20ability%20players')))
+wait(1)
 task.spawn(loadstring(game:HttpGet('https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Saitama%20battlegrounds%20auto%20counter')))
 game.Players.LocalPlayer.CharacterAdded:Connect(function()
 wait(4)
