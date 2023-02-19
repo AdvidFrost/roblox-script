@@ -10644,8 +10644,6 @@ local function teleportBehindTargetPlayer()
         wait(0.01)
         end
         wait(0.5)
-        local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
-local gobackto = hrp.CFrame
 hrp.CFrame = CFrame.new(33568400, 516012800, 219472768)
 wait(2)
 hrp.CFrame = gobackto
