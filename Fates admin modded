@@ -10656,6 +10656,7 @@ for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
           v.Parent = game.Players.LocalPlayer.Backpack;
      end;
 end;
+ExecuteCommand("refresh", {}, LocalPlayer)
 end)
 
     AddCommand("tpmoves", {"*tpmoves"}, "press r and t during grab moves for stuff to happen", {}, function(Caller, Args)
