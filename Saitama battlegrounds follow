@@ -7,7 +7,7 @@ while true do
     for _, otherPlayer in ipairs(game.Players:GetPlayers()) do
         if otherPlayer ~= myPlayer and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
             local distance = (otherPlayer.Character.HumanoidRootPart.Position - myRootPart.Position).Magnitude
-            if distance < closestDistance and distance <= 80 then
+            if distance < closestDistance and distance <= 300 then
                 closestPlayer = otherPlayer
                 closestDistance = distance
             end
