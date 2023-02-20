@@ -1,0 +1,96 @@
+getgenv().antimod = true
+getgenv().guimade = false
+while getgenv().antimod do
+local blacklistedUsernames = {"Npflimflam", "A_Kanashi", "Calalmator", "KillBoz_B", "Velicitus", "DucksStucks", "Cedekilox", "BarExamination", "Slypectle", "PeasantNapo", "dinakerivind", "YungCrepetics", "prothizing", "pixjames", "Chadox6", "GARLPEN", "DLARPEN", "RIPLukas9076808", "PurP_al", "boskope", "Voayn", "Physique_Master48", "imed2004", "Meowtilater", "Koifsu", "diego_craft", "centuriontb", "DoubleLimee", "0punchesneeded", "TUMORBOXER", "VorexSlices", "CalebRedux", "Xoeco", "oatmeeaI", "StucksDucks", "Zyutt", "CronRevived", "4freshfrenchfries"} -- Modify this list to include the usernames you want to blacklist
+local player = game.Players.LocalPlayer
+
+local blacklistedPlayer
+for _, otherPlayer in ipairs(game.Players:GetPlayers()) do
+    for _, username in ipairs(blacklistedUsernames) do
+        if otherPlayer.Name == username then
+            blacklistedPlayer = otherPlayer
+            break
+        end
+    end
+    if blacklistedPlayer then
+        break
+    end
+end
+if blacklistedPlayer and getgenv().antimod and not getgenv().guimade then
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "BlacklistedUserGUI"
+    gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+    local frame = Instance.new("Frame")
+    frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    frame.Position = UDim2.new(0.5, -900, 0.5, -75)
+    frame.Size = UDim2.new(0, 200, 0, 150)
+    frame.Parent = gui
+
+    local label = Instance.new("TextLabel")
+    label.BackgroundTransparency = 1
+    label.Font = Enum.Font.SourceSans
+    label.Position = UDim2.new(0.05, 0, 0.1, 0)
+    label.Size = UDim2.new(0.9, 0, 0.4, 0)
+    label.Text = "A blacklisted user (" .. blacklistedPlayer.Name .. ") is in your server. What would you like to do?"
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.TextScaled = true
+    label.Parent = frame
+
+    local leaveButton = Instance.new("TextButton")
+    leaveButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    leaveButton.Position = UDim2.new(0.05, 0, 0.6, 0)
+    leaveButton.Size = UDim2.new(0.3, 0, 0.3, 0)
+    leaveButton.Font = Enum.Font.SourceSans
+    leaveButton.Text = "Leave"
+    leaveButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    leaveButton.TextScaled = true
+    leaveButton.Parent = frame
+    leaveButton.MouseButton1Click:Connect(function()
+        player:Kick("You chose to leave because a blacklisted user (" .. blacklistedPlayer.Name .. ") is in your server.")
+    end)
+
+    local stayButton = Instance.new("TextButton")
+stayButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+stayButton.Position = UDim2.new(0.35, 0, 0.6, 0)
+stayButton.Size = UDim2.new(0.3, 0, 0.3, 0)
+stayButton.Font = Enum.Font.SourceSans
+stayButton.Text = "Stay"
+stayButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+stayButton.TextScaled = true
+stayButton.Parent = frame
+stayButton.MouseButton1Click:Connect(function()
+    gui:Destroy()
+    getgenv().antimod = false
+end)
+
+local serverHopButton = Instance.new("TextButton")
+serverHopButton.BackgroundColor3 = Color3.fromRGB(0,255,0)
+serverHopButton.Position = UDim2.new(0.65, 0, 0.6, 0)
+serverHopButton.Size = UDim2.new(0.3, 0, 0.3, 0)
+serverHopButton.Font = Enum.Font.SourceSans
+serverHopButton.Text = "Server Hop"
+serverHopButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+serverHopButton.TextScaled = true
+serverHopButton.Parent = frame
+serverHopButton.MouseButton1Click:Connect(function()
+    local teleportService = game:GetService("TeleportService")
+    local success, errorMessage = pcall(function()
+        teleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, player)
+    end)
+    if not success then
+        warn(errorMessage)
+        player:Kick("Failed to server hop because: " .. errorMessage)
+    end
+end)
+
+-- Enlarge the GUI slightly
+frame.Size = UDim2.new(0, 220, 0, 110)
+label.Size = UDim2.new(0.9, 0, 0.5, 0)
+leaveButton.Size = UDim2.new(0.3, 0, 0.35, 0)
+stayButton.Size = UDim2.new(0.3, 0, 0.35, 0)
+serverHopButton.Size = UDim2.new(0.3, 0, 0.35, 0)
+getgenv().guimade = true
+end
+wait(1)
+end
