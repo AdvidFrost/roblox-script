@@ -10743,15 +10743,14 @@ end
 
 -- Function to kick the local player and show a message
 function kickLocalPlayer()
-    game:GetService("Players").LocalPlayer:Kick("Blacklisted player detected!")
+    game:GetService("Players").LocalPlayer:Kick("Possible moderator detected!")
 end
 
--- Function to show a notification 30 seconds prior to kicking
 -- ID of the sound to play when a blacklisted player is detected
 local BLACKLISTED_SOUND_ID = 5568992074 -- Replace with your desired sound ID
 
 -- Function to show a notification 30 seconds prior to kicking
-function showNotification()
+function showNotification(playerName)
     -- Play a sound to alert the player
     local sound = Instance.new("Sound")
     sound.SoundId = "rbxassetid://" .. BLACKLISTED_SOUND_ID
@@ -10760,19 +10759,18 @@ function showNotification()
     sound.Parent = game.Workspace
     sound:Destroy()
 
-    -- Show the notification
+    -- Show the notification with the name of the blacklisted player
     game.StarterGui:SetCore("SendNotification", {
-        Title = "Blacklisted player detected!";
-        Text = "You will be kicked in 30 seconds.";
+        Title = "Possible mod detected!";
+        Text = "You will be kicked in 30 seconds.\nPlayer name: " .. playerName;
         Duration = 10;
     })
 end
 
-
 -- Connect to player join event
 game:GetService("Players").PlayerAdded:Connect(function(player)
     if isBlacklisted(player) then
-        showNotification()
+        showNotification(player.Name)
         wait(30)
         kickLocalPlayer()
     end
@@ -10781,11 +10779,12 @@ end)
 -- Check for any blacklisted players already in the game
 for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
     if isBlacklisted(player) then
-        showNotification()
+        showNotification(player.Name)
         wait(30)
         kickLocalPlayer()
     end
 end
+
 
 
     Utils.Notify(LocalPlayer, "Compatible game detected", "SB is supported for extra commands! Type a * in the cmds menu to view them", 10);
