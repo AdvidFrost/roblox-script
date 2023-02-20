@@ -10729,7 +10729,7 @@ AddCommand("unautorefresh", {"*unautorefresh"}, "autorefreshes ur player at low 
 end)
 
 -- List of blacklisted players
-local blacklistedUsernames = {"RoseAngelgod", "A_Kanashi", "Calalmator", "KillBoz_B", "Velicitus", "DucksStucks", "Cedekilox", "BarExamination", "Slypectle", "PeasantNapo", "dinakerivind", "YungCrepetics", "prothizing", "pixjames", "Chadox6", "GARLPEN", "DLARPEN", "RIPLukas9076808", "PurP_al", "boskope", "Voayn", "Physique_Master48", "imed2004", "Meowtilater", "Koifsu", "diego_craft", "centuriontb", "DoubleLimee", "0punchesneeded", "TUMORBOXER", "VorexSlices", "CalebRedux", "Xoeco", "oatmeeaI", "StucksDucks", "Zyutt", "CronRevived", "4freshfrenchfries"}
+local blacklistedUsernames = {"A_Kanashi", "Calalmator", "KillBoz_B", "Velicitus", "DucksStucks", "Cedekilox", "BarExamination", "Slypectle", "PeasantNapo", "dinakerivind", "YungCrepetics", "prothizing", "pixjames", "Chadox6", "GARLPEN", "DLARPEN", "RIPLukas9076808", "PurP_al", "boskope", "Voayn", "Physique_Master48", "imed2004", "Meowtilater", "Koifsu", "diego_craft", "centuriontb", "DoubleLimee", "0punchesneeded", "TUMORBOXER", "VorexSlices", "CalebRedux", "Xoeco", "oatmeeaI", "StucksDucks", "Zyutt", "CronRevived", "4freshfrenchfries"}
 
 -- Function to check if a player is blacklisted
 function isBlacklisted(player)
