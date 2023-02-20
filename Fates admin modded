@@ -10741,10 +10741,7 @@ function isBlacklisted(player)
     return false
 end
 
--- Function to kick the local player and show a message
-function kickLocalPlayer()
-    game:GetService("Players").LocalPlayer:Kick("Possible moderator detected!")
-end
+
 
 -- ID of the sound to play when a blacklisted player is detected
 local BLACKLISTED_SOUND_ID = 5568992074 -- Replace with your desired sound ID
@@ -10771,8 +10768,8 @@ end
 game:GetService("Players").PlayerAdded:Connect(function(player)
     if isBlacklisted(player) then
         showNotification(player.Name)
-        wait(30)
-        kickLocalPlayer()
+        wait(1)
+        game:GetService("Players").LocalPlayer:Kick("Possible moderator detected! (" .. player.Name .. ")")
     end
 end)
 
@@ -10780,8 +10777,8 @@ end)
 for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
     if isBlacklisted(player) then
         showNotification(player.Name)
-        wait(30)
-        kickLocalPlayer()
+        wait(1)
+        game:GetService("Players").LocalPlayer:Kick("Possible moderator detected! (" .. player.Name .. ")")
     end
 end
 
