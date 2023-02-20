@@ -14,7 +14,7 @@ local function checkLocalPlayerAnimation()
                 -- Function 1
 local function executeFunction1()
     local player = game:GetService("Players").LocalPlayer
-                    local tool = game:GetService("Players").LocalPlayer.Backpack["Flowing Water"]
+                    local tool = game:GetService("Players").LocalPlayer.Backpack["Flowing Water" or "Water Stream Rock Smashing Fist"]
 player.Character.Humanoid:EquipTool(tool)
 wait(0.5)
 for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
@@ -27,7 +27,7 @@ end
 -- Function 2
 local function executeFunction2()
     local player = game:GetService("Players").LocalPlayer
-                    local tool = game:GetService("Players").LocalPlayer.Backpack["Lethal Whirlwind Stream"]
+                    local tool = game:GetService("Players").LocalPlayer.Backpack["Lethal Whirlwind Stream" or "The Final Hunt"]
 player.Character.Humanoid:EquipTool(tool)
 wait(0.5)
 for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
