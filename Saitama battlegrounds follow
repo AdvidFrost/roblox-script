@@ -2,12 +2,43 @@ local myPlayer = game.Players.LocalPlayer
 local myHumanoid = myPlayer.Character:WaitForChild("Humanoid")
 local myRootPart = myPlayer.Character:WaitForChild("HumanoidRootPart")
 
+-- create whitelist file if it doesn't exist
+local whitelistFilePath = "Whitelist.txt"
+if not isfile(whitelistFilePath) then
+    writefile(whitelistFilePath, "")
+end
+
+-- read whitelist file
+local whitelist = {}
+local whitelistFile = readfile(whitelistFilePath)
+for player in whitelistFile:gmatch("[^\r\n]+") do
+    whitelist[player] = true
+end
+
+-- add player to whitelist
+function addToWhitelist(playerName)
+    if not whitelist[playerName] then
+        whitelist[playerName] = true
+        local whitelistFile = table.concat(table.keys(whitelist), "\n")
+        writefile(whitelistFilePath, whitelistFile)
+    end
+end
+
+-- remove player from whitelist
+function removeFromWhitelist(playerName)
+    if whitelist[playerName] then
+        whitelist[playerName] = nil
+        local whitelistFile = table.concat(table.keys(whitelist), "\n")
+        writefile(whitelistFilePath, whitelistFile)
+    end
+end
+
 while true do
     local closestPlayer, closestDistance = nil, math.huge
     for _, otherPlayer in ipairs(game.Players:GetPlayers()) do
         if otherPlayer ~= myPlayer and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
             local distance = (otherPlayer.Character.HumanoidRootPart.Position - myRootPart.Position).Magnitude
-            if distance < closestDistance and distance <= 300 then
+            if distance < closestDistance and distance <= 300 and not whitelist[otherPlayer.Name] then
                 closestPlayer = otherPlayer
                 closestDistance = distance
             end
