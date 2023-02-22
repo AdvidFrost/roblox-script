@@ -10714,6 +10714,13 @@ AddCommand("fightbot", {"*fightbot"}, "enables a fight bot", {}, function(Caller
     return "rejoin to turn off"
 end)
 
+AddCommand("autofarm", {"*autofarm"}, "autofarm for ur main", {}, function(Caller, Args)
+    AddCommand("fightbot", {"*fightbot"}, "enables a fight bot", {}, function(Caller, Args)
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Saitama%20battlegrounds%20fight%20bot"))()
+    return "rejoin to turn off"
+end)
+end)
+
 AddCommand("autorefresh", {"*autorefresh"}, "autorefreshes ur player at low health", {}, function(Caller, Args)
     getgenv().autorefresh = true
     local player = game.Players.LocalPlayer
