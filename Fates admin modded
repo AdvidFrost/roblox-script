@@ -10714,11 +10714,35 @@ AddCommand("fightbot", {"*fightbot"}, "enables a fight bot", {}, function(Caller
     return "rejoin to turn off"
 end)
 
-AddCommand("autofarm", {"*autofarm"}, "autofarm for ur main", {}, function(Caller, Args)
-    AddCommand("fightbot", {"*fightbot"}, "enables a fight bot", {}, function(Caller, Args)
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Saitama%20battlegrounds%20fight%20bot"))()
-    return "rejoin to turn off"
-end)
+AddCommand("autofarm", {"*autofarm"}, "only for me rn", {}, function(Caller, Args)
+    -- Define the animation to detect
+local animationToDetect = 12307656616
+
+-- Define the target player's name
+local targetPlayerName = "DrippingCxmPies"
+
+-- Define a function to check if the target player is playing the animation
+local function checkTargetPlayer()
+    local targetPlayer = game.Players:FindFirstChild(targetPlayerName)
+    if targetPlayer and targetPlayer.Character then
+        local playingTracks = targetPlayer.Character.Humanoid:GetPlayingAnimationTracks()
+        for _, track in ipairs(playingTracks) do
+            if track.Animation.AnimationId == "rbxassetid://" .. tostring(animationToDetect) then
+                print(targetPlayerName .. " is playing the animation with ID " .. animationToDetect)
+                while true do
+                    ExecuteCommand("loopcommand", {reset 7}, LocalPlayer)
+                    wait(7)
+                    end
+                break
+            end
+        end
+    end
+end
+
+-- Call the checkTargetPlayer function every second to continuously check if the target player is playing the animation
+while wait(1) do
+    checkTargetPlayer()
+end
 end)
 
 AddCommand("autorefresh", {"*autorefresh"}, "autorefreshes ur player at low health", {}, function(Caller, Args)
