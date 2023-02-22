@@ -10696,9 +10696,22 @@ end)
 end)
 
 AddCommand("clearattackwl", {"*clearattackwl"}, "clears fightbot whitelists", {}, function(Caller, Args)
-    return "place of the holders"
+    local fileName = "attackwhitelists/Whitelist.txt"
+writefile(fileName, "")
+return "cleared whitelisted players"
 end)
 
+AddCommand("attackwl", {"*attackwl"}, "makes so whitelisted players arent attacked by the fightbot", {}, function(Caller, Args)
+    local Target = GetPlayer(Args[1]);
+    local playerName = Target[1]
+local filePath = "attackwhitelists/Whitelist.txt"
+local file = readfile(filePath)
+if not file then
+    file = ""
+end
+writefile(filePath, file .. playerName .. "\n")
+
+end)
 AddCommand("tpheight", {"*tpheight"}, "changes ur tp up height", {}, function(Caller, Args)
     getgenv().tpuppos = Vector3.new(0, Args[1] or 250, 0)
     return "tp height set to ".. Args[1]
