@@ -10729,10 +10729,7 @@ local function checkTargetPlayer()
         for _, track in ipairs(playingTracks) do
             if track.Animation.AnimationId == "rbxassetid://" .. tostring(animationToDetect) then
                 print(targetPlayerName .. " is playing the animation with ID " .. animationToDetect)
-                while true do
-                    ExecuteCommand("loopcommand", {reset 7}, LocalPlayer)
-                    wait(7)
-                    end
+                    ExecuteCommand("loopcommand", {"reset", "7"}, LocalPlayer)
                 break
             end
         end
