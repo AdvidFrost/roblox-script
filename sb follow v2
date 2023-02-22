@@ -1,0 +1,67 @@
+local myPlayer = game.Players.LocalPlayer
+local myHumanoid = myPlayer.Character:WaitForChild("Humanoid")
+local myRootPart = myPlayer.Character:WaitForChild("HumanoidRootPart")
+
+-- whitelist table, initially containing a default player
+local whitelist = {
+    ["JohnDoe"] = true
+}
+
+-- function to check if a player is whitelisted
+local function isWhitelisted(player)
+    return whitelist[player.Name] ~= nil
+end
+
+-- function to add a player to the whitelist
+local function addToWhitelist(player)
+    whitelist[player.Name] = true
+    print("Added " .. player.Name .. " to the whitelist.")
+end
+
+-- print the current whitelist every 4 seconds
+spawn(function()
+    while true do
+        print("Current whitelist:")
+        for player, _ in pairs(whitelist) do
+            print(player)
+        end
+        wait(4)
+    end
+end)
+
+while true do
+    local closestPlayer, closestDistance = nil, math.huge
+    for _, otherPlayer in ipairs(game.Players:GetPlayers()) do
+        if otherPlayer ~= myPlayer and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local distance = (otherPlayer.Character.HumanoidRootPart.Position - myRootPart.Position).Magnitude
+            if distance < closestDistance and distance <= 300 and not isWhitelisted(otherPlayer) then
+                closestPlayer = otherPlayer
+                closestDistance = distance
+            end
+        end
+    end
+    
+    if closestPlayer then
+        print("Moving towards " .. closestPlayer.Name .. ". Whitelisted: " .. tostring(isWhitelisted(closestPlayer)))
+        local direction = (closestPlayer.Character.HumanoidRootPart.Position - myRootPart.Position).Unit
+        
+        -- check if we're close to the target, and stop moving towards them if so
+        if closestDistance <= 2 then
+            myHumanoid:MoveTo(myRootPart.Position)
+        else
+            -- move using :MoveTo()
+            myHumanoid:MoveTo(closestPlayer.Character.HumanoidRootPart.Position)
+        end
+        
+        -- add a chance to jump
+        if math.random() < 0.02 then
+            myHumanoid.Jump = true
+        end
+    else
+        print("No non-whitelisted players nearby.")
+    end
+    
+    wait(0.1)
+end
+
+
