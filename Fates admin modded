@@ -10742,6 +10742,22 @@ while wait(1) do
 end
 end)
 
+AddCommand("autofarmmain", {"*autofarmmain"}, "only for me rn", {}, function(Caller, Args)
+while true do
+local player = game:GetService("Players").LocalPlayer
+local tool = game:GetService("Players").LocalPlayer.Backpack["Hunter's Grasp"]
+player.Character.Humanoid:EquipTool(tool)
+wait(0.1)
+for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+     if v:IsA'Tool' then
+          v.Parent = game.Players.LocalPlayer.Backpack;
+     end;
+end;
+ExecuteCommand("refresh", {}, LocalPlayer)
+wait(7)
+end
+end)
+
 AddCommand("autorefresh", {"*autorefresh"}, "autorefreshes ur player at low health", {}, function(Caller, Args)
     getgenv().autorefresh = true
     local player = game.Players.LocalPlayer
