@@ -10695,7 +10695,7 @@ local character = player.Character
 end)
 end)
 
-AddCommand(followtest", {"*followtest"}, "testing v2 follow", {}, function(Caller, Args)
+AddCommand("followtest", {"*followtest"}, "testing v2 follow", {}, function(Caller, Args)
    local myPlayer = game.Players.LocalPlayer
 local myHumanoid = myPlayer.Character:WaitForChild("Humanoid")
 local myRootPart = myPlayer.Character:WaitForChild("HumanoidRootPart")
