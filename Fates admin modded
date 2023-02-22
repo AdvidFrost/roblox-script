@@ -10703,7 +10703,7 @@ end)
 
 AddCommand("attackwl", {"*attackwl"}, "makes so whitelisted players arent attacked by the fightbot", {}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
-    local playerName = Target[1]
+    local playerName = Target[1].Name
 local filePath = "attackwhitelists/Whitelist.txt"
 local file = readfile(filePath)
 if not file then
