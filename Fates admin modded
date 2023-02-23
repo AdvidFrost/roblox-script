@@ -10621,7 +10621,7 @@ print("DV hood detected")
     Utils.Notify(LocalPlayer, "Compatible game detected", "DVH is supported for extra commands! Type a * in the cmds menu to view them", 10);
 end
 
-if game.PlaceId == 10449761463 then
+if game.PlaceId == 10449761463 or 12360882630 then
     AddCommand("heaven", {"*heaven"}, "sends target to heaven", {}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
     local player = game.Players.LocalPlayer
