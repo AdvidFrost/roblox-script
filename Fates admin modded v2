@@ -5778,21 +5778,21 @@ AddCommand("unorbit", {"noorbit"}, "unorbits yourself from the other player", {}
     return "orbit stopped"
 end)
 
--- AddCommand("bypass", {"clientbypass"}, "client sided bypass", {3}, function()
---     AddConnection(CConnect(LocalPlayer.CharacterAdded, function()
---         WaitForChild(GetCharacter(), "Humanoid");
---         wait(.4);
---         SpoofInstance(GetHumanoid());
---         SpoofInstance(GetRoot(), isR6() and GetCharacter().Torso or GetCharacter().UpperTorso);
---         ProtectInstance(GetRoot());
---         ProtectInstance(GetHumanoid());
---     end));
---     local Char = GetCharacter();
---     Char.BreakJoints(Char);
---     CommandsTable["goto"].Function = CommandsTable["tweento"].Function
---     CommandsTable["to"].Function = CommandsTable["tweento"].Function
---     return "clientsided bypass enabled"
--- end)
+AddCommand("bypass", {"clientbypass"}, "client sided bypass", {3}, function()
+     AddConnection(CConnect(LocalPlayer.CharacterAdded, function()
+         WaitForChild(GetCharacter(), "Humanoid");
+         wait(.4);
+         SpoofInstance(GetHumanoid());
+         SpoofInstance(GetRoot(), isR6() and GetCharacter().Torso or GetCharacter().UpperTorso);
+         ProtectInstance(GetRoot());
+         ProtectInstance(GetHumanoid());
+     end));
+     local Char = GetCharacter();
+     Char.BreakJoints(Char);
+     CommandsTable["goto"].Function = CommandsTable["tweento"].Function
+     CommandsTable["to"].Function = CommandsTable["tweento"].Function
+     return "clientsided bypass enabled"
+end)
 
 AddCommand("shiftlock", {}, "enables shiftlock in your game (some games have it off)", {}, function()
     if (LocalPlayer.DevEnableMouseLock) then
@@ -6592,7 +6592,12 @@ AddCommand("pathfind", {"follow2"}, "finds a user with pathfinding", {"1",3}, fu
     end
 end)
 
---AddCommand("dex", {"darkdex"}, "A quick way to execute dark dex from the synapse script hub.", {}, loadstring(game:HttpGet("https://cdn.synapse.to/synapsedistro/hub/DarkDex.lua")));
+AddCommand("serverinfo", {"serverip", "serverport"}, "copies server info clipboard", {}, function(Caller, Args)
+    setclipboard(getgenv().peers);
+    return "script must be in autoexecute for info to be retrieved"
+end)
+
+AddCommand("dex", {"darkdex"}, "A quick way to execute dark dex from the synapse script hub.", {}, loadstring(game:HttpGet("https://cdn.synapse.to/synapsedistro/hub/DarkDex.lua")));
 
 AddCommand("console", {"errors", "warns", "outputs"}, "shows the outputs Advid's admin has made", {}, function()
     local MessageClone = Clone(Console.Frame.List);
@@ -6629,6 +6634,290 @@ AddCommand("console", {"errors", "warns", "outputs"}, "shows the outputs Advid's
     Utils.Tween(Console.Frame.List, "Sine", "Out", .25, {
         ScrollBarImageTransparency = 0
     })
+end)
+
+-- Advid's Sexy command
+AddCommand("serverinfo", {"serverip", "serverport"}, "copies server info clipboard", {}, function(Caller, Args)
+    setclipboard(getgenv().peers);
+    return "script must be in autoexecute for info to be retrieved"
+end)
+
+AddCommand("translator", {"googletranslator"}, "activates translator", {}, function(Caller, Args)
+   loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/x114/RobloxScripts/main/UpdatedChatTranslator"))()
+end)
+
+AddCommand("reanimate", {"reanimate"}, "reanimates you", {}, function(Caller, Args)
+local headless = (Args[1])
+local character = game.Players.LocalPlayer.Character
+local humanoid = character:WaitForChild("Humanoid")
+
+if humanoid.RigType == Enum.HumanoidRigType.R6 then
+    if headless then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/headlessr6"))()
+    else
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r6"))()
+    end
+elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
+    if headless then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r15headless"))()
+    else
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r15"))()
+    end
+end
+end)
+
+AddCommand("r15tor6", {"r15convert"}, "makes ur r15 character to r6", {}, function(Caller, Args)
+if humanoid.RigType == Enum.HumanoidRigType.R6 then
+    return "need to be in r15 silly"
+elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/convertr15"))()
+end
+end)
+
+AddCommand("antilock", {"antiaim"}, "turns on a universal prediction breaker", {}, function()
+       loadstring(game:HttpGet('https://pastebin.com/raw/gbRzQPh0'))()
+    end)
+    
+    AddCommand("camlock", {"camlock", "lock"}, "cam lock with adjustable prediction", {}, function(Caller, Args, CEnv)
+    getgenv().Prediction = (Args[1]) or 0.145
+getgenv().AimPart = "HumanoidRootPart"
+getgenv().Key = "C"
+getgenv().DisableKey = "P"
+
+getgenv().FOV = true
+getgenv().ShowFOV = true
+getgenv().FOVSize = 55
+
+--// Variables (Service)
+
+local Players = game:GetService("Players")
+local RS = game:GetService("RunService")
+local WS = game:GetService("Workspace")
+local GS = game:GetService("GuiService")
+local SG = game:GetService("StarterGui")
+
+--// Variables (regular)
+
+local LP = Players.LocalPlayer
+local Mouse = LP:GetMouse()
+local Camera = WS.CurrentCamera
+local GetGuiInset = GS.GetGuiInset
+
+local AimlockState = true
+local Locked
+local Victim
+
+local SelectedKey = getgenv().Key
+local SelectedDisableKey = getgenv().DisableKey
+
+--// Notification function
+
+function Notify(tx)
+    SG:SetCore("SendNotification", {
+        Title = "ADVID's ADMIN",
+        Text = tx,
+        Duration = 5
+    })
+end
+
+--// Check if aimlock is loaded
+
+if getgenv().Loaded == true then
+    Notify("Aimlock is already loaded!")
+    return
+end
+
+getgenv().Loaded = true
+
+--// FOV Circle
+
+local fov = Drawing.new("Circle")
+fov.Filled = false
+fov.Transparency = 1
+fov.Thickness = 1
+fov.Color = Color3.fromRGB(255, 0, 0)
+fov.NumSides = 1000
+
+--// Functions
+
+function update()
+    if getgenv().FOV == true then
+        if fov then
+            fov.Radius = getgenv().FOVSize * 2
+            fov.Visible = getgenv().ShowFOV
+            fov.Position = Vector2.new(Mouse.X, Mouse.Y + GetGuiInset(GS).Y)
+
+            return fov
+        end
+    end
+end
+
+function WTVP(arg)
+    return Camera:WorldToViewportPoint(arg)
+end
+
+function WTSP(arg)
+    return Camera.WorldToScreenPoint(Camera, arg)
+end
+
+function getClosest()
+    local closestPlayer
+    local shortestDistance = math.huge
+
+    for i, v in pairs(game.Players:GetPlayers()) do
+        local notKO = v.Character:WaitForChild("BodyEffects")["K.O"].Value ~= true
+        local notGrabbed = v.Character:FindFirstChild("GRABBING_COINSTRAINT") == nil
+        
+        if v ~= game.Players.LocalPlayer and v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health ~= 0 and v.Character:FindFirstChild(getgenv().AimPart) and notKO and notGrabbed then
+            local pos = Camera:WorldToViewportPoint(v.Character.PrimaryPart.Position)
+            local magnitude = (Vector2.new(pos.X, pos.Y) - Vector2.new(Mouse.X, Mouse.Y)).magnitude
+            
+            if (getgenv().FOV) then
+                if (fov.Radius > magnitude and magnitude < shortestDistance) then
+                    closestPlayer = v
+                    shortestDistance = magnitude
+                end
+            else
+                if (magnitude < shortestDistance) then
+                    closestPlayer = v
+                    shortestDistance = magnitude
+                end
+            end
+        end
+    end
+    return closestPlayer
+end
+ 
+--// Checks if key is down
+
+Mouse.KeyDown:Connect(function(k)
+    SelectedKey = SelectedKey:lower()
+    SelectedDisableKey = SelectedDisableKey:lower()
+    if k == SelectedKey then
+        if AimlockState == true then
+            Locked = not Locked
+            if Locked then
+                Victim = getClosest()
+
+                Notify("Locked onto: "..tostring(Victim.Character.Humanoid.DisplayName))
+            else
+                if Victim ~= nil then
+                    Victim = nil
+
+                    Notify("Unlocked!")
+                end
+            end
+        else
+            Notify("Aimlock is not enabled!")
+        end
+    end
+    if k == SelectedDisableKey then
+        AimlockState = not AimlockState
+    end
+end)
+
+--// Loop update FOV and loop camera lock onto target
+
+RS.RenderStepped:Connect(function()
+    update()
+    if AimlockState == true then
+        if Victim ~= nil then
+            Camera.CFrame = CFrame.new(Camera.CFrame.p, Victim.Character[getgenv().AimPart].Position + Victim.Character[getgenv().AimPart].Velocity*getgenv().Prediction)
+        end
+    end
+end)
+	while wait() do
+        if getgenv().AutoPrediction == true then
+        local pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+        local split = string.split(pingvalue,'(')
+        local ping = tonumber(split[1])
+            if ping < 225 then
+            getgenv().Prediction = 1.4
+        elseif ping < 215 then
+            getgenv().Prediction = 1.2
+	    elseif ping < 205 then
+            getgenv().Prediction = 1.0
+	    elseif ping < 190 then
+            getgenv().Prediction = 0.10
+        elseif ping < 180 then
+            getgenv().Prediction = 0.12
+	    elseif ping < 170 then
+            getgenv().Prediction = 0.15
+	    elseif ping < 160 then
+            getgenv().Prediction = 0.18
+	    elseif ping < 150 then
+            getgenv().Prediction = 0.110
+        elseif ping < 140 then
+            getgenv().Prediction = 0.113
+        elseif ping < 130 then
+            getgenv().Prediction = 0.116
+        elseif ping < 120 then
+            getgenv().Prediction = 0.120
+        elseif ping < 110 then
+            getgenv().Prediction = 0.124
+        elseif ping < 105 then
+            getgenv().Prediction = 0.127
+        elseif ping < 90 then
+            getgenv().Prediction = 0.130
+        elseif ping < 80 then
+            getgenv().Prediction = 0.133
+        elseif ping < 70 then
+            getgenv().Prediction = 0.136
+        elseif ping < 60 then
+            getgenv().Prediction = 0.15038
+        elseif ping < 50 then
+            getgenv().Prediction = 0.15038
+        elseif ping < 40 then
+            getgenv().Prediction = 0.145
+        elseif ping < 30 then
+            getgenv().Prediction = 0.155
+        elseif ping < 20 then
+            getgenv().Prediction = 0.157
+game:GetService("StarterGui"):SetCore("SendNotification", {
+				Title = "Lock Loaded!";
+				Text = "Advid's Admin";
+				Duration = 10;
+			})
+        end
+        end
+	end
+end)
+
+AddCommand("prediction", {"prediction", "lockmagnitude"}, "changes lock magnitude", {}, function(Caller, Args, CEnv)
+    getgenv().Prediction = (Args[1])
+    return "prediction set to: " ..(Args[1])
+end)
+
+AddCommand("blockhats", {"blockhats"}, "makes ur hats into blocks, r6 only", {}, function()
+local character = game.Players.LocalPlayer.Character
+local humanoid = character:WaitForChild("Humanoid")
+
+if humanoid.RigType == Enum.HumanoidRigType.R6 then
+    local player = game.Players.LocalPlayer
+local character = player.Character
+
+-- Find all the accessories in the character
+local accessories = character:GetChildren()
+
+-- Iterate through each accessory
+for _, accessory in pairs(accessories) do
+    if accessory:IsA("Accessory") then
+        -- Find the Mesh or SpecialMesh object in the accessory's handle
+        local mesh = accessory.Handle:FindFirstChild("Mesh")
+        if not mesh then
+            mesh = accessory.Handle:FindFirstChild("SpecialMesh")
+        end
+        
+        -- Check if the mesh exists
+        if mesh then
+            -- Delete the mesh
+            mesh:Destroy()
+        end
+    end
+end
+elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
+    return "r6 only"
+end
 end)
 
 task.spawn(function()
