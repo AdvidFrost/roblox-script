@@ -9003,7 +9003,7 @@ end
 Utils.Notify(LocalPlayer, "Loaded", format("script loaded in %.3f seconds", (tick()) - _L.start));
 Utils.Notify(LocalPlayer, "Welcome", "'cmds' to see all of the commands, 'config' to customise the script");
 if (debug.info(2, "f") == nil) then
-    Utils.Notify(LocalPlayer, "Outdated Script", "use the loadstring to get latest updates (github.com/AdvidFrost/roblox-script/blob/main/Fates%20admin%20modded)", 10);
+    Utils.Notify(LocalPlayer, "Outdated Script", "use the loadstring to get latest updates", 10);
 end
 _L.LatestCommit = JSONDecode(Services.HttpService, game.HttpGetAsync(game, "https://api.github.com/repos/AdvidFrost/roblox-script/commits?per_page=1&path=Fates%20admin%20modded"))[1]
 wait(1);
