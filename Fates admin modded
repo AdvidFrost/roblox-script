@@ -6779,7 +6779,7 @@ running = true
 end
 end)
 
-Utils.Notify(LocalPlayer, "Antifling loaded", "type antioff or antion in chat to dis/enable", 10);
+Utils.Notify(LocalPlayer, "Antifling loaded", "type antioff or antion in chat to de/activate it", 10);
 end)
 
 AddCommand("translator", {"googletranslator"}, "activates translator", {}, function(Caller, Args)
