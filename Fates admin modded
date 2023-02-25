@@ -1,12 +1,12 @@
 --[[
-	Advid's Admin - 16/11/2022
+	fates admin - 16/11/2022 Editted by AdvidFrost (Advid#1471)
 ]]
 
 game:GetService("NetworkClient").ConnectionAccepted:connect(function(peer)
    print("Server IP and port is " .. peer);
    getgenv().peers = peer;
 end);
- 
+
 local game = game
 local GetService = game.GetService
 if (not game.IsLoaded(game)) then
@@ -26,7 +26,7 @@ do
         local UserInputService = GetService(game, "UserInputService");
         local CommandBarPrefix = GetConfig().CommandBarPrefix
         local StringKeyCode = UserInputService.GetStringForKeyCode(UserInputService, Enum.KeyCode[CommandBarPrefix]);
-        return Notify(nil, "Loaded", "Advid's Admin is already loaded... use 'killscript' to kill", nil),
+        return Notify(nil, "Loaded", "Advid's admin is already loaded... use 'killscript' to kill", nil),
         Notify(nil, "Your Prefix is", string.format("%s (%s)", StringKeyCode, CommandBarPrefix));
     end
 end
@@ -187,7 +187,7 @@ do
                 return Ret
             end
             if (Debug) then
-                warn("[AA Error]: " .. debug.traceback(Ret));
+                warn("[FA Error]: " .. debug.traceback(Ret));
             end
         end
     end
@@ -334,6 +334,7 @@ end
 
 local setthreadidentity = setthreadidentity or syn_context_set or setthreadcontext or (syn and syn.set_thread_identity)
 local getthreadidentity = getthreadidentity or syn_context_get or getthreadcontext or (syn and syn.get_thread_identity)
+
 --END IMPORT [var]
 
 
@@ -625,7 +626,7 @@ do
             end
         end
 
-        -- ik this is horrible but Advid's Admin v3 has a better way of doing hooks
+        -- ik this is horrible but fates admin v3 has a better way of doing hooks
         if (Method == "children" or Method == "GetChildren" or Method ==  "getChildren" or Method == "GetDescendants" or Method == "getDescendants") then
             return filter(__Namecall(...), function(i, instance)
                 return not isProtected(instance);
@@ -779,7 +780,7 @@ do
                     }
                 end
                 local Connections = tbl_concat(
-                    getconnections(GetPropertyChangedSignal(Instance_, SpoofedPropertiesForInstance and SpoofedPropertiesForInstance.Property or Index), true),
+                    -- getconnections(GetPropertyChangedSignal(Instance_, SpoofedPropertiesForInstance and SpoofedPropertiesForInstance.Property or Index), true),
                     -- getconnections(Instance_.Changed, true),
                     getconnections(game.ItemChanged, true)
                 )
@@ -2660,14 +2661,18 @@ do
     end));
 end
 
-AddCommand("commandcount", {"cc"}, "shows you how many commands there is in Advid's Admin", {}, function(Caller)
+AddCommand("commandcount", {"cc"}, "shows you how many commands there is in Advid's admin", {}, function(Caller)
     Utils.Notify(Caller, "Amount of Commands", format("There are currently %s commands.", #filter(CommandsTable, function(i,v)
         return indexOf(CommandsTable, v) == i
     end)))
 end)
 
-AddCommand("trueinvisible", {"trueinvis"}, "Makes you truly invisible and people can see your chat Requirment: Must be wearly ONLY the pal hair", {}, function(Caller, Args, CEnv)
-   loadstring(game:HttpGet("https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Invisible%20r6",true))()
+AddCommand("walkspeed", {"ws", "speed"}, "changes your walkspeed to the second argument", {}, function(Caller, Args, CEnv)
+    local Humanoid = GetHumanoid();
+    CEnv[1] = Humanoid.WalkSpeed
+    SpoofProperty(Humanoid, "WalkSpeed");
+    Humanoid.WalkSpeed = tonumber(Args[1]) or 16
+    return "your walkspeed is now " .. Humanoid.WalkSpeed
 end)
 
 AddCommand("jumppower", {"jp"}, "changes your jumpower to the second argument", {}, function(Caller, Args, CEnv)
@@ -2689,7 +2694,7 @@ AddCommand("hipheight", {"hh"}, "changes your hipheight to the second argument",
 end)
 
 _L.KillCam = {};
-AddCommand("kill", {"tkill", "oof"}, "kills someone", {"1", 1, 3}, function(Caller, Args)
+AddCommand("kill", {"tkill"}, "kills someone", {"1", 1, 3}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
     local OldPos = GetRoot().CFrame
     local Humanoid = ReplaceHumanoid();
@@ -2756,7 +2761,7 @@ AddCommand("kill", {"tkill", "oof"}, "kills someone", {"1", 1, 3}, function(Call
     WaitForChild(Character, "HumanoidRootPart").CFrame = OldPos
 end)
 
-AddCommand("kill2", {"oof2"}, "another variant of kill", {1, "1"}, function(Caller, Args)
+AddCommand("kill2", {}, "another variant of kill", {1, "1"}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
     local TempRespawnTimes = {}
     for i, v in next, Target do
@@ -2872,7 +2877,7 @@ AddCommand("unloopkill", {"unlkill"}, "unloopkills a user", {3,"1"}, function(Ca
     return "loopkill disabled"
 end)
 
-AddCommand("bring", {"retrieve"}, "brings a user", {1}, function(Caller, Args)
+AddCommand("bring", {}, "brings a user", {1}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
     local Target2 = Args[2] and GetPlayer(Args[2]);
     local OldPos = GetRoot(Caller).CFrame
@@ -2940,7 +2945,7 @@ AddCommand("bring", {"retrieve"}, "brings a user", {1}, function(Caller, Args)
     end
 end)
 
-AddCommand("bring2", {"retrieve2"}, "another variant of bring", {1, 3, "1"}, function(Caller, Args)
+AddCommand("bring2", {}, "another variant of bring", {1, 3, "1"}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
     local Target2 = Args[2] and GetPlayer(Args[2]);
     local TempRespawnTimes = {}
@@ -3008,78 +3013,7 @@ AddCommand("bring2", {"retrieve2"}, "another variant of bring", {1, 3, "1"}, fun
     WaitForChild(Character, "HumanoidRootPart").CFrame = OldPos
 end)
 
-AddCommand("punish", {"kill4"}, "punishes a user", {1,"1"}, function(Caller, Args)
-    local Target = GetPlayer(Args[1]);
-    local Target2 = Args[2] and GetPlayer(Args[2]);
-    local OldPos = GetRoot(Caller).CFrame
-
-    local TempRespawnTimes = {}
-    for i = 1, #Target do
-        local v = Target[i]
-        TempRespawnTimes[v.Name] = RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name]
-    end
-    DisableAnimate();
-    ReplaceHumanoid();
-    for i, v in next, Target do
-        if (#Target == 1 and TempRespawnTimes[v.Name] and isR6(v)) then
-            Destroy(LocalPlayer.Character);
-            CWait(LocalPlayer.CharacterAdded);
-            WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos;
-            wait(.1);
-            ReplaceHumanoid();
-        end
-    end
-    local Target2Root = Target2 and GetRoot(Target2 and Target2[1] or nil);
-    for i = 1, #Target do
-        local v = Target[i]
-        if (GetCharacter(v)) then
-            if (isSat(v)) then
-                if (#Target == 1) then
-                    Utils.Notify(Caller or LocalPlayer, nil, v.Name .. " is sitting down, could not bring");
-                end
-                continue
-            end
-            if (RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name] and isR6(v)) then
-                continue
-            end
-
-            local TargetRoot = GetRoot(v);
-            if (not TargetRoot) then
-                continue
-            end
-
-            local Tool = GetCorrectToolWithHandle();
-            if (not Tool) then
-                continue
-            end
-            Tool.Parent = GetCharacter();
-            Tool.Handle.Size = Vector3New(4, 4, 4);
-            CFrameTool(Tool, (Target2 and Target2Root.CFrame or OldPos) * CFrameNew(-5, 0, 0));
-            if (not syn) then
-                wait(.1);
-            end
-            for i2 = 1, 3 do
-                firetouchinterest(TargetRoot, Tool.Handle, 0);
-                wait();
-                firetouchinterest(TargetRoot, Tool.Handle, 1);
-            end
-        else
-            Utils.Notify(Caller or LocalPlayer, "Fail", v.Name .. " is dead or does not have a root part, could not bring.");
-        end
-    end
-    local Root = GetRoot();
-    local RootPos = Root.Position
-    for i = 1, 3 do
-        Root.Position = Vector3New(RootPos.X + 99999, RootPos.Y + 999999999, RootPos.Z + 999999);
-        wait();
-    end
-    wait(.2);
-    Destroy(LocalPlayer.Character);
-    CWait(LocalPlayer.CharacterAdded);
-    WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
-end)
-
-AddCommand("void", {"kill3", "banish"}, "voids a user", {1,"1"}, function(Caller, Args)
+AddCommand("void", {"kill3"}, "voids a user", {1,"1"}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
     local Target2 = Args[2] and GetPlayer(Args[2]);
     local OldPos = GetRoot(Caller).CFrame
@@ -3300,10 +3234,6 @@ AddCommand("uninvisible", {"uninvis", "noinvis", "visible", "vis"}, "gives you b
     return "you are already visible"
 end)
 
-AddCommand("antivoid", {"antivoid", "novoid"}, "makes u unable to die in the void", {}, function()
-        workspace.FallenPartsDestroyHeight = 0/1/0
-end)
-
 AddCommand("dupetools", {"dp"}, "dupes your tools", {"1", 1, {"protect"}}, function(Caller, Args, CEnv)
     local Amount = tonumber(Args[1])
     local Protected = Args[2] == "protect"
@@ -3444,7 +3374,7 @@ AddCommand("dupetools2", {"rejoindupe", "dupe2"}, "sometimes a faster dupetools"
             end
             delfile("Advid's-admin/tooldupe.txt");
             delfile("Advid's-admin/tooldupe.lua");
-            loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/awesomecoolfortnite/roblox-script/main/Fates%20admin%20modded"))();
+            loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/Advid'sc/Advid's-admin/main/main.lua"))();
             RootPart.CFrame = OldPos
             repeat wait() RootPart.CFrame = OldPos until RootPart.CFrame == OldPos
             getgenv().F_A.PluginLibrary.ExecuteCommand("dp", {"1"}, LocalPlayer);
@@ -3474,29 +3404,6 @@ AddCommand("stopdupe", {}, "stops the dupe", {}, function()
     LoadCommand("dupetools").CmdEnv[1] = false
     DisableAllCmdConnections("dupetools");
     return "dupetools stopped"
-end)
-
-AddCommand("autoclick", {}, "autoclicks at a speed", {}, function(Caller, Args)
-    local time = (Args[1]) --decrease if too slow increase if too fast
-
-click = false
-m = game.Players.LocalPlayer:GetMouse()
-m.KeyDown:connect(function(key)
-if key == "v" then
-    if click == true then 
-        click = false
-    elseif click == false then 
-        click = true
-    end
-end
-end)
-
-while true do 
-    wait(time)
-    if click then 
-        mouse1click()
-    end
-end
 end)
 
 AddCommand("savetools", {"st"}, "saves your tools", {1,3}, function(Caller, Args)
@@ -3816,216 +3723,6 @@ AddCommand("infinitejump", {"infjump"}, "infinite jump no cooldown", {3}, functi
     return "infinite jump enabled"
 end)
 
-AddCommand("camlock", {"camlock", "lock"}, "cam lock with adjustable prediction", {}, function(Caller, Args, CEnv)
-    getgenv().Prediction = (Args[1]) or 0.145
-getgenv().AimPart = "HumanoidRootPart"
-getgenv().Key = "C"
-getgenv().DisableKey = "P"
-
-getgenv().FOV = true
-getgenv().ShowFOV = true
-getgenv().FOVSize = 55
-
---// Variables (Service)
-
-local Players = game:GetService("Players")
-local RS = game:GetService("RunService")
-local WS = game:GetService("Workspace")
-local GS = game:GetService("GuiService")
-local SG = game:GetService("StarterGui")
-
---// Variables (regular)
-
-local LP = Players.LocalPlayer
-local Mouse = LP:GetMouse()
-local Camera = WS.CurrentCamera
-local GetGuiInset = GS.GetGuiInset
-
-local AimlockState = true
-local Locked
-local Victim
-
-local SelectedKey = getgenv().Key
-local SelectedDisableKey = getgenv().DisableKey
-
---// Notification function
-
-function Notify(tx)
-    SG:SetCore("SendNotification", {
-        Title = "ADVID's ADMIN",
-        Text = tx,
-        Duration = 5
-    })
-end
-
---// Check if aimlock is loaded
-
-if getgenv().Loaded == true then
-    Notify("Aimlock is already loaded!")
-    return
-end
-
-getgenv().Loaded = true
-
---// FOV Circle
-
-local fov = Drawing.new("Circle")
-fov.Filled = false
-fov.Transparency = 1
-fov.Thickness = 1
-fov.Color = Color3.fromRGB(255, 0, 0)
-fov.NumSides = 1000
-
---// Functions
-
-function update()
-    if getgenv().FOV == true then
-        if fov then
-            fov.Radius = getgenv().FOVSize * 2
-            fov.Visible = getgenv().ShowFOV
-            fov.Position = Vector2.new(Mouse.X, Mouse.Y + GetGuiInset(GS).Y)
-
-            return fov
-        end
-    end
-end
-
-function WTVP(arg)
-    return Camera:WorldToViewportPoint(arg)
-end
-
-function WTSP(arg)
-    return Camera.WorldToScreenPoint(Camera, arg)
-end
-
-function getClosest()
-    local closestPlayer
-    local shortestDistance = math.huge
-
-    for i, v in pairs(game.Players:GetPlayers()) do
-        local notKO = v.Character:WaitForChild("BodyEffects")["K.O"].Value ~= true
-        local notGrabbed = v.Character:FindFirstChild("GRABBING_COINSTRAINT") == nil
-        
-        if v ~= game.Players.LocalPlayer and v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health ~= 0 and v.Character:FindFirstChild(getgenv().AimPart) and notKO and notGrabbed then
-            local pos = Camera:WorldToViewportPoint(v.Character.PrimaryPart.Position)
-            local magnitude = (Vector2.new(pos.X, pos.Y) - Vector2.new(Mouse.X, Mouse.Y)).magnitude
-            
-            if (getgenv().FOV) then
-                if (fov.Radius > magnitude and magnitude < shortestDistance) then
-                    closestPlayer = v
-                    shortestDistance = magnitude
-                end
-            else
-                if (magnitude < shortestDistance) then
-                    closestPlayer = v
-                    shortestDistance = magnitude
-                end
-            end
-        end
-    end
-    return closestPlayer
-end
- 
---// Checks if key is down
-
-Mouse.KeyDown:Connect(function(k)
-    SelectedKey = SelectedKey:lower()
-    SelectedDisableKey = SelectedDisableKey:lower()
-    if k == SelectedKey then
-        if AimlockState == true then
-            Locked = not Locked
-            if Locked then
-                Victim = getClosest()
-
-                Notify("Locked onto: "..tostring(Victim.Character.Humanoid.DisplayName))
-            else
-                if Victim ~= nil then
-                    Victim = nil
-
-                    Notify("Unlocked!")
-                end
-            end
-        else
-            Notify("Aimlock is not enabled!")
-        end
-    end
-    if k == SelectedDisableKey then
-        AimlockState = not AimlockState
-    end
-end)
-
---// Loop update FOV and loop camera lock onto target
-
-RS.RenderStepped:Connect(function()
-    update()
-    if AimlockState == true then
-        if Victim ~= nil then
-            Camera.CFrame = CFrame.new(Camera.CFrame.p, Victim.Character[getgenv().AimPart].Position + Victim.Character[getgenv().AimPart].Velocity*getgenv().Prediction)
-        end
-    end
-end)
-	while wait() do
-        if getgenv().AutoPrediction == true then
-        local pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
-        local split = string.split(pingvalue,'(')
-        local ping = tonumber(split[1])
-            if ping < 225 then
-            getgenv().Prediction = 1.4
-        elseif ping < 215 then
-            getgenv().Prediction = 1.2
-	    elseif ping < 205 then
-            getgenv().Prediction = 1.0
-	    elseif ping < 190 then
-            getgenv().Prediction = 0.10
-        elseif ping < 180 then
-            getgenv().Prediction = 0.12
-	    elseif ping < 170 then
-            getgenv().Prediction = 0.15
-	    elseif ping < 160 then
-            getgenv().Prediction = 0.18
-	    elseif ping < 150 then
-            getgenv().Prediction = 0.110
-        elseif ping < 140 then
-            getgenv().Prediction = 0.113
-        elseif ping < 130 then
-            getgenv().Prediction = 0.116
-        elseif ping < 120 then
-            getgenv().Prediction = 0.120
-        elseif ping < 110 then
-            getgenv().Prediction = 0.124
-        elseif ping < 105 then
-            getgenv().Prediction = 0.127
-        elseif ping < 90 then
-            getgenv().Prediction = 0.130
-        elseif ping < 80 then
-            getgenv().Prediction = 0.133
-        elseif ping < 70 then
-            getgenv().Prediction = 0.136
-        elseif ping < 60 then
-            getgenv().Prediction = 0.15038
-        elseif ping < 50 then
-            getgenv().Prediction = 0.15038
-        elseif ping < 40 then
-            getgenv().Prediction = 0.145
-        elseif ping < 30 then
-            getgenv().Prediction = 0.155
-        elseif ping < 20 then
-            getgenv().Prediction = 0.157
-game:GetService("StarterGui"):SetCore("SendNotification", {
-				Title = "Lock Loaded!";
-				Text = "Advid's Admin";
-				Duration = 10;
-			})
-        end
-        end
-	end
-end)
-
-AddCommand("prediction", {"prediction", "lockmagnitude"}, "changes lock magnitude", {}, function(Caller, Args, CEnv)
-    getgenv().Prediction = (Args[1])
-    return "prediction set to: " ..(Args[1])
-end)
-
 AddCommand("noinfinitejump", {"uninfjump", "noinfjump"}, "removes infinite jump", {}, function()
     local InfJump = LoadCommand("infjump").CmdEnv
     if (not next(InfJump)) then
@@ -4095,7 +3792,7 @@ AddCommand("setspawn", {}, "sets your spawn location to the location you are at"
         return tostring(round(tonumber(v)));
     end), ",");
 end)
-    
+
 AddCommand("removespawn", {}, "removes your spawn location", {}, function(Caller, Args)
     local Spawn = LoadCommand("setspawn").CmdEnv[1]
     if (Spawn) then
@@ -4167,36 +3864,6 @@ AddCommand("displaynames", {}, "enables/disables display names (on/off)", {{"on"
         end
         return "people with a displayname displaynames will be removed"
     end
-end)
-
-AddCommand("bang", {"rape"}, "makes you have sexy wexy with whoever u want", {}, function(Caller, Args)
-Target = Args[1]
-ExecuteCommand("loopgoto", {Target}, LocalPlayer)
-local player = game.Players.LocalPlayer
-local character = player.Character
-local humanoid = character:WaitForChild("Humanoid")
-
-if humanoid.RigType == Enum.HumanoidRigType.R6 then
-  AnimationId = "148840371"
-elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
-  AnimationId = "5918726674"
-end
-
-local Anim = Instance.new("Animation")
-Anim.AnimationId = "rbxassetid://"..AnimationId
-local k = humanoid:LoadAnimation(Anim)
-k:Play() --Play the animation
-k:AdjustSpeed(3)
-end)
-
-AddCommand("unbang", {"unrape"}, "no sex :(", {}, function()
-	ExecuteCommand("unloopgoto", {}, LocalPlayer)
-	local player = game.Players.LocalPlayer
-local character = player.Character
-local humanoid = character:WaitForChild("Humanoid")
-
-humanoid.Health = 0
-return "script was rushed so to stop the animation u gotta reset for now"
 end)
 
 AddCommand("time", {"settime"}, "sets the games time", {{"night", "day", "dawn"}}, function(Caller, Args)
@@ -4301,15 +3968,9 @@ AddCommand("fling2", {"stan2"}, "another variant of fling", {}, function(Caller,
     Root.CFrame = OldPos
 end)
 
-AddCommand("antikill", {}, "anti tkill :troll:", {3}, function(Caller, Args)
-    local character = game.Players.LocalPlayer.Character
-local humanoid = character:WaitForChild("Humanoid")
-
-if humanoid.RigType == Enum.HumanoidRigType.R6 then
-    game:GetService'Players'.LocalPlayer.Character['Right Arm']:Destroy()
-elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
-    game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
-end
+AddCommand("antitkill", {}, "anti tkill :troll:", {3}, function(Caller, Args)
+    Destroy(GetCharacter()["Right Arm"]);
+    return "lol"
 end)
 
 AddCommand("antiattach", {"anticlaim"}, "enables antiattach", {3}, function(Caller, Args)
@@ -4665,281 +4326,6 @@ AddCommand("unforceplay", {}, "stops forceplay", {}, function()
     return "stopped forceplay"
 end)
 
-AddCommand("raybeam", {}, "u need a piece of layered clothing on", {}, function()
-   --[[
-╭━━━╮╱╱╱╱╭╮╱╱╱╱╱╱╱╭╮
-┃╭━━╯╱╱╱╱┃┃╱╱╱╱╱╱╭╯╰╮
-┃╰━━┳━━┳━╯┣━━┳━┳━┻╮╭╋╮╭┳╮╭╮
-┃╭━━┫┃━┫╭╮┃╭╮┃╭┫╭╮┃┃┃┃┃┃╰╯┃
-┃┃╱╱┃┃━┫╰╯┃╰╯┃┃┃╭╮┃╰┫╰╯┃┃┃┃
-╰╯╱╱╰━━┻━━┻━━┻╯╰╯╰┻━┻━━┻┻┻╯
-
-RayBeam Fling V2.2 (FE)
-Official name of this Script.
-
-Wear trench coat, and any layered clothing pants to make this script work better.
---]]
-
---[[
-+/+/+/+/+/+( UpdateLog of V2.2 )+/+/+/+/+/+
-(1.) Added UpdateLog (explainable) (V2)
-(2.) Added R15 Detection (so you know) (V2)
-(3.) Added DeleteArm (prevent exploiters) (V2)
-(4.) Added SayDramaticStuff (explainable and slows down the script process) (V2)
-(5.) Added New Animation On SayDramaticStuff (Casting Summons Of Heaven) (V2.2)
---]]
-
--- R15 Detection wow
-
-if game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R6 then
-local m = Instance.new("Message", game.CoreGui)
-m.Text = "You are in R6, this script will not work"
-wait(4)
-m:Destroy()
-task.wait()
-return
-end
-
---[[
-(I will never obsfucate this, as it would make me claim this as my own code, all the code cut is from Infinite Yield and other sources i have forgotten.)
-
-Don't use this with games that has a kill block because you're gonna touch that kill block easier and kill yourself.
---]]
-
--- Respect to Digitality
--- For creating Leg Resize.
-
------
--- INFO TO KNOW
------
-
---[[
-Noclip : Automatically On
-Fly : Automatically On
-Fly is mobile supported, which means you can move with fly in mobile
-
-(Mobile users with executors wont be strugglin pressing a fake keyboard)
-
-Wear layered clothing when on a nocollide game (to only annoy people)
---]]
-
-TypeOfFling = 1 -- Default
--- 1 is SpreadRadius
--- 2 is FocusOneRadius
--- Any random number is still 2
-
--- if you dont know how to script
--- true is on
--- false is off
-
-DeleteArm = true
--- Prevent killing from other exploitors
-
-SayDramaticStuff = false
--- Say dramatic stuff like in anime lol
-
--- Meaning of the option TypeOfFling
-
--- SPREAD RADIUS
-
---[[
-This will reduce the effectiveness of flinging more harder but spreads the fling of radius even more.
---]]
-
--- FOCUS ONE RADIUS
-
---[[
-This will increase effectiveness of flinging more harder but reduces the radius of flinging.
---]]
-
--- OPTION FOR FLING VELOCITY
-
---[[
-Set your fling velocity, the higher the better, but the more broken it is. (This means you are going to get fling off because of the map parts or either bug out)
---]]
-
-FlingVelocity = 9000 -- Default
-
--- Set to 0 if you want it to not spin
-
-
--- Script will start now
--- You can notice familliar code cuts.
-
-local function Notif(txt)
-game.StarterGui:SetCore("SendNotification",{
-        Title = "Fling Notification";
-        Text = txt;
-         Icon = "rbxassetid://7772906436";
-         Duration = 5;
-    })
-end
-
-Notif("Running the script please wait")
-
-local Player = game.Players.LocalPlayer
-
-Player.Character:FindFirstChildOfClass('Humanoid').WalkSpeed = 0
-
-if DeleteArm then
-Player.Character.RightUpperArm:Destroy()
-end
-
-if SayDramaticStuff then
-AnimationId = "3303161675"
-local Anim = Instance.new("Animation")
-Anim.AnimationId = "rbxassetid://"..AnimationId
-local k = Player.Character:FindFirstChildOfClass('Humanoid'):LoadAnimation(Anim)
-k:Play()
-game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("UNLEASH POWER OF HEAVEN","All")
-k:AdjustSpeed(1)
-wait(4.7)
-end
-
-local P2 = game:GetService("Players").LocalPlayer
-local Noclipping = nil
-local Clip = true
-local RunService = game:GetService("RunService")
-	wait(0.1)
-	local function NoclipLoop()
-if Clip then
-		if P2.Character ~= nil then
-			for _, child in pairs(P2.Character:GetDescendants()) do
-				if child:IsA("BasePart") and child.CanCollide == true then
-					child.CanCollide = false
-				end
-			end
-	end
-end
-end
-	Noclipping = RunService.Stepped:Connect(NoclipLoop)
-wait(0.3)
-
-				for i, x in pairs(Player.Character:GetDescendants()) do
-					if x:IsA("BasePart") and not x.Anchored then
-						x.Anchored = true
-					end
-				end
-
-if SayDramaticStuff then
-
--- I watch anime so i know
-game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("THE POWER OF ROBLOX HACKS.","All")
-wait(3)
-game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("POWER OF DIMENSIONAL DIVERSION.","All")
-wait(2.3)
-game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("HEAVEN SKILL, SUPERNOVA!!","All")
-end
-
-local IsFlying = true
-local flyv
-local flyg
-local Speed = 70
-
-local LastSpeed = Speed
-local IsRunning = false
-local f = 1
-
-				flyv = Instance.new("BodyVelocity")
-	
-			flyv.Parent = Player.Character:FindFirstChild('Torso') or Player.Character:FindFirstChild('UpperTorso')
-				flyv.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
-	
-				flyg = Instance.new("BodyGyro")
-			flyg.Parent = Player.Character:FindFirstChild('Torso') or Player.Character:FindFirstChild('UpperTorso')
-				flyg.MaxTorque = Vector3.new(9e9,9e9,9e9)
-				flyg.P = 1000
-				flyg.D = 50
-			Player.Character:WaitForChild('Humanoid').PlatformStand = true
-
-spawn(function()
-		while true do
-			wait()
-		if IsFlying then
-				flyg.CFrame = workspace.CurrentCamera.CoordinateFrame * CFrame.new(-math.rad((f+0)*50*Speed),0,0) 
-					flyv.Velocity = workspace.CurrentCamera.CoordinateFrame.LookVector * Speed
-else
-f = 0
-		end
-if IsRunning then
-			Speed = LastSpeed
-		else
-			if not Speed == 0 then
-				LastSpeed = Speed
-			end 
-			Speed = 0
-		end
-end
-end)
-
-Player.Character.Humanoid.Changed:Connect(function()
-		if Player.Character.Humanoid.Health == 0 then
-		if IsFlying then
-Noclipping:Disconnect()
-Clip = false
-		flyg:Destroy()
-		flyv:Destroy()
-		end
-		end
-	end)
-
-Player.CharacterAdded:Connect(function()
-if isFlying then
-Noclipping:Disconnect()
-Clip = false
-flyg:Destroy()
-flyv:Destroy()
-end
-end)
-	Player.Character.Humanoid.Changed:Connect(function(Prop)
-		
-			if Player.Character.Humanoid.MoveDirection == Vector3.new(0,0,0) then
-				IsRunning = false
-			else
-				IsRunning = true
-			end	
-	end)
-
-wait(0.3)
-
-local char = Player.Character
-function helpmeget(char)
-	local c4 = char:FindFirstChild('HumanoidRootPart') or char:FindFirstChild('Torso') or char:FindFirstChild('UpperTorso')
-	return c4
-end
-
-local Spin = Instance.new("BodyAngularVelocity")
-Spin.Name = "SpinnerVelocity"
-Spin.Parent = helpmeget(Player.Character)
-Spin.MaxTorque = Vector3.new(0, math.huge, 0) 
-Spin.AngularVelocity = Vector3.new(0,FlingVelocity,0)
-
-wait(0.3)
-
-Player.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,false)
-if TypeOfFling == 1 then
-Player.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,false)
-Player.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,false)
-Player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Swimming)
-elseif TypeOfFling == 2 then
-Player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Swimming)
-else
-Player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Swimming)
-end
-
-loadstring(game:HttpGet('https://raw.githubusercontent.com/DigitalityScripts/roblox-scripts/main/Leg%20Resize'))()
-
-wait(0.4)
-
-for i, x in pairs(Player.Character:GetDescendants()) do
-					if x:IsA("BasePart") and x.Anchored then
-						x.Anchored = false
-					end
-				end
-
-Notif("Finished at loading the script")
-end)
-
 AddCommand("audiotime", {"audiotimeposition"}, "changes audio timeposition", {"1",1}, function(Caller, Args)
     local Time = Args[1]
     if (not tonumber(Time)) then
@@ -5029,7 +4415,7 @@ AddCommand("notruesightguis", {"untruesightguis", "notsg"}, "removes truesight o
 end)
 
 AddCommand("esp", {"aimbot", "cameralock", "silentaim", "aimlock", "tracers"}, "loads Advid's esp", {}, function(Caller, Args, CEnv)
-    CEnv.KillEsp = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/fatesc/fates-esp/main/main.lua"))();
+    CEnv.KillEsp = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/Advid'sc/Advid's-esp/main/main.lua"))();
     return "esp enabled"
 end)
 
@@ -5143,12 +4529,6 @@ AddCommand("age", {}, "ages a player", {"1"}, function(Caller, Args)
         t.day = t.day - tonumber(AccountAge);
         local CreatedAt = os.date("%d/%m/%y", os.time(t));
         Utils.Notify(Caller, "Command", format("%s's age is %s (%s)", v.Name, AccountAge, CreatedAt));
-    end
-end)
-
-AddCommand("print", {"consolesay"}, "prints smth in console", {}, function(Caller, Args, CEnv)
-    for i = 1,(Args[1]) do
-    print("real")
     end
 end)
 
@@ -5493,10 +4873,6 @@ AddCommand("btools", {}, "gives you btools", {3}, function(Caller, Args)
     return "client sided btools loaded"
 end)
 
-AddCommand("antilock", {"antiaim"}, "turns on a universal prediction breaker", {}, function()
-       loadstring(game:HttpGet('https://pastebin.com/raw/gbRzQPh0'))()
-    end)
-    
 AddCommand("spin", {}, "spins your character (optional: speed)", {}, function(Caller, Args, CEnv)
     local Speed = Args[1] or 5
     if (not CEnv[1]) then
@@ -5539,7 +4915,7 @@ end)
 AddCommand("loopgoto", {"loopto"}, "loop teleports yourself to the other character", {3, "1"}, function(Caller, Args, CEnv)
     local Target = GetPlayer(Args[1])[1]
     local Connection = CConnect(Heartbeat, function()
-        GetRoot().CFrame = GetRoot(Target).CFrame * CFrameNew(0, 0, 0.5);
+        GetRoot().CFrame = GetRoot(Target).CFrame * CFrameNew(0, 0, 2);
     end)
 
     CEnv[Target.Name] = Connection
@@ -5647,30 +5023,6 @@ AddCommand("fullbright", {"fb"}, "turns on fullbright", {}, function(Caller, Arg
     return "fullbright enabled"
 end)
 
-AddCommand("walkspeed", {"ws", "speed"}, "changes your walkspeed to the second argument", {}, function(Caller, Args, CEnv)
-    local Humanoid = GetHumanoid();
-    CEnv[1] = Humanoid.WalkSpeed
-    SpoofProperty(Humanoid, "WalkSpeed");
-    Humanoid.WalkSpeed = tonumber(Args[1]) or 16
-    return "your walkspeed is now " .. Humanoid.WalkSpeed
-end)
-
-AddCommand("loopwalkspeed", {"loopws", "loopspeed"}, "loops your walkspeed to the second argument", {}, function(Caller, Args, CEnv)
-    getgenv().loopspeed = true
-    while getgenv().loopspeed do
-        wait(0.01)
-    local Humanoid = GetHumanoid();
-    CEnv[1] = Humanoid.WalkSpeed
-    SpoofProperty(Humanoid, "WalkSpeed");
-    Humanoid.WalkSpeed = tonumber(Args[1]) or 16
-    end
-    print("looping your walkspeed to " .. Humanoid.WalkSpeed)
-end)
-
-AddCommand("unloopwalkspeed", {"unloopws", "unloopspeed"}, "unloops your walkspeed", {}, function(Caller, Args, CEnv)
-    getgenv().loopspeed = false
-end)
-
 AddCommand("nofullbright", {"revertlights", "unfullbright", "nofb"}, "reverts fullbright", {}, function()
     local Lighting = Services.Lighting
     local Lights = LoadCommand("fullbright").CmdEnv
@@ -5706,10 +5058,6 @@ AddCommand("unswim", {"noswim"}, "removes swim", {}, function(Caller, Args)
     ChangeState(Humanoid, LoadCommand("swim").CmdEnv[1]);
     Services.Workspace.Gravity = 198
     return "swimming disabled"
-end)
-
-AddCommand("translator", {"googletranslator"}, "activates translator", {}, function(Caller, Args)
-   loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/x114/RobloxScripts/main/UpdatedChatTranslator"))()
 end)
 
 AddCommand("disableanims", {"noanims"}, "disables character animations", {3}, function(Caller, Args)
@@ -5976,10 +5324,6 @@ AddCommand("anim", {"animation"}, "plays an animation", {3, "1"}, function(Calle
     return "playing animation " .. Args[1]
 end)
 
-AddCommand("hitboxexpander", {"hbe"}, "universal hitbox expander", {}, function(Caller)
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/RectangularObject/Roblox-Hitbox-Expander/main/HitboxExtenderv2.lua",true))()
-end)
-
 AddCommand("lastcommand", {"lastcmd"}, "executes the last command", {}, function(Caller)
     local Command = LastCommand[#LastCommand]
     ExecuteCommand(Command[1], Command[2], Command[3]);
@@ -6051,34 +5395,6 @@ AddCommand("spamsilentchat", {"spamchatlogs"}, "spams sending messages with what
     return "spamming chat sliently"
 end)
 
-AddCommand("reanimate", {"reanimate"}, "reanimates you", {}, function(Caller, Args)
-local headless = (Args[1])
-local character = game.Players.LocalPlayer.Character
-local humanoid = character:WaitForChild("Humanoid")
-
-if humanoid.RigType == Enum.HumanoidRigType.R6 then
-    if headless then
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/headlessr6"))()
-    else
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r6"))()
-    end
-elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
-    if headless then
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r15headless"))()
-    else
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r15"))()
-    end
-end
-end)
-
-AddCommand("r15tor6", {"r15convert"}, "makes ur r15 character to r6", {}, function(Caller, Args)
-if humanoid.RigType == Enum.HumanoidRigType.R6 then
-    return "need to be in r15 silly"
-elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/convertr15"))()
-end
-end)
-
 AddCommand("unspamsilentchat", {"nospamsilentchat", "unspamchatlogs", "nospamchatlogs", "unspamchat", "unspam"}, "stops the spam of chat", {}, function()
     local Spamming = LoadCommand("spamsilentchat").CmdEnv
     local Spamming1 = LoadCommand("spam").CmdEnv
@@ -6092,10 +5408,10 @@ end)
 
 AddCommand("advertise", {}, "advertises the script", {}, function()
     local ChatRemote = Services.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest
-    ChatRemote.FireServer(ChatRemote, "I am using Advid's Admin, join .gg/4JtAr7rYA2", "All");
+    ChatRemote.FireServer(ChatRemote, "I am using Advid's admin, join the server 4JtAr7rYA2", "All");
 end)
 
-AddCommand("joinserver", {"discord"}, "joins the Advid's Admin discord server", {}, function()
+AddCommand("joinserver", {"discord"}, "joins the fates admin discord server", {}, function()
     local Request = syn and syn.request or request
     local HttpService = Services.HttpService
     if (Request({
@@ -6113,117 +5429,10 @@ AddCommand("joinserver", {"discord"}, "joins the Advid's Admin discord server", 
             nonce = GenerateGUID(HttpService, false)
         }),
     }).StatusCode == 200) then
-        return "joined Advid's Admin discord server"
+        return "joined Advid's admin discord server"
     else
         return "discord isn't open"
     end
-end)
-
-AddCommand("vehiclefly", {"vfly"}, "a toggleable fly that works with vehicles", {}, function(Caller)
-    local FlyKey = Enum.KeyCode.V
-local SpeedKey = Enum.KeyCode.LeftControl
-
-local SpeedKeyMultiplier = 4
-local FlightSpeed = 256
-local FlightAcceleration = 4
-local TurnSpeed = 16
-
--- made by zeezy
-
--- enjoy :3
-
-local UserInputService = game:GetService("UserInputService")
-local StarterGui = game:GetService("StarterGui")
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local User = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
-local UserCharacter = nil
-local UserRootPart = nil
-local Connection = nil
-
-
-workspace.Changed:Connect(function()
-    Camera = workspace.CurrentCamera
-end)
-
-local setCharacter = function(c)
-    UserCharacter = c
-    UserRootPart = c:WaitForChild("HumanoidRootPart")
-end
-
-User.CharacterAdded:Connect(setCharacter)
-if User.Character then
-    setCharacter(User.Character)
-end
-
-local CurrentVelocity = Vector3.new(0,0,0)
-local Flight = function(delta)
-    local BaseVelocity = Vector3.new(0,0,0)
-    if not UserInputService:GetFocusedTextBox() then
-        if UserInputService:IsKeyDown(Enum.KeyCode.W) then
-            BaseVelocity = BaseVelocity + (Camera.CFrame.LookVector * FlightSpeed)
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.A) then
-            BaseVelocity = BaseVelocity - (Camera.CFrame.RightVector * FlightSpeed)
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.S) then
-            BaseVelocity = BaseVelocity - (Camera.CFrame.LookVector * FlightSpeed)
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.D) then
-            BaseVelocity = BaseVelocity + (Camera.CFrame.RightVector * FlightSpeed)
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
-            BaseVelocity = BaseVelocity + (Camera.CFrame.UpVector * FlightSpeed)
-        end
-    	if UserInputService:IsKeyDown(SpeedKey) then
-    		BaseVelocity = BaseVelocity * SpeedKeyMultiplier
-    	end
-    end
-    if UserRootPart then
-        local car = UserRootPart:GetRootPart()
-        if car.Anchored then return end
-        if not isnetworkowner(car) then return end
-        CurrentVelocity = CurrentVelocity:Lerp(
-            BaseVelocity,
-            math.clamp(delta * FlightAcceleration, 0, 1)
-        )
-        car.Velocity = CurrentVelocity + Vector3.new(0,2,0)
-        if car ~= UserRootPart then
-            car.RotVelocity = Vector3.new(0,0,0)
-            car.CFrame = car.CFrame:Lerp(CFrame.lookAt(
-                car.Position,
-                car.Position + CurrentVelocity + Camera.CFrame.LookVector
-            ), math.clamp(delta * TurnSpeed, 0, 1))
-        end
-    end
-end
-
-UserInputService.InputBegan:Connect(function(userInput,gameProcessed)
-    if gameProcessed then return end
-    if userInput.KeyCode == FlyKey then
-        if Connection then
-            StarterGui:SetCore("SendNotification",{
-                Title = "Vehicle Fly",
-                Text = "Flight disabled"
-            })
-            Connection:Disconnect()
-            Connection = nil
-        else
-            StarterGui:SetCore("SendNotification",{
-                Title = "Vehicle Fly",
-                Text = "Flight enabled"
-            })
-            CurrentVelocity = UserRootPart.Velocity
-            Connection = RunService.Heartbeat:Connect(Flight)
-        end
-    end
-end)
-
-StarterGui:SetCore("SendNotification",{
-    Title = "Vehicle Fly",
-    Text = "Loaded successfully"
-})
 end)
 
 AddCommand("rejoin", {"rj"}, "rejoins the game you're currently in", {}, function(Caller)
@@ -6282,7 +5491,7 @@ AddCommand("serverhop", {"sh"}, "switches servers (optional: min, max (default: 
 
         local queue_on_teleport = syn and syn.queue_on_teleport or queue_on_teleport
         if (queue_on_teleport and not Args[2]) then
-            queue_on_teleport("loadstring(game.HttpGet(game, \"\"))()");
+            queue_on_teleport("loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Fates%20admin%20modded\"))()");
         end;
 
         Services.TeleportService:TeleportToPlaceInstance(game.PlaceId, Server.id);    
@@ -6290,8 +5499,20 @@ AddCommand("serverhop", {"sh"}, "switches servers (optional: min, max (default: 
     end
 end);
 
-AddCommand("changelogs", {"cl"}, "shows you the updates on Advid's Admin", {}, function()
-    return "Released!!!"
+AddCommand("changelogs", {"cl"}, "shows you the updates on Advid's admin", {}, function()
+    local ChangeLogs = JSONDecode(Services.HttpService, game.HttpGetAsync(game, "https://api.github.com/repos/AdvidFrost/roblox-script/commits?per_page=1&path=Fates%20admin%20modded"));
+    ChangeLogs = map(ChangeLogs, function(i, v)
+        return {
+            ["Author"] = v.commit.author.name,
+            ["Date"] = gsub(v.commit.committer.date, "[T|Z]", " "),
+            ["Message"] = v.commit.message
+        }
+    end)
+    for i, v in next, ChangeLogs do
+        Utils.Print(format("Author: %s\nDate: %s\nMessage: %s", v.Author, v.Date, v.Message));
+    end
+
+    return "changelogs loaded, press f9"
 end)
 
 AddCommand("whitelist", {"wl"}, "whitelists a user so they can use commands", {"1"}, function(Caller, Args)
@@ -6337,7 +5558,7 @@ AddCommand("clearexceptions", {}, "removes users from exceptions list", {}, func
     return "exceptions list cleared"
 end)
 local CommandsLoaded = false
-AddCommand("commands", {"cmds"}, "shows you all the commands listed in Advid's Admin", {}, function()
+AddCommand("commands", {"cmds"}, "shows you all the commands listed in Advid's admin", {}, function()
     if (not CommandsLoaded) then
         local CommandsList = Commands.Frame.List
         Utils.SmoothScroll(CommandsList, .14);
@@ -6398,7 +5619,7 @@ end)
 AddCommand("reloadscript", {}, "kills the script and reloads it", {}, function(Caller)
     if (Caller == LocalPlayer) then
         ExecuteCommand("killscript", {}, LocalPlayer);
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/roblox-script/main/Fates%20admin%20modded"))();
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Fates%20admin%20modded"))();
     end
 end)
 
@@ -6453,38 +5674,6 @@ end)
 AddCommand("setcommandbarprefix", {"setcprefix"}, "sets your command bar prefix to whatever you input", {}, function()
     ChooseNewPrefix = true
     local CloseNotif = Utils.Notify(LocalPlayer, "New Prefix", "Input the new prefix you would like to have", 7);
-end)
-
-AddCommand("blockhats", {"blockhats"}, "makes ur hats into blocks, r6 only", {}, function()
-local character = game.Players.LocalPlayer.Character
-local humanoid = character:WaitForChild("Humanoid")
-
-if humanoid.RigType == Enum.HumanoidRigType.R6 then
-    local player = game.Players.LocalPlayer
-local character = player.Character
-
--- Find all the accessories in the character
-local accessories = character:GetChildren()
-
--- Iterate through each accessory
-for _, accessory in pairs(accessories) do
-    if accessory:IsA("Accessory") then
-        -- Find the Mesh or SpecialMesh object in the accessory's handle
-        local mesh = accessory.Handle:FindFirstChild("Mesh")
-        if not mesh then
-            mesh = accessory.Handle:FindFirstChild("SpecialMesh")
-        end
-        
-        -- Check if the mesh exists
-        if mesh then
-            -- Delete the mesh
-            mesh:Destroy()
-        end
-    end
-end
-elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
-    return "r6 only"
-end
 end)
 
 AddCommand("saveprefix", {}, "saves your prefix", {}, function(Caller, Args)
@@ -6589,21 +5778,21 @@ AddCommand("unorbit", {"noorbit"}, "unorbits yourself from the other player", {}
     return "orbit stopped"
 end)
 
--- AddCommand("bypass", {"clientbypass"}, "client sided bypass", {3}, function()
---     AddConnection(CConnect(LocalPlayer.CharacterAdded, function()
---         WaitForChild(GetCharacter(), "Humanoid");
---         wait(.4);
---         SpoofInstance(GetHumanoid());
---         SpoofInstance(GetRoot(), isR6() and GetCharacter().Torso or GetCharacter().UpperTorso);
---         ProtectInstance(GetRoot());
---         ProtectInstance(GetHumanoid());
---     end));
---     local Char = GetCharacter();
---     Char.BreakJoints(Char);
---     CommandsTable["goto"].Function = CommandsTable["tweento"].Function
---     CommandsTable["to"].Function = CommandsTable["tweento"].Function
---     return "clientsided bypass enabled"
--- end)
+AddCommand("bypass", {"clientbypass"}, "client sided bypass", {3}, function()
+     AddConnection(CConnect(LocalPlayer.CharacterAdded, function()
+         WaitForChild(GetCharacter(), "Humanoid");
+         wait(.4);
+         SpoofInstance(GetHumanoid());
+         SpoofInstance(GetRoot(), isR6() and GetCharacter().Torso or GetCharacter().UpperTorso);
+         ProtectInstance(GetRoot());
+         ProtectInstance(GetHumanoid());
+     end));
+     local Char = GetCharacter();
+     Char.BreakJoints(Char);
+     CommandsTable["goto"].Function = CommandsTable["tweento"].Function
+     CommandsTable["to"].Function = CommandsTable["tweento"].Function
+     return "clientsided bypass enabled"
+end)
 
 AddCommand("shiftlock", {}, "enables shiftlock in your game (some games have it off)", {}, function()
     if (LocalPlayer.DevEnableMouseLock) then
@@ -6993,8 +6182,6 @@ AddCommand("freecamgoto", {"fcgoto"}, "takes your freecam to t hem", {"1"}, func
     end
 end)
 
-
-
 AddCommand("plastic", {"fpsboost"}, "changes everything to a plastic material", {}, function(Caller, Args, CEnv)
     local time = tick();
     local Plasticc = 0
@@ -7168,7 +6355,7 @@ AddCommand("nojumpcooldown", {}, "removes a jumpcooldown if any in games", {}, f
 end)
 
 local LoadConfig, ConfigLoaded;
-AddCommand("config", {"conf"}, "shows Advid's Admin config", {}, function(Caller, Args, CEnv)
+AddCommand("config", {"conf"}, "shows Advid's admin config", {}, function(Caller, Args, CEnv)
     if (not ConfigLoaded) then
         if (not CEnv[1]) then
             LoadConfig();
@@ -7205,7 +6392,7 @@ AddCommand("rejoinre", {"rje"}, "rejoins and tps you to your old position", {3},
     local Pos = GetRoot().CFrame
     local queue_on_teleport = syn and syn.queue_on_teleport or queue_on_teleport
     if (queue_on_teleport) then
-        queue_on_teleport(format("game.Loaded:Wait();game:GetService('ReplicatedFirst'):SetDefaultLoadingGuiRemoved();local LocalPlayer = game:GetService('Players').LocalPlayer;LocalPlayer.CharacterAdded:Wait():WaitForChild('HumanoidRootPart').CFrame = CFrame.new(%s);loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/awesomecoolfortnite/roblox-script/main/Fates%20admin%20modded\"))()", tostring(Pos)));
+        queue_on_teleport(format("game.Loaded:Wait();game:GetService('ReplicatedFirst'):SetDefaultLoadingGuiRemoved();local LocalPlayer = game:GetService('Players').LocalPlayer;LocalPlayer.CharacterAdded:Wait():WaitForChild('HumanoidRootPart').CFrame = CFrame.new(%s);loadstring(game.HttpGet(game, \"https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Fates%20admin%20modded\"))()", tostring(Pos)));
     end
     ExecuteCommand("rejoin", {}, LocalPlayer);
 end)
@@ -7313,11 +6500,6 @@ AddCommand("disablesit", {"neversit", "nosit"}, "disables you from being sat", {
     return "disabled sit"
 end)
 
-AddCommand("serverinfo", {"serverip", "serverport"}, "copies server info clipboard", {}, function(Caller, Args)
-    setclipboard(getgenv().peers);
-    return "script must be in autoexecute for info to be retrieved"
-end)
-
 AddCommand("enablesit", {"undisablesit"}, "enables disablesit", {}, function()
     DisableAllCmdConnections("disablesit");
     return "enabled sit"
@@ -7410,9 +6592,14 @@ AddCommand("pathfind", {"follow2"}, "finds a user with pathfinding", {"1",3}, fu
     end
 end)
 
+AddCommand("serverinfo", {"serverip", "serverport"}, "copies server info clipboard", {}, function(Caller, Args)
+    setclipboard(getgenv().peers);
+    return "script must be in autoexecute for info to be retrieved"
+end)
+
 AddCommand("dex", {"darkdex"}, "A quick way to execute dark dex from the synapse script hub.", {}, loadstring(game:HttpGet("https://cdn.synapse.to/synapsedistro/hub/DarkDex.lua")));
 
-AddCommand("console", {"errors", "warns", "outputs"}, "shows the outputs Advid's Admin has made", {}, function()
+AddCommand("console", {"errors", "warns", "outputs"}, "shows the outputs Advid's admin has made", {}, function()
     local MessageClone = Clone(Console.Frame.List);
     
     Utils.ClearAllObjects(Console.Frame.List)
@@ -7447,6 +6634,290 @@ AddCommand("console", {"errors", "warns", "outputs"}, "shows the outputs Advid's
     Utils.Tween(Console.Frame.List, "Sine", "Out", .25, {
         ScrollBarImageTransparency = 0
     })
+end)
+
+-- Advid's Sexy command
+AddCommand("serverinfo", {"serverip", "serverport"}, "copies server info clipboard", {}, function(Caller, Args)
+    setclipboard(getgenv().peers);
+    return "script must be in autoexecute for info to be retrieved"
+end)
+
+AddCommand("translator", {"googletranslator"}, "activates translator", {}, function(Caller, Args)
+   loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/x114/RobloxScripts/main/UpdatedChatTranslator"))()
+end)
+
+AddCommand("reanimate", {"reanimate"}, "reanimates you", {}, function(Caller, Args)
+local headless = (Args[1])
+local character = game.Players.LocalPlayer.Character
+local humanoid = character:WaitForChild("Humanoid")
+
+if humanoid.RigType == Enum.HumanoidRigType.R6 then
+    if headless then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/headlessr6"))()
+    else
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r6"))()
+    end
+elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
+    if headless then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r15headless"))()
+    else
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/r15"))()
+    end
+end
+end)
+
+AddCommand("r15tor6", {"r15convert"}, "makes ur r15 character to r6", {}, function(Caller, Args)
+if humanoid.RigType == Enum.HumanoidRigType.R6 then
+    return "need to be in r15 silly"
+elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/awesomecoolfortnite/reanimate-not-mine/main/convertr15"))()
+end
+end)
+
+AddCommand("antilock", {"antiaim"}, "turns on a universal prediction breaker", {}, function()
+       loadstring(game:HttpGet('https://pastebin.com/raw/gbRzQPh0'))()
+    end)
+    
+    AddCommand("camlock", {"camlock", "lock"}, "cam lock with adjustable prediction", {}, function(Caller, Args, CEnv)
+    getgenv().Prediction = (Args[1]) or 0.145
+getgenv().AimPart = "HumanoidRootPart"
+getgenv().Key = "C"
+getgenv().DisableKey = "P"
+
+getgenv().FOV = true
+getgenv().ShowFOV = true
+getgenv().FOVSize = 55
+
+--// Variables (Service)
+
+local Players = game:GetService("Players")
+local RS = game:GetService("RunService")
+local WS = game:GetService("Workspace")
+local GS = game:GetService("GuiService")
+local SG = game:GetService("StarterGui")
+
+--// Variables (regular)
+
+local LP = Players.LocalPlayer
+local Mouse = LP:GetMouse()
+local Camera = WS.CurrentCamera
+local GetGuiInset = GS.GetGuiInset
+
+local AimlockState = true
+local Locked
+local Victim
+
+local SelectedKey = getgenv().Key
+local SelectedDisableKey = getgenv().DisableKey
+
+--// Notification function
+
+function Notify(tx)
+    SG:SetCore("SendNotification", {
+        Title = "ADVID's ADMIN",
+        Text = tx,
+        Duration = 5
+    })
+end
+
+--// Check if aimlock is loaded
+
+if getgenv().Loaded == true then
+    Notify("Aimlock is already loaded!")
+    return
+end
+
+getgenv().Loaded = true
+
+--// FOV Circle
+
+local fov = Drawing.new("Circle")
+fov.Filled = false
+fov.Transparency = 1
+fov.Thickness = 1
+fov.Color = Color3.fromRGB(255, 0, 0)
+fov.NumSides = 1000
+
+--// Functions
+
+function update()
+    if getgenv().FOV == true then
+        if fov then
+            fov.Radius = getgenv().FOVSize * 2
+            fov.Visible = getgenv().ShowFOV
+            fov.Position = Vector2.new(Mouse.X, Mouse.Y + GetGuiInset(GS).Y)
+
+            return fov
+        end
+    end
+end
+
+function WTVP(arg)
+    return Camera:WorldToViewportPoint(arg)
+end
+
+function WTSP(arg)
+    return Camera.WorldToScreenPoint(Camera, arg)
+end
+
+function getClosest()
+    local closestPlayer
+    local shortestDistance = math.huge
+
+    for i, v in pairs(game.Players:GetPlayers()) do
+        local notKO = v.Character:WaitForChild("BodyEffects")["K.O"].Value ~= true
+        local notGrabbed = v.Character:FindFirstChild("GRABBING_COINSTRAINT") == nil
+        
+        if v ~= game.Players.LocalPlayer and v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health ~= 0 and v.Character:FindFirstChild(getgenv().AimPart) and notKO and notGrabbed then
+            local pos = Camera:WorldToViewportPoint(v.Character.PrimaryPart.Position)
+            local magnitude = (Vector2.new(pos.X, pos.Y) - Vector2.new(Mouse.X, Mouse.Y)).magnitude
+            
+            if (getgenv().FOV) then
+                if (fov.Radius > magnitude and magnitude < shortestDistance) then
+                    closestPlayer = v
+                    shortestDistance = magnitude
+                end
+            else
+                if (magnitude < shortestDistance) then
+                    closestPlayer = v
+                    shortestDistance = magnitude
+                end
+            end
+        end
+    end
+    return closestPlayer
+end
+ 
+--// Checks if key is down
+
+Mouse.KeyDown:Connect(function(k)
+    SelectedKey = SelectedKey:lower()
+    SelectedDisableKey = SelectedDisableKey:lower()
+    if k == SelectedKey then
+        if AimlockState == true then
+            Locked = not Locked
+            if Locked then
+                Victim = getClosest()
+
+                Notify("Locked onto: "..tostring(Victim.Character.Humanoid.DisplayName))
+            else
+                if Victim ~= nil then
+                    Victim = nil
+
+                    Notify("Unlocked!")
+                end
+            end
+        else
+            Notify("Aimlock is not enabled!")
+        end
+    end
+    if k == SelectedDisableKey then
+        AimlockState = not AimlockState
+    end
+end)
+
+--// Loop update FOV and loop camera lock onto target
+
+RS.RenderStepped:Connect(function()
+    update()
+    if AimlockState == true then
+        if Victim ~= nil then
+            Camera.CFrame = CFrame.new(Camera.CFrame.p, Victim.Character[getgenv().AimPart].Position + Victim.Character[getgenv().AimPart].Velocity*getgenv().Prediction)
+        end
+    end
+end)
+	while wait() do
+        if getgenv().AutoPrediction == true then
+        local pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+        local split = string.split(pingvalue,'(')
+        local ping = tonumber(split[1])
+            if ping < 225 then
+            getgenv().Prediction = 1.4
+        elseif ping < 215 then
+            getgenv().Prediction = 1.2
+	    elseif ping < 205 then
+            getgenv().Prediction = 1.0
+	    elseif ping < 190 then
+            getgenv().Prediction = 0.10
+        elseif ping < 180 then
+            getgenv().Prediction = 0.12
+	    elseif ping < 170 then
+            getgenv().Prediction = 0.15
+	    elseif ping < 160 then
+            getgenv().Prediction = 0.18
+	    elseif ping < 150 then
+            getgenv().Prediction = 0.110
+        elseif ping < 140 then
+            getgenv().Prediction = 0.113
+        elseif ping < 130 then
+            getgenv().Prediction = 0.116
+        elseif ping < 120 then
+            getgenv().Prediction = 0.120
+        elseif ping < 110 then
+            getgenv().Prediction = 0.124
+        elseif ping < 105 then
+            getgenv().Prediction = 0.127
+        elseif ping < 90 then
+            getgenv().Prediction = 0.130
+        elseif ping < 80 then
+            getgenv().Prediction = 0.133
+        elseif ping < 70 then
+            getgenv().Prediction = 0.136
+        elseif ping < 60 then
+            getgenv().Prediction = 0.15038
+        elseif ping < 50 then
+            getgenv().Prediction = 0.15038
+        elseif ping < 40 then
+            getgenv().Prediction = 0.145
+        elseif ping < 30 then
+            getgenv().Prediction = 0.155
+        elseif ping < 20 then
+            getgenv().Prediction = 0.157
+game:GetService("StarterGui"):SetCore("SendNotification", {
+				Title = "Lock Loaded!";
+				Text = "Advid's Admin";
+				Duration = 10;
+			})
+        end
+        end
+	end
+end)
+
+AddCommand("prediction", {"prediction", "lockmagnitude"}, "changes lock magnitude", {}, function(Caller, Args, CEnv)
+    getgenv().Prediction = (Args[1])
+    return "prediction set to: " ..(Args[1])
+end)
+
+AddCommand("blockhats", {"blockhats"}, "makes ur hats into blocks, r6 only", {}, function()
+local character = game.Players.LocalPlayer.Character
+local humanoid = character:WaitForChild("Humanoid")
+
+if humanoid.RigType == Enum.HumanoidRigType.R6 then
+    local player = game.Players.LocalPlayer
+local character = player.Character
+
+-- Find all the accessories in the character
+local accessories = character:GetChildren()
+
+-- Iterate through each accessory
+for _, accessory in pairs(accessories) do
+    if accessory:IsA("Accessory") then
+        -- Find the Mesh or SpecialMesh object in the accessory's handle
+        local mesh = accessory.Handle:FindFirstChild("Mesh")
+        if not mesh then
+            mesh = accessory.Handle:FindFirstChild("SpecialMesh")
+        end
+        
+        -- Check if the mesh exists
+        if mesh then
+            -- Delete the mesh
+            mesh:Destroy()
+        end
+    end
+end
+elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
+    return "r6 only"
+end
 end)
 
 task.spawn(function()
@@ -8720,6 +8191,7 @@ AddConnection(CConnect(ConfigUI.Close.MouseButton1Click, function()
 end))
 --END IMPORT [uimore]
 
+
 --IMPORT [plugin]
 PluginConf = IsSupportedExploit and GetPluginConfig();
 local Plugins;
@@ -9244,6 +8716,8 @@ do
     end)
 end
 --END IMPORT [config]
+
+
 AddConnection(CConnect(CommandBar.Input.FocusLost, function()
     local Text = trim(CommandBar.Input.Text);
     local CommandArgs = split(Text, " ");
@@ -9297,1329 +8771,6 @@ getgenv().F_A = {
     PluginLibrary = PluginLibrary,
     GetConfig = GetConfig
 }
-
-if game.PlaceId == 5991163185 then
-    AddCommand("vote", {"*vote"}, "vote yes or no on a vk, works good for avoiding kicks or kicking someone if u got alts", {{"yes", "no"}}, function(Caller, Args)
-local vote = (Args[1])
-if vote == "yes" then
-local A_1 = "Vote"
-local A_2 = true
-local Event = game:GetService("ReplicatedStorage").VoteKick
-Event:FireServer(A_1, A_2)
-end
-if vote == "no" then
-local A_1 = "Vote"
-local A_2 = false
-local Event = game:GetService("ReplicatedStorage").VoteKick
-Event:FireServer(A_1, A_2)
-end
-end)
-
-Utils.Notify(LocalPlayer, "Compatible game detected", "Spray paint has some commands type * in command list to view", 10);
-end
-
---DHB
-if game.PlaceId == 9739787329 then   
-AddCommand("crash", {"*crash"}, "crashes the game, prepcrash command must be used first", {}, function()
-       game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
-wait(0.001)
-game:GetService'Players'.LocalPlayer.Character['RightLowerArm']:Destroy()
-wait(0.001)
-game:GetService'Players'.LocalPlayer.Character['RightUpperArm']:Destroy()
-wait(3)
-game:GetService'Players'.LocalPlayer.Character['Head']:Destroy()
-game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("crash/lag attempted","All")
-    return "crash attempted"
-end)
-
-AddCommand("killfix", {"*killfix"}, "makes you fat but fixes ur kill, void, and other commands", {}, function()
-       getgenv().killfix = true
-game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(Character)
-if getgenv().killfix then
-    wait(3)
-    local A_1 = "scale"
-local A_2 = "BodyWidthScale"
-local A_3 = 100
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2, A_3)
-end
-end)
-end)
-
-AddCommand("mgtool", {"*mgtool"}, "uses all moneyguns in your inventory, use buymg (amount) to get some", {}, function()
-       local player = game.Players.LocalPlayer
-local character = player.Character
-local mouse = player:GetMouse()
-
-local tool = Instance.new("Tool")
-tool.Name = "Megamoneygun"
-tool.Parent = player.Backpack
-
-function onClick()
-  for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
-if obj.Name == "CurrencyGun" then
-local equip = game.Players.LocalPlayer.Backpack.CurrencyGun
-equip.Parent = game.Players.LocalPlayer.Character
-end
-end
-wait(0.3)
-for i,v in pairs(game:GetService("Players").LocalPlayer.Character:GetChildren())do
-if v.ClassName == "Tool" then
-v:Activate()
-end
-end
-end
-
-
-mouse.Button1Down:Connect(function()
-  if tool.Parent == character then
-    -- The tool is being held
-    onClick()
-  else
-    -- The tool is not being held
-  end
-end)
-    end)
-    
-AddCommand("prepcrash", {"*prepcrash"}, "prepares to crash the game, once ready you can type crash in the command bar to crash", {}, function()
-     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(214, 288, -763)
-for i = 1,30 do
-    wait(0.2)
-for i,v in pairs(game:GetDescendants()) do
-      if v:IsA("ClickDetector") then
-          fireclickdetector(v)
-      end
-end
-end
-wait(0.5)
-for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-v.Parent = game.Players.LocalPlayer.Character
-end
-return("Crash ready! Type !crash to finish the job")
-    end)
-    
-    AddCommand("buymoneygun", {"*buymoneygun", "buymg"}, "buys moneyguns. Use the mgtool command to use them all at once", {}, function(Caller, Args, CEnv)
-    for i = 1,(Args[1]) do
-    fireclickdetector(game:GetService("Workspace")["[MoneyGun] - $100"].ClickDetector)
-    wait(0.1)
-fireclickdetector(game:GetService("Workspace")["[MoneyGun] - $100"].ClickDetector)
-wait(0.1)
-fireclickdetector(game:GetService("Workspace")["[MoneyGun] - $100"].ClickDetector)
-wait(1)
-for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
-if obj.Name == "CurrencyGun" then
-local equip = game.Players.LocalPlayer.Backpack.CurrencyGun
-equip.Parent = game.Players.LocalPlayer.Character
-end
-end
-end
-    return "Bought moneyguns"
-end)
-
-AddCommand("protect", {"*protect", "guard"}, "lasers players within a radius of protected player", {1,"1"}, function(Caller, Args, CEnv)
-for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
-if obj.Name == "Revolver" then
-local equip = game.Players.LocalPlayer.Backpack.Revolver
-equip.Parent = game.Players.LocalPlayer.Character
-end
-end
-local targetPlayerName = Args[1]
-
-print(targetPlayerName)
-local targetPlayerChar = nil
-for _, player in pairs(game.Players:GetPlayers()) do
-  if player.Name == targetPlayerName then
-    targetPlayerChar = player.Character
-    break
-  end
-end
-
--- If the target player was not found, display an error message
-if not targetPlayerChar then
-  return "full username required"
-end
-
--- Get the local player's character
-local localPlayerChar = game.Players.LocalPlayer.Character
-
--- Create a function to get and print the coordinates
-local function getCoords()
-  -- Get the target player's coordinates
-  local targetPlayerCoords = targetPlayerChar.HumanoidRootPart.Position
-
-  -- Find the closest player to the target player
-  local closestPlayer = nil
-  local closestDistance = math.huge
-  for _, player in pairs(game.Players:GetPlayers()) do
-    if player.Name ~= targetPlayerName and player ~= game.Players.LocalPlayer then
-      -- Get the player's coordinates
-      local playerCoords = player.Character.HumanoidRootPart.Position
-
-      -- Calculate the distance between the target player and the player
-      local distance = (playerCoords - targetPlayerCoords).Magnitude
-
-      -- If the distance is less than the current closest distance, update the closest player and distance
-      if distance < closestDistance then
-        closestPlayer = player
-        closestDistance = distance
-      end
-    end
-  end
-
-  -- If the closest player is within 20 units of the target player, fire the gun at them
-  if closestPlayer and closestDistance <= 20 then
-    local reloadEvent = game:GetService("ReplicatedStorage").ReloadWeapon
-    local coords = closestPlayer.Character.HumanoidRootPart.Position
-    local NewX = coords.X
-    local NewY = coords.Y
-    local NewZ = coords.Z
-    local final = Vector3.new(NewX, NewY, NewZ)
-    local A_1 = Vector3.new(1 * NewX, 1 * NewY, 1 * NewZ)
-    local A_2 = localPlayerChar:WaitForChild("Revolver")
-    local Event = game:GetService("ReplicatedStorage").ToolRemoteEvents.Rev
-    Event:FireServer(A_1, A_2)
-    reloadEvent:FireServer()
-    print(final)
-  end
-end
-
--- Create a loop that runs the function every 1 second
-while true do
-  getCoords()
-  wait(0.005)
-end
-end)
-
-AddCommand("semigod", {"*semigod"}, "Enables a pretty good godmode", {}, function()
-game.Players.LocalPlayer.Character.Ragdolled:Destroy()
-getgenv().Godmode = true
-game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(Character)
-if getgenv().Godmode then
-    wait(2)
-    game.Players.LocalPlayer.Character.Ragdolled:Destroy()
-end
-end)
-return "enabled! (only weakness is a punch at low health)"
-end)
-
-AddCommand("jail", {"*jail", "arrest"}, "tps user to uphill jail", {1,"1"}, function(Caller, Args)
-    local Target = GetPlayer(Args[1]);
-    local OldPos = GetRoot(LocalPlayer).CFrame
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-299, 574, -13)
-wait(0.2)
-    ExecuteCommand("bring", {Args[1]}, LocalPlayer)
-    wait(.5);
-        WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
-end)
-
-AddCommand("housearrest", {"*housearrest"}, "tps user to unto unescapeable house", {1,"1"}, function(Caller, Args)
-    local Target = GetPlayer(Args[1]);
-    local OldPos = GetRoot(LocalPlayer).CFrame
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(290, 576, -98)
-wait(0.2)
-    ExecuteCommand("bring", {Args[1]}, LocalPlayer)
-    wait(.5);
-        WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
-end)
-
-AddCommand("screenglitch", {"*screenglitch"}, "makes everyones screen bug out", {}, function(Caller, Args)
-getgenv().hatglitch = true
-local A_1 = "wear"
-local A_2 = 1158416
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2)
-wait(0.3)
-local A_1 = "scale"
-local A_2 = "BodyHeightScale"
-local A_3 = 105
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2, A_3)
-wait(0.3)
-local A_1 = "scale"
-local A_2 = "BodyWidthScale"
-local A_3 = 100
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2, A_3)
-wait(0.3)
-local A_1 = "scale"
-local A_2 = "HeadScale"
-local A_3 = 100
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2, A_3)
-wait(0.3)
-local A_1 = "scale"
-local A_2 = "BodyProportionScale"
-local A_3 = 100
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2, A_3)
-
-while getgenv().hatglitch do 
-local A_1 = "scale"
-local A_2 = "BodyTypeScale"
-local A_3 = 100
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2, A_3)
-wait(0.001)
-local A_1 = "scale"
-local A_2 = "BodyTypeScale"
-local A_3 = 0
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2, A_3)
-end
-end)
-
-AddCommand("unscreenglitch", {"*unscreenglitch"}, "stops making everyones screen bug out", {}, function(Caller, Args)
-getgenv().hatglitch = false
-end)
-
- AddCommand("ungod", {"*ungod"}, "disables semigod", {}, function()
-        getgenv().Godmode = false
-	return "god mode disabled. reset for it to take effect"
- end)
-    
-    AddCommand("rapidfire", {"*rapidfire"}, "autobuys armor if below a threshold", {}, function()
-    if not game:IsLoaded() then 
-   game.Loaded:Wait();
-end
-
-local players, replicatedStorage, runService, userInputService = game:GetService("Players"), game:GetService("ReplicatedStorage"), game:GetService("RunService"), game:GetService("UserInputService");
-local client, mouse = players.LocalPlayer, players.LocalPlayer:GetMouse();
-
-local toolRemoteEvents = replicatedStorage:FindFirstChild("ToolRemoteEvents");
-local reloadWeapon = replicatedStorage:FindFirstChild("ReloadWeapon");
-
-local keyHeld = false
-
-userInputService.InputBegan:Connect(function(key)
-   if userInputService:GetFocusedTextBox() then return end 
-
-   if key.KeyCode == Enum.KeyCode.E then 
-       keyHeld = true
-   end
-end);
-
-userInputService.InputEnded:Connect(function(key)
-   if userInputService:GetFocusedTextBox() then return end 
-
-   if key.KeyCode == Enum.KeyCode.E then 
-       keyHeld = false
-   end
-end);
-
-runService.RenderStepped:Connect(function()
-   if keyHeld == true then 
-       if client.Character and client.Character:FindFirstChildOfClass("Tool") then
-           local tool = client.Character:FindFirstChildOfClass("Tool");
-
-           toolRemoteEvents[((tool.Name ~= "Revolver" and tool.Name) or "Rev")]:FireServer(mouse.Hit.Position, tool);
-           reloadWeapon:FireServer();
-       end
-   end
-end);
-return "enabled! hold e to fire quick with weapon in hand"
-    end)
-    
-    AddCommand("cashsniper", {"*cashsniper"}, "snipes all cash detected in the workspace", {}, function()
-getgenv().enablesniping = true
-
-function scanWorkspace()
-  if not getgenv().enablesniping then
-    return
-  end
-  
-  local money = workspace:FindFirstChild("Currency")
-  local moneyDrop = workspace:FindFirstChild("MoneyDrop")
-
-  if money then
-    fireclickdetector(money.ClickDetector)
-  end
-  
-  if moneyDrop then
-    fireclickdetector(moneyDrop.ClickDetector)  
-end
-end
-
-while true do
-  scanWorkspace()
-  wait(0.1)
-end
-return "Cash sniping enabled"
-    end)
-    
-    AddCommand("maptp", {"*maptp"}, "Teleports you to a landmark in the map", {{"casino", "school", "park", "park2", "bank", "gunstore1", "gunstore2", "adminbase"}}, function(Caller, Args)
-local location = (Args[1])
-
--- Coordinates for each location
-local bankCoords = CFrame.new(-401, 175, -270)
-local gunstore1Coords = CFrame.new(482, 202, -619)
-local gunstore2Coords = CFrame.new(-574, 162, -737)
-local schoolCoords = CFrame.new(-527, 174, 203)
-local adminbaseCoords = CFrame.new(-502, 137, -886)
-local parkCoords = CFrame.new(77, 178, -983)
-local park2Coords = CFrame.new(-251, 175, -759)
-local casinoCoords = CFrame.new(-1113, 469, -154)
--- Teleport the player to the specified location
-local player = game.Players.LocalPlayer
-if location == "bank" then
-  player.Character.HumanoidRootPart.CFrame = bankCoords
-elseif location == "gunstore1" then
-  player.Character.HumanoidRootPart.CFrame = gunstore1Coords
-elseif location == "gunstore2" then
-  player.Character.HumanoidRootPart.CFrame = gunstore2Coords
-elseif location == "school" then
-  player.Character.HumanoidRootPart.CFrame = schoolCoords
-  elseif location == "park2" then
-  player.Character.HumanoidRootPart.CFrame = park2Coords
-  elseif location == "casino" then
-  player.Character.HumanoidRootPart.CFrame = casinoCoords
-elseif location == "adminbase" then
-  player.Character.HumanoidRootPart.CFrame = adminbaseCoords
-elseif location == "park" then  -- Add this block to handle the "park" location
-  player.Character.HumanoidRootPart.CFrame = parkCoords
-else
-  print("Invalid location specified")
-end
-end)
-
-    AddCommand("nocashsniper", {"*nocashsniper", "stopsnipe"}, "stops sniping", {}, function()
-        getgenv().enablesniping = false
-return "Cash sniping disabled"
-    end)
-    
-    AddCommand("revenge", {"*revenge"}, "gets revenge on whoever stomped a player of your choice", {}, function(Caller, Args)
-    getgenv().revengemode = true
-    local Target = GetPlayer(Args[1]);
-    local revenged = Target[1].Name
-while getgenv().revengemode do
-    wait(0.1)
-if game:GetService("Workspace")[revenged].CharacterDied.Value == true then
-    local killer = game:GetService("Workspace")[revenged].KilledBy.Value
-    print("target player died, " ..killer.. " killed them")
-    print(killer)
-    ExecuteCommand("kill", {killer}, LocalPlayer)
-    wait(11)
-    else
-        print("target player alive")
-end
-end
-end)
-
-AddCommand("unrevenge", {"*unrevenge"}, "stomps avenging players", {}, function(Caller, Args)
-    getgenv().revengemode = false
-end)
-
-    AddCommand("autoarmor", {"*autoarmor"}, "autobuys armor if below a threshold", {}, function()
-        while getgenv().autoarmor do
-            wait(0.01)
-if game:GetService("Players").LocalPlayer.Armor.Value < 49 then
-fireclickdetector(game:GetService("Workspace")["Higher armor {20000$}"].Head.ClickDetector)
-end
-end
-    end)
-    
-    AddCommand("unautoarmor", {"*unautoarmor"}, "stops buying armor", {}, function()
-        getgenv().autoarmor = false
-    end)
-    
-    AddCommand("cashdropper", {"*cashdropper"}, "cashdropper gui", {}, function()
-        local screenGui = Instance.new("ScreenGui")
-local frame = Instance.new("Frame")
-local textBox = Instance.new("TextBox")
-local button1 = Instance.new("TextButton")
-local button2 = Instance.new("TextButton")
-
-screenGui.Name = "CashDropper"
-screenGui.Parent = game.Players.LocalPlayer.PlayerGui
-
-frame.Name = "CashDropperFrame"
-frame.Parent = screenGui
-frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-frame.Position = UDim2.new(0, 250, 0, 250) -- position the frame near the middle left of the screen
-frame.Size = UDim2.new(0, 200, 0, 200)
-
-textBox.Name = "AmountTextBox"
-textBox.Parent = frame
-textBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-textBox.Position = UDim2.new(0, 10, 0, 10)
-textBox.Size = UDim2.new(0, 180, 0, 30)
-textBox.Text = "Enter amount"
-
-button1.Name = "NotificationButton"
-button1.Parent = frame
-button1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-button1.Position = UDim2.new(0, 10, 0, 50)
-button1.Size = UDim2.new(0, 180, 0, 30)
-button1.Text = "Send notification"
-
-button2.Name = "DropCashButton"
-button2.Parent = frame
-button2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-button2.Position = UDim2.new(0, 10, 0, 90)
-button2.Size = UDim2.new(0, 180, 0, 30)
-button2.Text = "Drop cash"
-
--- Button 1 script
-button1.MouseButton1Click:Connect(function()
-   local amount = tonumber(textBox.Text)
-   local neededAmount = amount / 0.7 -- accounting for the 30% deduction
-   game.StarterGui:SetCore("SendNotification", {
-      Title = "Amount needed";
-      Text = "You need to drop $" .. neededAmount .. " to get $" .. amount;
-   })
-end)
-
--- Button 2 script
-button2.MouseButton1Click:Connect(function()
-   local amount = tonumber(textBox.Text)
-   local neededAmount = amount / 0.7 -- accounting for the 30% deduction
-   local event = game:GetService("ReplicatedStorage").WalletRemotes.DropCash
-   event:FireServer(neededAmount)
-end)
-    end)
-    
-    local player = game.Players.LocalPlayer
-player.Chatted:Connect(function(message)
-    if message:lower() == "shazam!" then
-        local A_1 = "wear"
-local A_2 = 2691814355
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2)
-local A_1 = "wear"
-local A_2 = 144055148
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-Event:FireServer(A_1, A_2)
-end
-end)
-    
-local player = game.Players.LocalPlayer
-local Event = game:GetService("ReplicatedStorage").UpdateAvatar
-player.Chatted:Connect(function(message)
-    if message:lower() == "im vengeance" then
-        local A_1 = "wear"
-local A_2 = 3049284724
-Event:FireServer(A_1, A_2)
-local A_1 = "wear"
-local A_2 = 3049285265
-Event:FireServer(A_1, A_2)
-local A_1 = "wear"
-local A_2 = 10647971081
-Event:FireServer(A_1, A_2)
-    end
-end)
-
-print("Da hood battles grounds detected")
-    Utils.Notify(LocalPlayer, "Compatible game detected", "DHB is supported for extra commands! Type a * in the cmds menu to view them", 10);
-end
-
---MY HOOD
-if game.PlaceId == 9112775301 then   
-AddCommand("crash", {"*crash"}, "crashes the game, prepcrash command must be used first", {}, function()
-       game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
-wait(0.001)
-game:GetService'Players'.LocalPlayer.Character['RightLowerArm']:Destroy()
-wait(0.001)
-game:GetService'Players'.LocalPlayer.Character['RightUpperArm']:Destroy()
-wait(3)
-game:GetService'Players'.LocalPlayer.Character['Head']:Destroy()
-game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("crash/lag attempted","All")
-    return "crash attempted"
-end)
-    
-AddCommand("killfix", {"*killfix"}, "makes you fat but fixes ur kill, void, and other commands", {}, function()
-       getgenv().killfix = true
-game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(Character)
-if getgenv().killfix then
-    wait(3)
-    local A_1 = "scale"
-local A_2 = "ProportionScale"
-local A_3 = 1
-local Event = game:GetService("ReplicatedStorage").AvatarEditor.RemoteEvent
-Event:FireServer(A_1, A_2, A_3)
-wait(0.1)
-local A_1 = "scale"
-local A_2 = "BodyTypeScale"
-local A_3 = 1
-local Event = game:GetService("ReplicatedStorage").AvatarEditor.RemoteEvent
-Event:FireServer(A_1, A_2, A_3)
-end
-end)
-end)
-
-AddCommand("prepcrash", {"*prepcrash"}, "prepares to crash the game, once ready you can type crash in the command bar to crash", {}, function()
-     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(435, 639, 124)
-for i = 1,30 do
-    wait(0.2)
-for i,v in pairs(game:GetDescendants()) do
-      if v:IsA("ClickDetector") then
-          fireclickdetector(v)
-      end
-end
-end
-wait(0.5)
-for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-v.Parent = game.Players.LocalPlayer.Character
-end
-return("Crash ready! Type !crash to finish the job")
-    end)
-    
-
-AddCommand("protect", {"*protect", "guard"}, "lasers players within a radius of protected player", {1,"1"}, function(Caller, Args, CEnv)
-for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
-if obj.Name == "Revolver" then
-local equip = game.Players.LocalPlayer.Backpack.Revolver
-equip.Parent = game.Players.LocalPlayer.Character
-end
-end
-local targetPlayerName = Args[1]
-
-print(targetPlayerName)
-local targetPlayerChar = nil
-for _, player in pairs(game.Players:GetPlayers()) do
-  if player.Name == targetPlayerName then
-    targetPlayerChar = player.Character
-    break
-  end
-end
-
--- If the target player was not found, display an error message
-if not targetPlayerChar then
-  return "full username required"
-end
-
--- Get the local player's character
-local localPlayerChar = game.Players.LocalPlayer.Character
-
--- Create a function to get and print the coordinates
-local function getCoords()
-  -- Get the target player's coordinates
-  local targetPlayerCoords = targetPlayerChar.HumanoidRootPart.Position
-
-  -- Find the closest player to the target player
-  local closestPlayer = nil
-  local closestDistance = math.huge
-  for _, player in pairs(game.Players:GetPlayers()) do
-    if player.Name ~= targetPlayerName and player ~= game.Players.LocalPlayer then
-      -- Get the player's coordinates
-      local playerCoords = player.Character.HumanoidRootPart.Position
-
-      -- Calculate the distance between the target player and the player
-      local distance = (playerCoords - targetPlayerCoords).Magnitude
-
-      -- If the distance is less than the current closest distance, update the closest player and distance
-      if distance < closestDistance then
-        closestPlayer = player
-        closestDistance = distance
-      end
-    end
-  end
-
-  -- If the closest player is within 20 units of the target player, fire the gun at them
-  if closestPlayer and closestDistance <= 20 then
-    local reloadEvent = game:GetService("ReplicatedStorage").ReloadWeapon
-    local coords = closestPlayer.Character.HumanoidRootPart.Position
-    local NewX = coords.X
-    local NewY = coords.Y
-    local NewZ = coords.Z
-    local final = Vector3.new(NewX, NewY, NewZ)
-    local A_1 = Vector3.new(1 * NewX, 1 * NewY, 1 * NewZ)
-    local A_2 = localPlayerChar:WaitForChild("Revolver")
-    local Event = game:GetService("ReplicatedStorage").ToolRemoteEvents.Rev
-    Event:FireServer(A_1, A_2)
-    reloadEvent:FireServer()
-    print(final)
-  end
-end
-
--- Create a loop that runs the function every 1 second
-while true do
-  getCoords()
-  wait(0.005)
-end
-end)
-
-AddCommand("semigod", {"*semigod"}, "Enables a pretty good godmode", {}, function()
-game.Players.LocalPlayer.Character.Ragdolled:Destroy()
-getgenv().Godmode = true
-game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(Character)
-if getgenv().Godmode then
-    wait(2)
-    game.Players.LocalPlayer.Character.Ragdolled:Destroy()
-end
-end)
-return "enabled! (only weakness is a punch at low health)"
-end)
-
-AddCommand("jail", {"*jail", "arrest"}, "tps user to uphill jail", {1,"1"}, function(Caller, Args)
-    local Target = GetPlayer(Args[1]);
-    local OldPos = GetRoot(LocalPlayer).CFrame
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-311, 574, -18)
-wait(0.2)
-    ExecuteCommand("bring", {Args[1]}, LocalPlayer)
-    wait(.5);
-        WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
-end)
-
-AddCommand("housearrest", {"*housearrest"}, "tps user to unto unescapeable house", {1,"1"}, function(Caller, Args)
-    local Target = GetPlayer(Args[1]);
-    local OldPos = GetRoot(LocalPlayer).CFrame
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(291, 576, -99)
-wait(0.2)
-    ExecuteCommand("bring", {Args[1]}, LocalPlayer)
-    wait(.5);
-        WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
-end)
-
-
-
- AddCommand("ungod", {"*ungod"}, "disables semigod", {}, function()
-        getgenv().Godmode = false
-	return "god mode disabled. reset for it to take effect"
- end)
-    
-    AddCommand("rapidfire", {"*rapidfire"}, "autobuys armor if below a threshold", {}, function()
-    if not game:IsLoaded() then 
-   game.Loaded:Wait();
-end
-
-local players, replicatedStorage, runService, userInputService = game:GetService("Players"), game:GetService("ReplicatedStorage"), game:GetService("RunService"), game:GetService("UserInputService");
-local client, mouse = players.LocalPlayer, players.LocalPlayer:GetMouse();
-
-local toolRemoteEvents = replicatedStorage:FindFirstChild("ToolRemoteEvents");
-local reloadWeapon = replicatedStorage:FindFirstChild("ReloadWeapon");
-
-local keyHeld = false
-
-userInputService.InputBegan:Connect(function(key)
-   if userInputService:GetFocusedTextBox() then return end 
-
-   if key.KeyCode == Enum.KeyCode.E then 
-       keyHeld = true
-   end
-end);
-
-userInputService.InputEnded:Connect(function(key)
-   if userInputService:GetFocusedTextBox() then return end 
-
-   if key.KeyCode == Enum.KeyCode.E then 
-       keyHeld = false
-   end
-end);
-
-runService.RenderStepped:Connect(function()
-   if keyHeld == true then 
-       if client.Character and client.Character:FindFirstChildOfClass("Tool") then
-           local tool = client.Character:FindFirstChildOfClass("Tool");
-
-           toolRemoteEvents[((tool.Name ~= "Revolver" and tool.Name) or "Rev")]:FireServer(mouse.Hit.Position, tool);
-           reloadWeapon:FireServer();
-       end
-   end
-end);
-return "enabled! hold e to fire quick with weapon in hand"
-    end)
-    
-    AddCommand("cashsniper", {"*cashsniper"}, "snipes all cash detected in the workspace", {}, function()
-getgenv().enablesniping = true
-
-function scanWorkspace()
-  if not getgenv().enablesniping then
-    return
-  end
-  
-  local money = workspace:FindFirstChild("Currency")
-if money then
-    fireclickdetector(money.ClickDetector)
-  end
-end
-
-while true do
-  scanWorkspace()
-  wait(0.1)
-end
-return "Cash sniping enabled"
-    end)
-    
-    AddCommand("maptp", {"*maptp"}, "Teleports you to a landmark in the map", {{"casino", "school", "park", "park2", "bank", "gunstore1", "gunstore2", "adminbase"}}, function(Caller, Args)
-local location = (Args[1])
-
--- Coordinates for each location
-local bankCoords = CFrame.new(-409, 575, -289)
-local gunstore1Coords = CFrame.new(485, 602, -616)
-local gunstore2Coords = CFrame.new(-575, 562, -739)
-local schoolCoords = CFrame.new(-583, 574, 212)
-local adminbaseCoords = CFrame.new(-499, 537, -885)
-local parkCoords = CFrame.new(121, 578, -1045)
-local park2Coords = CFrame.new(-243, 575, -764)
-local casinoCoords = CFrame.new(-902, 575, -125)
--- Teleport the player to the specified location
-local player = game.Players.LocalPlayer
-if location == "bank" then
-  player.Character.HumanoidRootPart.CFrame = bankCoords
-elseif location == "gunstore1" then
-  player.Character.HumanoidRootPart.CFrame = gunstore1Coords
-elseif location == "gunstore2" then
-  player.Character.HumanoidRootPart.CFrame = gunstore2Coords
-elseif location == "school" then
-  player.Character.HumanoidRootPart.CFrame = schoolCoords
-  elseif location == "park2" then
-  player.Character.HumanoidRootPart.CFrame = park2Coords
-  elseif location == "casino" then
-  player.Character.HumanoidRootPart.CFrame = casinoCoords
-elseif location == "adminbase" then
-  player.Character.HumanoidRootPart.CFrame = adminbaseCoords
-elseif location == "park" then  -- Add this block to handle the "park" location
-  player.Character.HumanoidRootPart.CFrame = parkCoords
-else
-  print("Invalid location specified")
-end
-end)
-
-    AddCommand("nocashsniper", {"*nocashsniper", "stopsnipe"}, "stops sniping", {}, function()
-        getgenv().enablesniping = false
-return "Cash sniping disabled"
-    end)
-    
-    AddCommand("revenge", {"*revenge"}, "gets revenge on whoever stomped a player of your choice", {}, function(Caller, Args)
-    getgenv().revengemode = true
-    local revenged = Args[1]
-while getgenv().revengemode do
-    wait(0.1)
-if game:GetService("Workspace")[revenged].CharacterDied.Value == true then
-    local killer = game:GetService("Workspace")[revenged].KilledBy.Value
-    print("target player died, " ..killer.. " killed them")
-    print(killer)
-    ExecuteCommand("kill", {killer}, LocalPlayer)
-    wait(11)
-    else
-        print("target player alive")
-end
-end
-end)
-
-AddCommand("unrevenge", {"*unrevenge"}, "stomps avenging players", {}, function(Caller, Args)
-    getgenv().revengemode = false
-end)
-
-    AddCommand("autoarmor", {"*autoarmor"}, "autobuys armor if below a threshold", {}, function()
-        getgenv().autoarmor = true
-        while getgenv().autoarmor do
-            wait(0.01)
-if game:GetService("Players").LocalPlayer.DataFolder.Armor < 49 then
-fireclickdetector(game:GetService("Workspace")["Higher armor {20000$}"].Head.ClickDetector)
-end
-end
-    end)
-    
-    AddCommand("unautoarmor", {"*unautoarmor"}, "stops buying armor", {}, function()
-        getgenv().autoarmor = false
-    end)
-    
-    AddCommand("cashdropper", {"*cashdropper"}, "cashdropper gui", {}, function()
-        local screenGui = Instance.new("ScreenGui")
-local frame = Instance.new("Frame")
-local textBox = Instance.new("TextBox")
-local button1 = Instance.new("TextButton")
-local button2 = Instance.new("TextButton")
-
-screenGui.Name = "CashDropper"
-screenGui.Parent = game.Players.LocalPlayer.PlayerGui
-
-frame.Name = "CashDropperFrame"
-frame.Parent = screenGui
-frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-frame.Position = UDim2.new(0, 250, 0, 250) -- position the frame near the middle left of the screen
-frame.Size = UDim2.new(0, 200, 0, 200)
-
-textBox.Name = "AmountTextBox"
-textBox.Parent = frame
-textBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-textBox.Position = UDim2.new(0, 10, 0, 10)
-textBox.Size = UDim2.new(0, 180, 0, 30)
-textBox.Text = "Enter amount"
-
-button1.Name = "NotificationButton"
-button1.Parent = frame
-button1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-button1.Position = UDim2.new(0, 10, 0, 50)
-button1.Size = UDim2.new(0, 180, 0, 30)
-button1.Text = "Send notification"
-
-button2.Name = "DropCashButton"
-button2.Parent = frame
-button2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-button2.Position = UDim2.new(0, 10, 0, 90)
-button2.Size = UDim2.new(0, 180, 0, 30)
-button2.Text = "Drop cash"
-
--- Button 1 script
-button1.MouseButton1Click:Connect(function()
-   local amount = tonumber(textBox.Text)
-   local neededAmount = amount / 0.7 -- accounting for the 30% deduction
-   game.StarterGui:SetCore("SendNotification", {
-      Title = "Amount needed";
-      Text = "You need to drop $" .. neededAmount .. " to get $" .. amount;
-   })
-end)
-
--- Button 2 script
-button2.MouseButton1Click:Connect(function()
-   local amount = tonumber(textBox.Text)
-   local neededAmount = amount / 0.7 -- accounting for the 30% deduction
-   local event = game:GetService("ReplicatedStorage").WalletRemotes.DropCash
-   event:FireServer(neededAmount)
-end)
-    end)
-
-print("My hood detected")
-    Utils.Notify(LocalPlayer, "Compatible game detected", "My hood is supported for extra commands! Type a * in the cmds menu to view them", 10);
-end
-
---DV HOOD
-if game.PlaceId == 9431306429 then   
-AddCommand("crash", {"*crash"}, "crashes the game, prepcrash command must be used first", {}, function()
-       game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
-wait(0.001)
-game:GetService'Players'.LocalPlayer.Character['RightLowerArm']:Destroy()
-wait(0.001)
-game:GetService'Players'.LocalPlayer.Character['RightUpperArm']:Destroy()
-wait(3)
-game:GetService'Players'.LocalPlayer.Character['Head']:Destroy()
-game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("crash/lag attempted","All")
-    return "crash attempted"
-end)
-
-AddCommand("mgtool", {"*mgtool"}, "uses all moneyguns in your inventory, use buymg (amount) to get some", {}, function()
-       local player = game.Players.LocalPlayer
-local character = player.Character
-local mouse = player:GetMouse()
-
-local tool = Instance.new("Tool")
-tool.Name = "Megamoneygun"
-tool.Parent = player.Backpack
-
-function onClick()
-  for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
-if obj.Name == "MoneyGun" then
-local equip = game.Players.LocalPlayer.Backpack.MoneyGun
-equip.Parent = game.Players.LocalPlayer.Character
-end
-end
-wait(0.3)
-for i,v in pairs(game:GetService("Players").LocalPlayer.Character:GetChildren())do
-if v.ClassName == "Tool" then
-v:Activate()
-end
-end
-end
-
-
-mouse.Button1Down:Connect(function()
-  if tool.Parent == character then
-    -- The tool is being held
-    onClick()
-  else
-    -- The tool is not being held
-  end
-end)
-    end)
-    
-AddCommand("prepcrash", {"*prepcrash"}, "prepares to crash the game, once ready you can type crash in the command bar to crash", {}, function()
-     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-761, 185, 267)
-for i = 1,30 do
-    wait(0.2)
-for i,v in pairs(game:GetDescendants()) do
-      if v:IsA("ClickDetector") then
-          fireclickdetector(v)
-      end
-end
-end
-wait(0.5)
-for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-v.Parent = game.Players.LocalPlayer.Character
-end
-return("Crash ready! Type !crash to finish the job")
-    end)
-
-AddCommand("pp", {"*pp", "batpp"}, "if u have bat u can have pp", {}, function()
-     local player = game.Players.LocalPlayer
-local backpack = player.Backpack
-local bat = backpack:FindFirstChild("Bat")
-if bat then
-    player.Character.Humanoid:EquipTool(bat)
-else
-    print("Tool 'Bat' not found in backpack.")
-end
-     local player = game.Players.LocalPlayer
-local tool = player.Character:FindFirstChildOfClass("Tool")
-
-if tool then
-    tool.Grip = tool.Grip - Vector3.new(-1.15, -1.3, 1.5)
-    tool.Parent = player.Backpack
-    tool.Parent = player.Character
-else
-    return "where yo bat at bro"
-end
-
-wait(0.1)
-local player = game.Players.LocalPlayer
-local tool = player.Character:FindFirstChildOfClass("Tool")
-
-if tool then
-    tool.Grip = tool.Grip * CFrame.Angles(math.rad(80), 0, 0)
-    return "Bat made into pp! No need to rexecute every unequip, just equip it again"
-end
-end)
-
-AddCommand("protect", {"*protect", "guard"}, "lasers players within a radius of protected player", {1,"1"}, function(Caller, Args, CEnv)
-for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
-if obj.Name == "Revolver" then
-local equip = game.Players.LocalPlayer.Backpack.Revolver
-equip.Parent = game.Players.LocalPlayer.Character
-end
-end
-local targetPlayerName = Args[1]
-
-print(targetPlayerName)
-local targetPlayerChar = nil
-for _, player in pairs(game.Players:GetPlayers()) do
-  if player.Name == targetPlayerName then
-    targetPlayerChar = player.Character
-    break
-  end
-end
-
--- If the target player was not found, display an error message
-if not targetPlayerChar then
-  return "full username required"
-end
-
--- Get the local player's character
-local localPlayerChar = game.Players.LocalPlayer.Character
-
--- Create a function to get and print the coordinates
-local function getCoords()
-  -- Get the target player's coordinates
-  local targetPlayerCoords = targetPlayerChar.HumanoidRootPart.Position
-
-  -- Find the closest player to the target player
-  local closestPlayer = nil
-  local closestDistance = math.huge
-  for _, player in pairs(game.Players:GetPlayers()) do
-    if player.Name ~= targetPlayerName and player ~= game.Players.LocalPlayer then
-      -- Get the player's coordinates
-      local playerCoords = player.Character.HumanoidRootPart.Position
-
-      -- Calculate the distance between the target player and the player
-      local distance = (playerCoords - targetPlayerCoords).Magnitude
-
-      -- If the distance is less than the current closest distance, update the closest player and distance
-      if distance < closestDistance then
-        closestPlayer = player
-        closestDistance = distance
-      end
-    end
-  end
-
-  -- If the closest player is within 20 units of the target player, fire the gun at them
-  if closestPlayer and closestDistance <= 20 then
-    local reloadEvent = game:GetService("ReplicatedStorage").ReloadWeapon
-    local coords = closestPlayer.Character.HumanoidRootPart.Position
-    local NewX = coords.X
-    local NewY = coords.Y
-    local NewZ = coords.Z
-    local final = Vector3.new(NewX, NewY, NewZ)
-    local A_1 = Vector3.new(1 * NewX, 1 * NewY, 1 * NewZ)
-    local A_2 = localPlayerChar:WaitForChild("Revolver")
-    local Event = game:GetService("ReplicatedStorage").ToolRemoteEvents.Rev
-    Event:FireServer(A_1, A_2)
-    reloadEvent:FireServer()
-    print(final)
-  end
-end
-
--- Create a loop that runs the function every 1 second
-while true do
-  getCoords()
-  wait(0.005)
-end
-end)
-
-AddCommand("semigod", {"*semigod"}, "Enables a pretty good godmode", {}, function()
-game.Players.LocalPlayer.Character.Ragdolled:Destroy()
-getgenv().Godmode = true
-game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(Character)
-if getgenv().Godmode then
-    wait(2)
-    game.Players.LocalPlayer.Character.Ragdolled:Destroy()
-end
-end)
-return "enabled! (only weakness is a punch at low health)"
-end)
-
-AddCommand("jail", {"*jail"}, "tps user to jail", {1,"1"}, function(Caller, Args)
-    local Target = GetPlayer(Args[1]);
-    local OldPos = GetRoot(LocalPlayer).CFrame
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(76, 124, 341)
-wait(0.2)
-    ExecuteCommand("bring", {Args[1]}, LocalPlayer)
-    wait(.5);
-        WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos
-end)
-
- AddCommand("ungod", {"*ungod"}, "disables semigod", {}, function()
-        getgenv().Godmode = false
-	return "god mode disabled. reset for it to take effect"
- end)
-    
-    AddCommand("rapidfire", {"*rapidfire"}, "autobuys armor if below a threshold", {}, function()
-    if not game:IsLoaded() then 
-   game.Loaded:Wait();
-end
-
-local players, replicatedStorage, runService, userInputService = game:GetService("Players"), game:GetService("ReplicatedStorage"), game:GetService("RunService"), game:GetService("UserInputService");
-local client, mouse = players.LocalPlayer, players.LocalPlayer:GetMouse();
-
-local toolRemoteEvents = replicatedStorage:FindFirstChild("ToolRemoteEvents");
-local reloadWeapon = replicatedStorage:FindFirstChild("ReloadWeapon");
-
-local keyHeld = false
-
-userInputService.InputBegan:Connect(function(key)
-   if userInputService:GetFocusedTextBox() then return end 
-
-   if key.KeyCode == Enum.KeyCode.E then 
-       keyHeld = true
-   end
-end);
-
-userInputService.InputEnded:Connect(function(key)
-   if userInputService:GetFocusedTextBox() then return end 
-
-   if key.KeyCode == Enum.KeyCode.E then 
-       keyHeld = false
-   end
-end);
-
-runService.RenderStepped:Connect(function()
-   if keyHeld == true then 
-       if client.Character and client.Character:FindFirstChildOfClass("Tool") then
-           local tool = client.Character:FindFirstChildOfClass("Tool");
-
-           toolRemoteEvents[((tool.Name ~= "Revolver" and tool.Name) or "Rev")]:FireServer(mouse.Hit.Position, tool);
-           reloadWeapon:FireServer();
-       end
-   end
-end);
-return "enabled! hold e to fire quick with weapon in hand"
-    end)
-    
-    AddCommand("cashsniper", {"*cashsniper"}, "snipes all cash detected in the workspace", {}, function()
-getgenv().enablesniping = true
-
-function scanWorkspace()
-  if not getgenv().enablesniping then
-    return
-  end
-  
-  local money = workspace:FindFirstChild("Money")
-  local moneyDrop = workspace:FindFirstChild("MoneyDrop")
-
-  if money then
-    fireclickdetector(money.ClickDetector)
-  end
-  
-  if moneyDrop then
-    fireclickdetector(moneyDrop.ClickDetector)  
-end
-end
-
-while true do
-  scanWorkspace()
-  wait(0.1)
-end
-return "Cash sniping enabled"
-    end)
-    
-    AddCommand("maptp", {"*maptp"}, "Teleports you to a landmark in the map", {{"casino", "school", "park", "park2", "gunstore1", "gunstore2"}}, function(Caller, Args)
-local location = (Args[1])
-
--- Coordinates for each location
-local gunstore1Coords = CFrame.new(-376, 144, 220)
-local gunstore2Coords = CFrame.new(348, 124, -239)
-local schoolCoords = CFrame.new(-821, 171, 30)
-local parkCoords = CFrame.new(-209, 141, 47)
-local park2Coords = CFrame.new(-79, 143, -457)
-local casinoCoords = CFrame.new(-220, 143, -330)
--- Teleport the player to the specified location
-local player = game.Players.LocalPlayer
-if location == "gunstore1" then
-  player.Character.HumanoidRootPart.CFrame = gunstore1Coords
-elseif location == "gunstore2" then
-  player.Character.HumanoidRootPart.CFrame = gunstore2Coords
-elseif location == "school" then
-  player.Character.HumanoidRootPart.CFrame = schoolCoords
-  elseif location == "park2" then
-  player.Character.HumanoidRootPart.CFrame = park2Coords
-  elseif location == "casino" then
-  player.Character.HumanoidRootPart.CFrame = casinoCoords
-elseif location == "park" then  -- Add this block to handle the "park" location
-  player.Character.HumanoidRootPart.CFrame = parkCoords
-else
-  print("Invalid location specified")
-end
-end)
-
-    AddCommand("nocashsniper", {"*nocashsniper", "stopsnipe"}, "stops sniping", {}, function()
-        getgenv().enablesniping = false
-return "Cash sniping disabled"
-    end)
-    
-    AddCommand("revenge", {"*revenge"}, "gets revenge on whoever stomped a player of your choice", {}, function(Caller, Args)
-    getgenv().revengemode = true
-    local revenged = Args[1]
-while getgenv().revengemode do
-    wait(0.1)
-if game:GetService("Workspace")[revenged].CharacterDied.Value == true then
-    local killer = game:GetService("Workspace")[revenged].KilledBy.Value
-    print("target player died, " ..killer.. " killed them")
-    print(killer)
-    ExecuteCommand("kill", {killer}, LocalPlayer)
-    wait(11)
-    else
-        print("target player alive")
-end
-end
-end)
-
-AddCommand("unrevenge", {"*unrevenge"}, "stomps avenging players", {}, function(Caller, Args)
-    getgenv().revengemode = false
-end)
-
-    AddCommand("autoarmor", {"*autoarmor"}, "autobuys armor if below a threshold", {}, function()
-        getgenv().autoarmor = true
-        while getgenv().autoarmor do
-            wait(0.01)
-if game:GetService("Players").LocalPlayer.Armor.Value < 49 then
-fireclickdetector(game:GetService("Workspace")["Higher armor {20000$}"].Head.ClickDetector)
-end
-end
-    end)
-    
-    AddCommand("unautoarmor", {"*unautoarmor"}, "stops buying armor", {}, function()
-        getgenv().autoarmor = false
-    end)
-    
-    AddCommand("superbat", {"*superbat"}, "a bat that one shots", {}, function()
-        -- Check the player's backpack for the number of items with the name "Bat"
-local player = game.Players.LocalPlayer
-local backpack = player.Backpack
-local numBats = 0
-for _, item in pairs(backpack:GetChildren()) do
-  if item.Name == "Bat" then
-    numBats = numBats + 1
-  end
-end
-
--- If the player has at least 10 bats, execute the rest of the script
-if numBats >= 10 then
-  local player = game.Players.LocalPlayer
-local character = player.Character
-local mouse = player:GetMouse()
-
-local tool = Instance.new("Tool")
-tool.Name = "SuperBat"
-tool.Parent = player.Backpack
-
-function onClick()
-  for _,obj in next, game.Players.LocalPlayer.Backpack:GetChildren() do
-if obj.Name == "Bat" then
-local equip = game.Players.LocalPlayer.Backpack.Bat
-equip.Parent = game.Players.LocalPlayer.Character
-end
-end
-wait(0.3)
-for i,v in pairs(game:GetService("Players").LocalPlayer.Character:GetChildren())do
-if v.ClassName == "Tool" then
-v:Activate()
-end
-end
-end
-
-
-mouse.Button1Down:Connect(function()
-  if tool.Parent == character then
-    -- The tool is being held
-    onClick()
-  else
-    -- The tool is not being held
-  end
-end)
-  return "use tha tool to equip all ur bats and swing em"
-else
-  -- If the player does not have at least 10 bats, print a message
-  return "You need atleast 10 bats!"
-end
-    end)
-    
-    AddCommand("cashdropper", {"*cashdropper"}, "cashdropper gui", {}, function()
-        local screenGui = Instance.new("ScreenGui")
-local frame = Instance.new("Frame")
-local textBox = Instance.new("TextBox")
-local button1 = Instance.new("TextButton")
-local button2 = Instance.new("TextButton")
-
-screenGui.Name = "CashDropper"
-screenGui.Parent = game.Players.LocalPlayer.PlayerGui
-
-frame.Name = "CashDropperFrame"
-frame.Parent = screenGui
-frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-frame.Position = UDim2.new(0, 250, 0, 250) -- position the frame near the middle left of the screen
-frame.Size = UDim2.new(0, 200, 0, 200)
-
-textBox.Name = "AmountTextBox"
-textBox.Parent = frame
-textBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-textBox.Position = UDim2.new(0, 10, 0, 10)
-textBox.Size = UDim2.new(0, 180, 0, 30)
-textBox.Text = "Enter amount"
-
-button1.Name = "NotificationButton"
-button1.Parent = frame
-button1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-button1.Position = UDim2.new(0, 10, 0, 50)
-button1.Size = UDim2.new(0, 180, 0, 30)
-button1.Text = "Send notification"
-
-button2.Name = "DropCashButton"
-button2.Parent = frame
-button2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-button2.Position = UDim2.new(0, 10, 0, 90)
-button2.Size = UDim2.new(0, 180, 0, 30)
-button2.Text = "Drop cash"
-
--- Button 1 script
-button1.MouseButton1Click:Connect(function()
-   local amount = tonumber(textBox.Text)
-   local neededAmount = amount / 0.7 -- accounting for the 30% deduction
-   game.StarterGui:SetCore("SendNotification", {
-      Title = "Amount needed";
-      Text = "You need to drop $" .. neededAmount .. " to get $" .. amount;
-   })
-end)
-
--- Button 2 script
-button2.MouseButton1Click:Connect(function()
-   local amount = tonumber(textBox.Text)
-   local neededAmount = amount / 0.7 -- accounting for the 30% deduction
-   local event = game:GetService("ReplicatedStorage").WalletRemotes.DropCash
-   event:FireServer(neededAmount)
-end)
-    end)
-
-print("DV hood detected")
-    Utils.Notify(LocalPlayer, "Compatible game detected", "DVH is supported for extra commands! Type a * in the cmds menu to view them", 10);
-end
 
 if game.PlaceId == 10449761463 or 12360882630 then
     AddCommand("heaven", {"*heaven"}, "sends target to heaven", {}, function(Caller, Args)
@@ -10848,7 +8999,8 @@ end
 
     Utils.Notify(LocalPlayer, "Compatible game detected", "SB is supported for extra commands! Type a * in the cmds menu to view them", 10);
     end
-if game.PlaceId == 6708206173 then
+    
+    if game.PlaceId == 6708206173 then
     AddCommand("getknight", {"*getknight"}, "teleports to knight (if available)", {}, function()
     local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
 local gobackto = hrp.CFrame
@@ -10918,8 +9070,8 @@ end)
 AddCommand("boothupdate", {"*boothupdate"}, "sets the text and/or of ur booth", {}, function(Caller, Args)
 local A_1 = "Update"
 local A_2 =  {
-	["DescriptionText"] = Args[1], 
-	["ImageId"] = Args[2] or 0
+	["DescriptionText"] = concat(Args, " "), 
+	["ImageId"] = 0
 }
 local Event = game:GetService("ReplicatedStorage").CustomiseBooth
 Event:FireServer(A_1, A_2)
@@ -10994,37 +9146,11 @@ end)
 Utils.Notify(LocalPlayer, "Compatible game detected", "Rate my avatar is supported for extra commands! Type a * in the cmds menu to view them", 10);
 end
 
--- Get a reference to the Workspace service
-local workspace = game:GetService("Workspace")
-
--- Define a list of the target usernames
-local targetUsernames = {"segclord", "Arovlias"}
-
--- Create a table to store the players that have already been given a crown
-local crownedPlayers = {}
-
--- Create a function that will be called every frame to check the players
-local function checkPlayers()
-  -- Use a loop to check all of the players in the game
-  for _, player in pairs(game.Players:GetPlayers()) do
-    -- Check if the player's username is in the targetUsernames list and if they have already been given a crown
-    if table.find(targetUsernames, player.Name) and not crownedPlayers[player] then
-      -- If it is, add the crown emoji to the beginning of their display name
-      player.Character.Humanoid.DisplayName = "(👑) " .. player.Character.Humanoid.DisplayName
-      
-      -- Add the player to the crownedPlayers table to mark them as having been given a crown
-      crownedPlayers[player] = true
-    end
-  end
-end
-
--- Connect the checkPlayers function to the RenderStepped event
-game:GetService("RunService").RenderStepped:Connect(checkPlayers)
-
-
-Utils.Notify(LocalPlayer, "Modded Version", "You are using a modded admin by Advid#1471", 10);
 Utils.Notify(LocalPlayer, "Loaded", format("script loaded in %.3f seconds", (tick()) - _L.start));
 Utils.Notify(LocalPlayer, "Welcome", "'cmds' to see all of the commands, 'config' to customise the script");
 if (debug.info(2, "f") == nil) then
-    Utils.Notify(LocalPlayer, "Possibly outdated", "Use a loadstring with the github link for latest updates", 10);
+    Utils.Notify(LocalPlayer, "Outdated Script", "use the loadstring to get latest updates", 10);
 end
+_L.LatestCommit = JSONDecode(Services.HttpService, game.HttpGetAsync(game, "https://api.github.com/repos/AdvidFrost/roblox-script/commits?per_page=1&path=Fates%20admin%20modded"))[1]
+wait(1);
+Utils.Notify(LocalPlayer, "Newest Update", format("%s - %s", _L.LatestCommit.commit.message, _L.LatestCommit.commit.author.name));
