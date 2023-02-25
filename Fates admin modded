@@ -6779,8 +6779,7 @@ running = true
 end
 end)
 
-Nifs("Anti Fling Has Loaded.")
-Nifs("Type antioff or antioff to toggle Anti Fling")
+Utils.Notify(LocalPlayer, "Antifling loaded", "type antioff or antion in chat to dis/enable", 10);
 end)
 
 AddCommand("translator", {"googletranslator"}, "activates translator", {}, function(Caller, Args)
