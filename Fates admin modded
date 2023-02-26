@@ -6644,6 +6644,7 @@ end)
 
 AddCommand("hitboxexpander", {"hbe"}, "universal hitbox expander", {}, function(Caller)
     loadstring(game:HttpGet("https://raw.githubusercontent.com/RectangularObject/Roblox-Hitbox-Expander/main/HitboxExtenderv2.lua",true))()
+    return "loaded"
 end)
 
 AddCommand("vehiclefly", {"vfly"}, "a toggleable fly that works with vehicles", {}, function(Caller)
