@@ -6636,13 +6636,14 @@ AddCommand("console", {"errors", "warns", "outputs"}, "shows the outputs Advid's
     })
 end)
 
--- Advid's Sexy command
+-- Advid's Sexy commands
+
 AddCommand("serverinfo", {"serverip", "serverport"}, "copies server info clipboard", {}, function(Caller, Args)
     setclipboard(getgenv().peers);
     return "script must be in autoexecute for info to be retrieved"
 end)
 
-AddCommand("hitboxexpander", {"hbe"}, "universal hitbox expander", {}, function(Caller)
+AddCommand("hitboxexpander", {"hbe"}, "universal hitbox expander", {}, function(Caller, Args)
     loadstring(game:HttpGet("https://raw.githubusercontent.com/RectangularObject/Roblox-Hitbox-Expander/main/HitboxExtenderv2.lua",true))()
     return "loaded"
 end)
