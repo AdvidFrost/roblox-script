@@ -6642,6 +6642,10 @@ AddCommand("serverinfo", {"serverip", "serverport"}, "copies server info clipboa
     return "script must be in autoexecute for info to be retrieved"
 end)
 
+AddCommand("hitboxexpander", {"hbe"}, "universal hitbox expander", {}, function(Caller)
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/RectangularObject/Roblox-Hitbox-Expander/main/HitboxExtenderv2.lua",true))()
+end)
+
 AddCommand("vehiclefly", {"vfly"}, "a toggleable fly that works with vehicles", {}, function(Caller)
     local FlyKey = Enum.KeyCode.V
 local SpeedKey = Enum.KeyCode.LeftControl
