@@ -6686,8 +6686,22 @@ game:GetService'Players'.LocalPlayer.Character['RightUpperArm']:Destroy()
 end
 end)
 
-AddCommand("unloopdeletetools", {"unloopnotools"}, "stops the loopdeletetools command", {}, function(Caller, Args)
-   getgenv().loopdeltools = false
+AddCommand("nolegs", {"legless"}, "deletes yo legs", {}, function(Caller, Args)
+   local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+if humanoid.RigType == Enum.HumanoidRigType.R6 then
+game:GetService'Players'.LocalPlayer.Character['Right Leg']:Destroy()
+game:GetService'Players'.LocalPlayer.Character['Left Leg']:Destroy()
+else
+    game:GetService'Players'.LocalPlayer.Character['LeftFoot']:Destroy()
+game:GetService'Players'.LocalPlayer.Character['RightFoot']:Destroy()
+game:GetService'Players'.LocalPlayer.Character['LeftLowerLeg']:Destroy()
+game:GetService'Players'.LocalPlayer.Character['RightLowerLeg']:Destroy()
+game:GetService'Players'.LocalPlayer.Character['LeftUpperLeg']:Destroy()
+game:GetService'Players'.LocalPlayer.Character['RightUpperLeg']:Destroy()
+end
 end)
 
 AddCommand("bighead", {}, "makes your head big, you need an rthro head!!", {}, function(Caller, Args)
