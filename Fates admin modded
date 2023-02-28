@@ -6340,7 +6340,7 @@ end)
 AddCommand("nojumpcooldown", {}, "removes a jumpcooldown if any in games", {}, function()
     local UserInputService = Services.UserInputService
     local Humanoid = GetHumanoid();
-    local connections = tbl_concat(getconnections(UserInputService.JumpRequest), getconnections(GetPropertyChangedSignal(Humanoid, "FloorMaterial")), getconnections(Humanoid.Jumping));
+    local connections = tbl_concat(getconnection	s(UserInputService.JumpRequest), getconnections(GetPropertyChangedSignal(Humanoid, "FloorMaterial")), getconnections(Humanoid.Jumping));
     for i, v in next, connections do
         if (v.Func and not is_synapse_function(v.Func)) then
             if (Hooks.NoJumpCooldown) then
@@ -6641,6 +6641,11 @@ end)
 AddCommand("serverinfo", {"serverip", "serverport"}, "copies server info clipboard", {}, function(Caller, Args)
     setclipboard(getgenv().peers);
     return "script must be in autoexecute for info to be retrieved"
+end)
+
+AddCommand("antivoid", {"novoid"}, "prevents u from dying to the void", {}, function(Caller, Args)
+    workspace.FallenPartsDestroyHeight = 0/1/0
+    return "enabled"
 end)
 
 AddCommand("punish", {"kill4"}, "punishes a user", {1,"1"}, function(Caller, Args)
@@ -9591,6 +9596,7 @@ local character = player.Character
     end
     end
 end)
+return "enabled"
 end)
 
 AddCommand("clearattackwl", {"*clearattackwl"}, "clears fightbot whitelists", {}, function(Caller, Args)
@@ -9628,50 +9634,6 @@ end)
 AddCommand("fightbot", {"*fightbot"}, "enables a fight bot", {}, function(Caller, Args)
     loadstring(game:HttpGet("https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/Saitama%20battlegrounds%20fight%20bot"))()
     return "rejoin to turn off"
-end)
-
-AddCommand("autofarm", {"*autofarm"}, "only for me rn", {}, function(Caller, Args)
-    -- Define the animation to detect
-local animationToDetect = 12307656616
-
--- Define the target player's name
-local targetPlayerName = "DrippingCxmPies"
-
--- Define a function to check if the target player is playing the animation
-local function checkTargetPlayer()
-    local targetPlayer = game.Players:FindFirstChild(targetPlayerName)
-    if targetPlayer and targetPlayer.Character then
-        local playingTracks = targetPlayer.Character.Humanoid:GetPlayingAnimationTracks()
-        for _, track in ipairs(playingTracks) do
-            if track.Animation.AnimationId == "rbxassetid://" .. tostring(animationToDetect) then
-                print(targetPlayerName .. " is playing the animation with ID " .. animationToDetect)
-                    ExecuteCommand("loopcommand", {"reset", "7"}, LocalPlayer)
-                break
-            end
-        end
-    end
-end
-
--- Call the checkTargetPlayer function every second to continuously check if the target player is playing the animation
-while wait(1) do
-    checkTargetPlayer()
-end
-end)
-
-AddCommand("autofarmmain", {"*autofarmmain"}, "only for me rn", {}, function(Caller, Args)
-while true do
-local player = game:GetService("Players").LocalPlayer
-local tool = game:GetService("Players").LocalPlayer.Backpack["Hunter's Grasp"]
-player.Character.Humanoid:EquipTool(tool)
-wait(0.1)
-for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-     if v:IsA'Tool' then
-          v.Parent = game.Players.LocalPlayer.Backpack;
-     end;
-end;
-ExecuteCommand("refresh", {}, LocalPlayer)
-wait(7)
-end
 end)
 
 AddCommand("autorefresh", {"*autorefresh"}, "autorefreshes ur player at low health", {}, function(Caller, Args)
