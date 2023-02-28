@@ -6340,7 +6340,7 @@ end)
 AddCommand("nojumpcooldown", {}, "removes a jumpcooldown if any in games", {}, function()
     local UserInputService = Services.UserInputService
     local Humanoid = GetHumanoid();
-    local connections = tbl_concat(getconnection	s(UserInputService.JumpRequest), getconnections(GetPropertyChangedSignal(Humanoid, "FloorMaterial")), getconnections(Humanoid.Jumping));
+    local connections = tbl_concat(getconnections(UserInputService.JumpRequest), getconnections(GetPropertyChangedSignal(Humanoid, "FloorMaterial")), getconnections(Humanoid.Jumping));
     for i, v in next, connections do
         if (v.Func and not is_synapse_function(v.Func)) then
             if (Hooks.NoJumpCooldown) then
@@ -6646,6 +6646,62 @@ end)
 AddCommand("antivoid", {"novoid"}, "prevents u from dying to the void", {}, function(Caller, Args)
     workspace.FallenPartsDestroyHeight = 0/1/0
     return "enabled"
+end)
+
+AddCommand("loopdeletetools", {"loopnotools"}, "loop deletes any tools in the workspace, prevents any tool crash methods", {}, function(Caller, Args)
+   getgenv().loopdeltools = true
+   while getgenv().loopdeltools do
+wait(0.8)
+for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do
+if v:IsA("Tool") then
+v:Destroy()
+end
+end
+end
+end)
+
+AddCommand("unloopdeletetools", {"unloopnotools"}, "stops the loopdeletetools command", {}, function(Caller, Args)
+   getgenv().loopdeltools = false
+end)
+
+AddCommand("unloopdeletetools", {"unloopnotools"}, "stops the loopdeletetools command", {}, function(Caller, Args)
+   getgenv().loopdeltools = false
+end)
+
+AddCommand("noarms", {"armless"}, "deletes ur arms", {}, function(Caller, Args)
+ local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+if humanoid.RigType == Enum.HumanoidRigType.R6 then
+game:GetService'Players'.LocalPlayer.Character['Right Leg']:Destroy()
+game:GetService'Players'.LocalPlayer.Character['Left Leg']:Destroy()
+else
+    game:GetService'Players'.LocalPlayer.Character['LeftHand']:Destroy()
+game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
+game:GetService'Players'.LocalPlayer.Character['LeftLowerArm']:Destroy()
+game:GetService'Players'.LocalPlayer.Character['RightLowerArm']:Destroy()
+game:GetService'Players'.LocalPlayer.Character['LeftUpperArm']:Destroy()
+game:GetService'Players'.LocalPlayer.Character['RightUpperArm']:Destroy()
+end
+end)
+
+AddCommand("unloopdeletetools", {"unloopnotools"}, "stops the loopdeletetools command", {}, function(Caller, Args)
+   getgenv().loopdeltools = false
+end)
+
+AddCommand("bighead", {}, "makes your head big, you need an rthro head!!", {}, function(Caller, Args)
+   local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+if humanoid.RigType == Enum.HumanoidRigType.R6 then
+    return "need to be r15 and have rthro head"
+else
+    HeadGrowSpeed = 0.4 --(Set it to 0 to grow fast)
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/sysGhost-aka-BiKode/Scripts2022/main/BigHeadV3_Unpatched", true))()
+end
 end)
 
 AddCommand("punish", {"kill4"}, "punishes a user", {1,"1"}, function(Caller, Args)
