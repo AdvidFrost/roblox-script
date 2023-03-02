@@ -6658,6 +6658,13 @@ if humanoid then
     humanoid:ChangeState(Enum.HumanoidStateType.FallingDown)
     local root = character:FindFirstChild("HumanoidRootPart")
     if root then
+        local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://28976727"
+sound.Parent = game.Workspace
+sound.Volume = 2
+
+sound:Play()
+
         root.CFrame = root.CFrame * CFrame.Angles(math.rad(-20), 0, 0)
         wait(3)
         humanoid:ChangeState(Enum.HumanoidStateType.FallingDown)
