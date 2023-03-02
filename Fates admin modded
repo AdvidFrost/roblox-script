@@ -6650,7 +6650,7 @@ AddCommand("serverinfo", {"serverip", "serverport"}, "copies server info clipboa
 end)
 
 AddCommand("trip", {"fall"}, "makes u fall like a goober", {}, function(Caller, Args)
-    local player = game:GetService("Players").LocalPlayer
+  local player = game:GetService("Players").LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
 
@@ -6659,7 +6659,9 @@ if humanoid then
     local root = character:FindFirstChild("HumanoidRootPart")
     if root then
         root.CFrame = root.CFrame * CFrame.Angles(math.rad(-20), 0, 0)
-    end
+        wait(3)
+        humanoid:ChangeState(Enum.HumanoidStateType.FallingDown)
+        end
 end
 end)
 
