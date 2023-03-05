@@ -9699,7 +9699,14 @@ Utils.Notify(LocalPlayer, "Compatible game detected", "Rate my avatar is support
 end
 
 --Saitama battlegrounds
-if game.PlaceId == 10449761463 or 12360882630 then
+local placeIds = {
+    "12360882630",
+    "10449761463"
+}
+
+local currentPlaceId = tostring(game.PlaceId)
+
+if table.find(placeIds, currentPlaceId) then
     AddCommand("heaven", {"*heaven"}, "sends target to heaven", {}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
     local player = game.Players.LocalPlayer
@@ -9882,7 +9889,7 @@ end
 
 
     Utils.Notify(LocalPlayer, "Compatible game detected", "SB is supported for extra commands! Type a * in the cmds menu to view them", 10);
-    end
+end
 
 Utils.Notify(LocalPlayer, "Loaded", format("script loaded in %.3f seconds", (tick()) - _L.start));
 Utils.Notify(LocalPlayer, "Welcome", "'cmds' to see all of the commands, 'config' to customise the script");
