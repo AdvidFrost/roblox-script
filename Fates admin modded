@@ -6678,6 +6678,33 @@ AddCommand("antivoid", {"novoid"}, "prevents u from dying to the void", {}, func
     return "enabled"
 end)
 
+AddCommand("antichatlogger", {"acl"}, "prevents you from being banned for bad messages in chat", {{"on", "off"}}, function(Caller, Args)
+    local onoroff = Args[1]
+    
+    if onoroff == "on" then
+        local filePath = "Advid's-admin/values and ect/ACL value.txt"
+
+-- Check if the value is already true
+if readfile(filePath) == "true" then
+    return "ACL is already on"
+else
+    writefile(filePath, "true")
+    task.spawn(loadstring(game:HttpGet("https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/antichatlogger", true)))
+    return "ACL turned on (this saves, you dont need to enable it everytime)"
+end
+elseif onoroff == "off" then
+    local filePath = "Advid's-admin/values and ect/ACL value.txt"
+
+-- Check if the value is already false
+if readfile(filePath) == "false" then
+    return "ACL is already off"
+else
+    writefile(filePath, "false")
+    return "ACL turned off (this saves, you dont need to disable it everytime)"
+end
+end
+end)
+
 AddCommand("shaders", {"beautify"}, "Applies some nice lighting and blur to your game (3 variants)", {}, function(Caller, Args)
     -- Define the choice (1, 2, or 3)
 local choice = (Args[1])
@@ -10201,10 +10228,56 @@ for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
         game:GetService("Players").LocalPlayer:Kick("Possible moderator detected! (" .. player.Name .. ")")
     end
 end
-
-
-
     Utils.Notify(LocalPlayer, "Compatible game detected", "SB is supported for extra commands! Type a * in the cmds menu to view them", 10);
+end
+
+-- Anti chat logger
+local folderPath = "Advid's-admin/values and ect"
+local filePath = folderPath.."/ACL value.txt"
+
+-- Check if the folder exists
+if not isfolder(folderPath) then
+    -- Folder doesn't exist, so create it
+    makefolder(folderPath)
+    print("Created new folder for ACL value file")
+end
+
+-- Check if the file exists
+if not isfile(filePath) then
+    -- File doesn't exist, so create it and write "false" as the default value
+    writefile(filePath, "false")
+    print("Created new ACL value file")
+end
+
+-- Read the value from the file
+local aclValue = readfile(filePath)
+
+if aclValue == "true" then
+    local folderPath = "Advid's-admin/values and ect"
+local filePath = folderPath.."/ACL value.txt"
+
+-- Check if the folder exists
+if not isfolder(folderPath) then
+    -- Folder doesn't exist, so create it
+    makefolder(folderPath)
+    print("Created new folder for ACL value file")
+end
+
+-- Check if the file exists
+if not isfile(filePath) then
+    -- File doesn't exist, so create it and write "false" as the default value
+    writefile(filePath, "false")
+    print("Created new ACL value file")
+end
+
+-- Read the value from the file
+local aclValue = readfile(filePath)
+
+if aclValue == "true" then
+task.spawn(loadstring(game:HttpGet("https://raw.githubusercontent.com/AdvidFrost/roblox-script/main/antichatlogger", true)))
+else
+    return
+end
 end
 
 Utils.Notify(LocalPlayer, "Loaded", format("script loaded in %.3f seconds", (tick()) - _L.start));
