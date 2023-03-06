@@ -10235,42 +10235,18 @@ end
 local folderPath = "Advid's-admin/values and ect"
 local filePath = folderPath.."/ACL value.txt"
 
--- Check if the folder exists
 if not isfolder(folderPath) then
     -- Folder doesn't exist, so create it
     makefolder(folderPath)
     print("Created new folder for ACL value file")
 end
 
--- Check if the file exists
 if not isfile(filePath) then
     -- File doesn't exist, so create it and write "false" as the default value
     writefile(filePath, "false")
     print("Created new ACL value file")
 end
 
--- Read the value from the file
-local aclValue = readfile(filePath)
-
-if aclValue == "true" then
-    local folderPath = "Advid's-admin/values and ect"
-local filePath = folderPath.."/ACL value.txt"
-
--- Check if the folder exists
-if not isfolder(folderPath) then
-    -- Folder doesn't exist, so create it
-    makefolder(folderPath)
-    print("Created new folder for ACL value file")
-end
-
--- Check if the file exists
-if not isfile(filePath) then
-    -- File doesn't exist, so create it and write "false" as the default value
-    writefile(filePath, "false")
-    print("Created new ACL value file")
-end
-
--- Read the value from the file
 local aclValue = readfile(filePath)
 
 if aclValue == "true" then
@@ -10279,6 +10255,8 @@ else
     return
 end
 end
+
+
 
 Utils.Notify(LocalPlayer, "Loaded", format("script loaded in %.3f seconds", (tick()) - _L.start));
 Utils.Notify(LocalPlayer, "Welcome", "'cmds' to see all of the commands, 'config' to customise the script");
