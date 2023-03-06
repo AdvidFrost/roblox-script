@@ -6680,7 +6680,7 @@ end)
 
 AddCommand("swordaura2", {"saura2"}, "A sword aura with vfx (client sided obviously)", {}, function(Caller, Args)
     -- zapdos vfx reach
-reach = Args[1] -- increase or decrease with this
+reach = (Args[1]) -- increase or decrease with this
 
 lp=game:service'Players'.LocalPlayer
 pl=lp.Character
