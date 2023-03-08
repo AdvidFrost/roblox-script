@@ -10097,10 +10097,77 @@ game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(
     return "crash attempted, if nothing happened you need swords dummy"
 end)
 
+AddCommand("signbot", {"*signbot"}, "creates a bot that allows players to request signs", {}, function(Caller, Args)
+local cooldown = false
+local triggerPhrase = "!givesigns"
+local defaultMsg = "Hi I'm sign bot! Type !givesigns in chat to receive all the available signs in game!"
+local givingSignsMsg = "Giving all signs now!"
+local cooldownMsg = "You are on cooldown for sign request!"
+local cooldownTime = 5 -- seconds
+
+local function giveSigns()
+    print("Giving signs to " .. game:GetService("Players").LocalPlayer.Name)
+    local A_1 = "Update"
+    local A_2 = {
+        ["DescriptionText"] = givingSignsMsg,
+        ["ImageId"] = 0
+    }
+    local Event = game:GetService("ReplicatedStorage").CustomiseBooth
+    Event:FireServer(A_1, A_2)
+    -- Give the signs here
+end
+
+for _, v in pairs(game:GetService("Players"):GetPlayers()) do
+    if v ~= game:GetService("Players").LocalPlayer then
+        v.Chatted:Connect(function(msg)
+            if msg == triggerPhrase and not cooldown then
+                giveSigns()
+                ExecuteCommand("givetools", {v.Name}, LocalPlayer)
+                cooldown = true
+                print(v.Name .. " triggered the cooldown")
+                local A_1 = "Update"
+                local A_2 = {
+                    ["DescriptionText"] = givingSignsMsg,
+                    ["ImageId"] = 0
+                }
+                local Event = game:GetService("ReplicatedStorage").CustomiseBooth
+                Event:FireServer(A_1, A_2)
+                wait(cooldownTime)
+                cooldown = false
+                local A_1 = "Update"
+                local A_2 = {
+                    ["DescriptionText"] = defaultMsg,
+                    ["ImageId"] = 0
+                }
+                local Event = game:GetService("ReplicatedStorage").CustomiseBooth
+                Event:FireServer(A_1, A_2)
+            elseif cooldown then
+                print(v.Name .. " is on cooldown")
+                local A_1 = "Update"
+                local A_2 = {
+                    ["DescriptionText"] = cooldownMsg,
+                    ["ImageId"] = 0
+                }
+                local Event = game:GetService("ReplicatedStorage").CustomiseBooth
+                Event:FireServer(A_1, A_2)
+            else
+                local A_1 = "Update"
+                local A_2 = {
+                    ["DescriptionText"] = defaultMsg,
+                    ["ImageId"] = 0
+                }
+                local Event = game:GetService("ReplicatedStorage").CustomiseBooth
+                Event:FireServer(A_1, A_2)
+            end
+        end)
+    end
+end
+end)
+
 AddCommand("rate", {"*rate"}, "!rate (player) (stars)", {}, function(Caller, Args)
-local Target = Args[1]
-local A_1 = game:GetService("Players")[Args[1]]
-local A_2 = Args[2]
+local Target = GetPlayer(Args[1]);
+local A_1 = game:GetService("Players")[Target[1]]
+local A_2 = tonumber(Args[2]) or 5
 local Event = game:GetService("ReplicatedStorage").PostRating
 Event:FireServer(A_1, A_2)
 end)
