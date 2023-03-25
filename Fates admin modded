@@ -7226,8 +7226,8 @@ local character = player.Character or player.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
 
 if humanoid.RigType == Enum.HumanoidRigType.R6 then
-game:GetService'Players'.LocalPlayer.Character['Right Leg']:Destroy()
-game:GetService'Players'.LocalPlayer.Character['Left Leg']:Destroy()
+game:GetService'Players'.LocalPlayer.Character['Right Arm']:Destroy()
+game:GetService'Players'.LocalPlayer.Character['Left Arm']:Destroy()
 else
     game:GetService'Players'.LocalPlayer.Character['LeftHand']:Destroy()
 game:GetService'Players'.LocalPlayer.Character['RightHand']:Destroy()
