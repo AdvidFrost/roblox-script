@@ -10301,6 +10301,40 @@ writefile(fileName, "")
 return "cleared whitelisted players"
 end)
 
+AddCommand("airstrike", {"*airstrike"}, "needs genos", {}, function(Caller, Args)
+    local Target = GetPlayer(Args[1]);
+local targetUsername = Target[1]
+
+-- Find the target player
+local targetPlayer = game:GetService("Players"):FindFirstChild(targetUsername)
+if not targetPlayer then
+    print("Target player not found.")
+    return
+end
+
+-- Calculate the offset to teleport the player
+local direction = (targetPlayer.Character.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Unit
+local offset = direction * 115 + Vector3.new(0, 80, 0)
+
+-- Teleport the local player to be 115 studs away from the target player and 80 studs in the air
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position + offset, targetPlayer.Character.HumanoidRootPart.Position)
+
+-- Wait for 0.1 seconds
+wait(0.1)
+
+-- Equip the tool named "Jet Dive" in the player's backpack
+local toolName = "Jet Dive"
+local backpack = game.Players.LocalPlayer:WaitForChild("Backpack")
+local tool = backpack:FindFirstChild(toolName)
+if not tool then
+    print("Tool not found.")
+    return
+end
+tool.Parent = game.Players.LocalPlayer.Character
+game.Players.LocalPlayer.Character.Humanoid:EquipTool(tool)
+ExecuteCommand("refresh", {}, LocalPlayer)
+end)
+
 AddCommand("attackwl", {"*attackwl"}, "makes so whitelisted players arent attacked by the fightbot", {}, function(Caller, Args)
     local Target = GetPlayer(Args[1]);
     local playerName = Target[1].Name
