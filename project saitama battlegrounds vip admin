@@ -1,0 +1,611 @@
+_G.x10damage = false
+_G.x10health = false
+_G.x2health = false
+_G.x2damage = false
+_G.nocooldown = false
+_G.instantultimate = false
+_G.fastrun = false
+_G.fastregen = false
+
+local overseers = {"Advidfrost5", "Npflimflam"}
+
+local playerName = game.Players.LocalPlayer.Name
+local isOverseer = false
+
+for i, v in ipairs(overseers) do
+    if playerName == v then
+        isOverseer = true
+        break
+    end
+end
+
+if isOverseer then
+    print("yes overseer")
+else
+    print("not overseer")
+end
+
+local function onChatMessage(speaker, message)
+    local command = "!kick"
+    
+    if string.sub(message, 1, #command) == command then
+        local argument = string.sub(message, #command + 2)
+        if #argument > 0 then
+            local partialTargetDisplayNameOrUsername = argument
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Function to find the target player using partial display name or username
+local function findTargetPlayer()
+    local targetPlayer = nil
+    
+    for _, player in ipairs(Players:GetPlayers()) do
+        if string.find(string.lower(player.DisplayName), string.lower(partialTargetDisplayNameOrUsername), 1, true) or
+           string.find(string.lower(player.Name), string.lower(partialTargetDisplayNameOrUsername), 1, true) then
+            targetPlayer = player
+            break
+        end
+    end
+    
+    if targetPlayer then
+        print("Target player found: " .. targetPlayer.Name)
+    end
+    
+    return targetPlayer
+end
+
+-- Function to send the kick command
+local function sendKickCommand()
+    -- Check if the LocalPlayer is available
+    if LocalPlayer then
+        -- Find the target player
+        local targetPlayer = findTargetPlayer()
+        
+        if targetPlayer then
+            if targetPlayer == LocalPlayer then
+                local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("Don't bite the hand that feeds you!"), "All")
+            else
+                -- Define the kick command
+                local command = "/kick " .. targetPlayer.Name
+                
+                local isOverseer = false
+
+for i, v in ipairs(overseers) do
+    if speaker == v then
+        isOverseer = true
+        break
+    end
+end
+
+if isOverseer then
+    Players:Chat(command)
+else
+    local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("You aren't an overseer, you can't use this command"), "All")
+end
+            end
+        else
+            local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("Player not found."), "All")
+        end
+    end
+end
+
+sendKickCommand()
+        end
+    end
+end
+
+local function onPlayerAdded(player)
+    player.Chatted:Connect(function(message)
+        onChatMessage(player.Name, message)
+    end)
+end
+
+for _, player in ipairs(game.Players:GetPlayers()) do
+    onPlayerAdded(player)
+end
+
+game.Players.PlayerAdded:Connect(onPlayerAdded)
+
+
+local function clearDummies()
+	local A_1 = {
+		["Goal"] = "VIP Server Power",
+		["power"] = "Clear Dummies"
+	}
+	local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+	Event:FireServer(A_1)
+end
+
+--
+local function commandhelp()
+	while true do
+	    local player = game.Players.LocalPlayer
+		local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("Hello, for more info how to use the free private server commands, type !help in chat."), "All")
+		wait(240) -- Wait for 1 minute and 50 seconds
+	end
+end
+
+-- Main function
+local function main()
+	while true do
+		wait(400) -- Wait for 1 minute and 50 seconds
+		local player = game.Players.LocalPlayer
+		local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("Dummies will be cleared in 10 seconds"), "All")
+		wait(10) -- Wait for 10 seconds
+		clearDummies()
+	end
+end
+
+-- Start the main function with task.spawn
+
+
+local Cooldowns = {}
+
+-- Define function to handle chat messages
+local function onPlayerChatted(player, message)
+    -- Get the lowercased message to make it case-insensitive
+    local lowerMessage = message:lower()
+
+    -- Check if the message is one of the four phrases
+    if lowerMessage == "!nocooldown" or lowerMessage == "!instantultimate" or lowerMessage == "!giveallultimate" or lowerMessage == "!spawndummy" or lowerMessage == "!2xhealth" or lowerMessage == "!2xdamage"  or lowerMessage == "!10xdamage" or lowerMessage == "!10xhealth" or lowerMessage == "!battleroyal" or lowerMessage == "!votekick" or lowerMessage == "!fastregen" or lowerMessage == "!fastrun" or lowerMessage == "!help" or lowerMessage == "!page2" or lowerMessage == "!credits" or lowerMessage == "!page3" or lowerMessage == "!dummyrain" or lowerMessage == "!dummycircle" or lowerMessage == "!shutdown" or lowerMessage == "!ban" or lowerMessage == "!forcebattleroyal" or lowerMessage == "!cleardummies" then
+        -- Check if the player is not in the cooldowns table or the cooldown has passed
+        if not Cooldowns[player.UserId] or os.time() - Cooldowns[player.UserId] >= 5 then
+            -- Update the player's cooldown
+            Cooldowns[player.UserId] = os.time()
+
+            -- Get the player's username
+            local username = player.Name
+
+            -- Print the player's name
+            print(username .. " activated the phrase: " .. message)
+
+            if lowerMessage == "!nocooldown" then
+                -- Execute the remote
+                local A_1 = {
+                    ["Goal"] = "VIP Server Power",
+                    ["power"] = "No Cooldown"
+                }
+                local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+                Event:FireServer(A_1)
+if _G.nocooldown == false then
+    _G.nocooldown = true
+    else
+        _G.nocooldown = false
+        end
+                -- Send private message to the player using SayMessageRequest
+                local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(string.format("/w %s %s", username, "No cooldown set to " .. tostring(_G.nocooldown)), "All")
+
+elseif lowerMessage == "!fastregen" then
+local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "Fast Regen"
+}
+local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+Event:FireServer(A_1)
+if _G.fastregen == false then
+    _G.fastregen = true
+    else
+        _G.fastregen = false
+        end
+local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(string.format("/w %s %s", username, "Fast regen set to " .. tostring(_G.fastregen)), "All")
+                
+elseif lowerMessage == "!2xdamage" then
+local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "2X Damage"
+}
+local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+Event:FireServer(A_1)
+if _G.x2damage == false then
+    _G.x2damage = true
+    else
+        _G.x2damage = false
+        end
+local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(string.format("/w %s %s", username, "2x damage set to " .. tostring(_G.x2damage)), "All")
+elseif lowerMessage == "!2xhealth" then
+    -- Script generated by R2Sv2
+-- R2Sv2 fixed by ButterflyEffect, dragging function DanistyÂ§#9161
+-- Remote Path: game:GetService("Workspace").Live.Npflimflam.Communicate
+ 
+local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "2X Health"
+}
+local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+Event:FireServer(A_1)
+if _G.x2health == false then
+    _G.x2health = true
+    else
+        _G.x2health = false
+        end
+local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(string.format("/w %s %s", username, "2x health set to " .. tostring(_G.x2health)), "All")
+                
+                elseif lowerMessage == "!10xdamage" then
+local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "10X Damage"
+}
+local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+Event:FireServer(A_1)
+if _G.x10damage == false then
+    _G.x10damage = true
+    else
+        _G.x10damage = false
+        end
+local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(string.format("/w %s %s", username, "10x damage set to " .. tostring(_G.x10damage)), "All")
+                elseif lowerMessage == "!help" then
+                    local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("Here are the commands all players are able to use: !fastregen, !battleroyal, !2xdamage, !2xhealth, !10xdamage, !10xhealth, !spawndummy, !giveallultimate. Type !page2 for the next page."), "All")
+                elseif lowerMessage == "!page2" then
+                    local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("!instantultimate, !nocooldown, !fastrun, !credits. Type !page3 for the next page"), "All")
+                elseif lowerMessage == "!credits" then
+                    local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("Created by Advid. DC: Advid 1471"), "All")
+                elseif lowerMessage == "!page3" then
+                    local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("⚠Warning! These commands are only available for overseers (Important ppl). !dummyrain, !kick, !dummycircle, !forcebattleroyal, !cleardummies"), "All")
+elseif lowerMessage == "!10xhealth" then
+    -- Script generated by R2Sv2
+-- R2Sv2 fixed by ButterflyEffect, dragging function DanistyÂ§#9161
+-- Remote Path: game:GetService("Workspace").Live.Npflimflam.Communicate
+ 
+local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "10X Health"
+}
+local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+Event:FireServer(A_1)
+if _G.x10health == false then
+    _G.x10health = true
+    else
+        _G.x10health = false
+        end
+local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(string.format("/w %s %s", username, "10x health set to " .. tostring(_G.x10health)), "All")
+elseif lowerMessage == "!cleardummies" then
+                local isOverseer = false
+
+for i, v in ipairs(overseers) do
+    if username == v then
+        isOverseer = true
+        break
+    end
+end
+
+if isOverseer then
+    print("yes overseer")
+local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "Clear Dummies"
+}
+local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+Event:FireServer(A_1)
+else
+    local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("You aren't an overseer, you can't use this command"), "All")
+end
+elseif lowerMessage == "!dummyrain" then
+                local isOverseer = false
+
+for i, v in ipairs(overseers) do
+    if username == v then
+        isOverseer = true
+        break
+    end
+end
+
+if isOverseer then
+    -- Roblox Teleport Script with Remote Event Execution
+    local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+local gobackto = hrp.CFrame
+local function getRandomPosition(center, radius, yMin, yMax)
+    local angle = math.random() * math.pi * 2
+    local distance = math.random() * radius
+    local x = center.x + math.cos(angle) * distance
+    local z = center.z + math.sin(angle) * distance
+    local y = math.random(yMin, yMax)
+    return Vector3.new(x, y, z)
+end
+
+local function teleportAndExecuteRemote(player, position)
+    player.Character:SetPrimaryPartCFrame(CFrame.new(position))
+
+    local A_1 = {
+        ["Goal"] = "VIP Server Power",
+        ["power"] = "Spawn Dummy"
+    }
+    local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+    Event:FireServer(A_1)
+end
+
+local startPosition = Vector3.new(178, 643, -15)
+local teleportDistance = 300
+local yMin = 1000
+local yMax = 1400
+
+local player = game.Players.LocalPlayer
+local startTime = os.clock()
+local elapsedTime = 0
+local delay = 0.25
+local duration = 15
+
+while elapsedTime < duration do
+    local randomPosition = getRandomPosition(startPosition, teleportDistance, yMin, yMax)
+    teleportAndExecuteRemote(player, randomPosition)
+    wait(delay)
+    elapsedTime = os.clock() - startTime
+end
+wait(2)
+hrp.CFrame = gobackto
+else
+    local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("You aren't an overseer, you can't use this command"), "All")
+end
+
+                elseif lowerMessage == "!fastrun" then
+    -- Script generated by R2Sv2
+-- R2Sv2 fixed by ButterflyEffect, dragging function DanistyÂ§#9161
+-- Remote Path: game:GetService("Workspace").Live.Npflimflam.Communicate
+ 
+local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "Fast Run"
+}
+local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+Event:FireServer(A_1)
+if _G.fastrun == false then
+    _G.fastrun = true
+    else
+        _G.fastrun = false
+        end
+local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(string.format("/w %s %s", username, "Fast run set to " .. tostring(_G.fastrun)), "All")
+                    
+            elseif lowerMessage == "!instantultimate" then
+            -- Execute the remote
+local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "Instant Ultimate"
+}
+local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+Event:FireServer(A_1)
+if _G.instantultimate == false then
+    _G.instantultimate = true
+    else
+        _G.instantultimate = false
+        end
+                -- Send private message to the player using SayMessageRequest
+                local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(string.format("/w %s %s", username, "Instant ultimate set to " .. tostring(_G.instantultimate)), "All")
+                
+            elseif lowerMessage == "!battleroyal" then
+                local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ChatRemote = ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest
+
+local voteCounter = 0
+local voteList = {}
+local requiredVotes = math.round(Players.NumPlayers * 0.75)
+local message = "A battle royal vote has been started, 0/" .. requiredVotes .. " votes needed, type !vote yes to accept the vote. This message expires in 60 seconds."
+local voteActive = true
+
+local function onPlayerAdded(player)
+    player.Chatted:Connect(function(chatMessage)
+        if chatMessage == "!vote yes" and not voteList[player.UserId] and voteActive then
+            voteList[player.UserId] = true
+            voteCounter = voteCounter + 1
+
+            if voteCounter >= requiredVotes then
+                voteActive = false
+                ChatRemote:FireServer("Battle royal vote successful!", "All")
+local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "Battle Royale"
+}
+local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+Event:FireServer(A_1)
+
+            else
+                ChatRemote:FireServer("Vote registered. Current vote count: " .. voteCounter .. "/" .. requiredVotes, "All")
+            end
+        end
+    end)
+end
+
+local function init()
+    for _, player in ipairs(Players:GetPlayers()) do
+        onPlayerAdded(player)
+    end
+    Players.PlayerAdded:Connect(onPlayerAdded)
+end
+
+local function startVote()
+    ChatRemote:FireServer(message, "All")
+    wait(60)
+
+    if voteCounter < requiredVotes and voteActive then
+        voteActive = false
+        ChatRemote:FireServer("Vote expired. Not enough votes.", "All")
+    end
+end
+
+init()
+startVote()
+
+elseif lowerMessage == "!dummycircle" then
+local isOverseer = false
+
+for i, v in ipairs(overseers) do
+    if username == v then
+        isOverseer = true
+        break
+    end
+end
+
+if isOverseer then
+    print("yes overseer")
+    local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+local gobackto = hrp.CFrame
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local localPlayer = Players.LocalPlayer
+local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+local rootPart = character:WaitForChild("HumanoidRootPart")
+local targetPlayerName = username -- Replace this with the target player's name
+
+local circleDiameter = 60
+local circleRadius = circleDiameter / 2
+local incrementAngle = 1 -- Teleport angle increment in degrees
+local circleSpeed = 2 -- Set the speed at which you circle around the target player (in rotations per second)
+local remoteEventInterval = 0.3 -- Set the interval for executing the remote event
+
+local circleCompleted = false
+
+local function findTargetPlayer()
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player.Name == targetPlayerName then
+            return player
+        end
+    end
+    return nil
+end
+
+local function fireRemoteEventLoop()
+    while not circleCompleted do
+        local A_1 = {
+            ["Goal"] = "VIP Server Power",
+            ["power"] = "Spawn Dummy"
+        }
+        local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+        Event:FireServer(A_1)
+        wait(remoteEventInterval)
+    end
+end
+
+local function circleTarget()
+    local targetPlayer = findTargetPlayer()
+
+    if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        local targetPosition = targetPlayer.Character.HumanoidRootPart.Position
+        local timePerRotation = 1 / circleSpeed
+        local timePerIncrement = timePerRotation * (incrementAngle / 360)
+
+        for angle = 0, 360, incrementAngle do
+            local newPosition = Vector3.new(
+                targetPosition.X + circleRadius * math.cos(math.rad(angle)),
+                targetPosition.Y,
+                targetPosition.Z + circleRadius * math.sin(math.rad(angle))
+            )
+            rootPart.CFrame = CFrame.new(newPosition) * CFrame.Angles(0, math.rad(angle + 90), 0)
+            wait(timePerIncrement)
+        end
+        
+        circleCompleted = true -- Signal that the circle is completed
+    else
+        warn("Target player not found or character not available")
+    end
+end
+
+spawn(fireRemoteEventLoop)
+circleTarget()
+wait(0.2)
+hrp.CFrame = gobackto
+else
+    local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("You aren't an overseer, you can't use this command"), "All")
+end
+end
+            elseif lowerMessage == "!giveallultimate" then
+                -- Script generated by R2Sv2
+-- R2Sv2 fixed by ButterflyEffect, dragging function DanistyÂ§#9161
+-- Remote Path: game:GetService("Workspace").Live.Npflimflam.Communicate
+ 
+local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "Give All Ultimate"
+}
+local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+Event:FireServer(A_1)
+
+
+                -- Send private message to the player using SayMessageRequest
+                local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(string.format("/w %s %s", username, "Ultimate given!"), "All")
+            elseif lowerMessage == "!spawndummy" then
+            -- Define the target player's username
+local targetUsername = username
+
+-- Find the target player object by searching through all players
+local targetPlayer = nil
+for _, player in pairs(game.Players:GetPlayers()) do
+    if player.Name == targetUsername then
+        targetPlayer = player
+        break
+    end
+end
+
+-- Make sure we found the target player
+if not targetPlayer then
+    warn("Could not find player with username " .. targetUsername)
+    return
+end
+
+-- Get the local player's current position and rotation
+local originalPosition = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame
+
+-- Teleport the local player to the target player
+game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame
+
+-- Wait a short amount of time for the player to arrive
+wait(0.3)
+
+-- Execute some code here (replace with your own code)
+local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "Spawn Dummy"
+}
+local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+Event:FireServer(A_1)
+
+wait(0.3)
+-- Teleport the local player back to their original position
+game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
+
+local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(string.format("/w %s %s", username, "Dummy spawned"), "All")
+                
+            end
+        end
+    end
+
+-- Define function to handle new players
+local function onPlayerAdded(player)
+    -- Listen for chat messages from the player
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+-- Listen for new players joining the game
+local Players = game:GetService("Players")
+Players.PlayerAdded:Connect(onPlayerAdded)
+
+-- Connect chat event for existing players
+for _, player in ipairs(Players:GetPlayers()) do
+    onPlayerAdded(player)
+end
+task.spawn(main)
+task.spawn(commandhelp)
+print("loaded")
