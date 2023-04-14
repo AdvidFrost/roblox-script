@@ -10339,7 +10339,7 @@ end
 
 -- Check for counter and create or remove billboard gui
 local function checkCounter(player)
-    while wait(1) do
+    while wait(0.1) do
         if player.Character and player.Character:FindFirstChild("Counter") then
             if not player.Character.Head:FindFirstChildOfClass("BillboardGui") then
                 createBillboardGui(player)
