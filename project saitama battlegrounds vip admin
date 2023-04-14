@@ -1,3 +1,4 @@
+local LOCALPLAYEERRRRRRRRRR = game.Players.LocalPlayer
 _G.x10damage = false
 _G.x10health = false
 _G.x2health = false
@@ -7,11 +8,46 @@ _G.instantultimate = false
 _G.fastrun = false
 _G.fastregen = false
 
-local overseers = {"Advidfrost5", "Npflimflam"}
+local theboss = {"Advidfrost5"}
 
+local playerName = game.Players.LocalPlayer.Name
+local isBoss = false
+
+for i, v in ipairs(theboss) do
+    if playerName == v then
+        isBoss = true
+        break
+    end
+end
+
+if isBoss then
+    print("Wassup boss")
+else
+    print("Ay boy you aint the boss")
+end
+
+local folderName = "overseers"
+local fileName = folderName .. "/players.txt"
 local playerName = game.Players.LocalPlayer.Name
 local isOverseer = false
 
+-- Check if the folder and file exist, if not create them
+if not isfolder(folderName) then
+    makefolder(folderName)
+end
+
+if not isfile(fileName) then
+    writefile(fileName, "")
+end
+
+-- Read the file content and split it into a table with usernames
+local fileContent = readfile(fileName)
+local overseers = {}
+for username in fileContent:gmatch("([^\n]+)") do
+    table.insert(overseers, username)
+end
+
+-- Check if the local player is an overseer
 for i, v in ipairs(overseers) do
     if playerName == v then
         isOverseer = true
@@ -19,6 +55,7 @@ for i, v in ipairs(overseers) do
     end
 end
 
+-- Print the result
 if isOverseer then
     print("yes overseer")
 else
@@ -35,7 +72,7 @@ local function onChatMessage(speaker, message)
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
--- Function to find the target player using partial display name or username
+
 local function findTargetPlayer()
     local targetPlayer = nil
     
@@ -54,9 +91,9 @@ local function findTargetPlayer()
     return targetPlayer
 end
 
--- Function to send the kick command
+
 local function sendKickCommand()
-    -- Check if the LocalPlayer is available
+    
     if LocalPlayer then
         -- Find the target player
         local targetPlayer = findTargetPlayer()
@@ -66,10 +103,16 @@ local function sendKickCommand()
                 local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
                 ChatRemote:FireServer(("Don't bite the hand that feeds you!"), "All")
             else
-                -- Define the kick command
+                
                 local command = "/kick " .. targetPlayer.Name
                 
                 local isOverseer = false
+                
+                local fileContent = readfile(fileName)
+local overseers = {}
+for username in fileContent:gmatch("([^\n]+)") do
+    table.insert(overseers, username)
+end
 
 for i, v in ipairs(overseers) do
     if speaker == v then
@@ -78,6 +121,7 @@ for i, v in ipairs(overseers) do
     end
 end
 
+-- Print the result
 if isOverseer then
     Players:Chat(command)
 else
@@ -115,7 +159,7 @@ local function clearDummies()
 		["Goal"] = "VIP Server Power",
 		["power"] = "Clear Dummies"
 	}
-	local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+	local Event = game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
 	Event:FireServer(A_1)
 end
 
@@ -141,43 +185,43 @@ local function main()
 	end
 end
 
--- Start the main function with task.spawn
+
 
 
 local Cooldowns = {}
 
--- Define function to handle chat messages
+
 local function onPlayerChatted(player, message)
-    -- Get the lowercased message to make it case-insensitive
+    
     local lowerMessage = message:lower()
 
-    -- Check if the message is one of the four phrases
+    
     if lowerMessage == "!nocooldown" or lowerMessage == "!instantultimate" or lowerMessage == "!giveallultimate" or lowerMessage == "!spawndummy" or lowerMessage == "!2xhealth" or lowerMessage == "!2xdamage"  or lowerMessage == "!10xdamage" or lowerMessage == "!10xhealth" or lowerMessage == "!battleroyal" or lowerMessage == "!votekick" or lowerMessage == "!fastregen" or lowerMessage == "!fastrun" or lowerMessage == "!help" or lowerMessage == "!page2" or lowerMessage == "!credits" or lowerMessage == "!page3" or lowerMessage == "!dummyrain" or lowerMessage == "!dummycircle" or lowerMessage == "!shutdown" or lowerMessage == "!ban" or lowerMessage == "!forcebattleroyal" or lowerMessage == "!cleardummies" then
-        -- Check if the player is not in the cooldowns table or the cooldown has passed
+        
         if not Cooldowns[player.UserId] or os.time() - Cooldowns[player.UserId] >= 5 then
-            -- Update the player's cooldown
+            
             Cooldowns[player.UserId] = os.time()
 
-            -- Get the player's username
+            
             local username = player.Name
 
-            -- Print the player's name
+            
             print(username .. " activated the phrase: " .. message)
 
             if lowerMessage == "!nocooldown" then
-                -- Execute the remote
+                
                 local A_1 = {
                     ["Goal"] = "VIP Server Power",
                     ["power"] = "No Cooldown"
                 }
-                local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+                local Event = game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
                 Event:FireServer(A_1)
 if _G.nocooldown == false then
     _G.nocooldown = true
     else
         _G.nocooldown = false
         end
-                -- Send private message to the player using SayMessageRequest
+                
                 local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
                 ChatRemote:FireServer(string.format("/w %s %s", username, "No cooldown set to " .. tostring(_G.nocooldown)), "All")
 
@@ -186,7 +230,7 @@ local A_1 =  {
 	["Goal"] = "VIP Server Power", 
 	["power"] = "Fast Regen"
 }
-local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+local Event = game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
 Event:FireServer(A_1)
 if _G.fastregen == false then
     _G.fastregen = true
@@ -201,7 +245,7 @@ local A_1 =  {
 	["Goal"] = "VIP Server Power", 
 	["power"] = "2X Damage"
 }
-local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+local Event = game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
 Event:FireServer(A_1)
 if _G.x2damage == false then
     _G.x2damage = true
@@ -213,13 +257,13 @@ local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEve
 elseif lowerMessage == "!2xhealth" then
     -- Script generated by R2Sv2
 -- R2Sv2 fixed by ButterflyEffect, dragging function DanistyÂ§#9161
--- Remote Path: game:GetService("Workspace").Live.Npflimflam.Communicate
+-- Remote Path: game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
  
 local A_1 =  {
 	["Goal"] = "VIP Server Power", 
 	["power"] = "2X Health"
 }
-local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+local Event = game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
 Event:FireServer(A_1)
 if _G.x2health == false then
     _G.x2health = true
@@ -234,7 +278,7 @@ local A_1 =  {
 	["Goal"] = "VIP Server Power", 
 	["power"] = "10X Damage"
 }
-local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+local Event = game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
 Event:FireServer(A_1)
 if _G.x10damage == false then
     _G.x10damage = true
@@ -251,20 +295,20 @@ local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEve
                 ChatRemote:FireServer(("!instantultimate, !nocooldown, !fastrun, !credits. Type !page3 for the next page"), "All")
                 elseif lowerMessage == "!credits" then
                     local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
-                ChatRemote:FireServer(("Created by Advid. DC: Advid 1471"), "All")
+                ChatRemote:FireServer(("Created by Advid. DC: Advid 1471. Feel free to message me with feedback, questions, or suggestions! :)"), "All")
                 elseif lowerMessage == "!page3" then
                     local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
                 ChatRemote:FireServer(("⚠Warning! These commands are only available for overseers (Important ppl). !dummyrain, !kick, !dummycircle, !forcebattleroyal, !cleardummies"), "All")
 elseif lowerMessage == "!10xhealth" then
     -- Script generated by R2Sv2
 -- R2Sv2 fixed by ButterflyEffect, dragging function DanistyÂ§#9161
--- Remote Path: game:GetService("Workspace").Live.Npflimflam.Communicate
+-- Remote Path: game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
  
 local A_1 =  {
 	["Goal"] = "VIP Server Power", 
 	["power"] = "10X Health"
 }
-local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+local Event = game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
 Event:FireServer(A_1)
 if _G.x10health == false then
     _G.x10health = true
@@ -275,6 +319,12 @@ local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEve
                 ChatRemote:FireServer(string.format("/w %s %s", username, "10x health set to " .. tostring(_G.x10health)), "All")
 elseif lowerMessage == "!cleardummies" then
                 local isOverseer = false
+
+local fileContent = readfile(fileName)
+local overseers = {}
+for username in fileContent:gmatch("([^\n]+)") do
+    table.insert(overseers, username)
+end
 
 for i, v in ipairs(overseers) do
     if username == v then
@@ -289,7 +339,7 @@ local A_1 =  {
 	["Goal"] = "VIP Server Power", 
 	["power"] = "Clear Dummies"
 }
-local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+local Event = game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
 Event:FireServer(A_1)
 else
     local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
@@ -297,6 +347,12 @@ else
 end
 elseif lowerMessage == "!dummyrain" then
                 local isOverseer = false
+
+local fileContent = readfile(fileName)
+local overseers = {}
+for username in fileContent:gmatch("([^\n]+)") do
+    table.insert(overseers, username)
+end
 
 for i, v in ipairs(overseers) do
     if username == v then
@@ -325,7 +381,7 @@ local function teleportAndExecuteRemote(player, position)
         ["Goal"] = "VIP Server Power",
         ["power"] = "Spawn Dummy"
     }
-    local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+    local Event = game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
     Event:FireServer(A_1)
 end
 
@@ -356,13 +412,13 @@ end
                 elseif lowerMessage == "!fastrun" then
     -- Script generated by R2Sv2
 -- R2Sv2 fixed by ButterflyEffect, dragging function DanistyÂ§#9161
--- Remote Path: game:GetService("Workspace").Live.Npflimflam.Communicate
+-- Remote Path: game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
  
 local A_1 =  {
 	["Goal"] = "VIP Server Power", 
 	["power"] = "Fast Run"
 }
-local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+local Event = game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
 Event:FireServer(A_1)
 if _G.fastrun == false then
     _G.fastrun = true
@@ -373,19 +429,19 @@ local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEve
                 ChatRemote:FireServer(string.format("/w %s %s", username, "Fast run set to " .. tostring(_G.fastrun)), "All")
                     
             elseif lowerMessage == "!instantultimate" then
-            -- Execute the remote
+            
 local A_1 =  {
 	["Goal"] = "VIP Server Power", 
 	["power"] = "Instant Ultimate"
 }
-local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+local Event = game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
 Event:FireServer(A_1)
 if _G.instantultimate == false then
     _G.instantultimate = true
     else
         _G.instantultimate = false
         end
-                -- Send private message to the player using SayMessageRequest
+                
                 local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
                 ChatRemote:FireServer(string.format("/w %s %s", username, "Instant ultimate set to " .. tostring(_G.instantultimate)), "All")
                 
@@ -413,7 +469,7 @@ local A_1 =  {
 	["Goal"] = "VIP Server Power", 
 	["power"] = "Battle Royale"
 }
-local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+local Event = game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
 Event:FireServer(A_1)
 
             else
@@ -445,6 +501,12 @@ startVote()
 
 elseif lowerMessage == "!dummycircle" then
 local isOverseer = false
+
+local fileContent = readfile(fileName)
+local overseers = {}
+for username in fileContent:gmatch("([^\n]+)") do
+    table.insert(overseers, username)
+end
 
 for i, v in ipairs(overseers) do
     if username == v then
@@ -488,7 +550,7 @@ local function fireRemoteEventLoop()
             ["Goal"] = "VIP Server Power",
             ["power"] = "Spawn Dummy"
         }
-        local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+        local Event = game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
         Event:FireServer(A_1)
         wait(remoteEventInterval)
     end
@@ -512,7 +574,7 @@ local function circleTarget()
             wait(timePerIncrement)
         end
         
-        circleCompleted = true -- Signal that the circle is completed
+        circleCompleted = true 
     else
         warn("Target player not found or character not available")
     end
@@ -529,13 +591,13 @@ end
             elseif lowerMessage == "!giveallultimate" then
                 -- Script generated by R2Sv2
 -- R2Sv2 fixed by ButterflyEffect, dragging function DanistyÂ§#9161
--- Remote Path: game:GetService("Workspace").Live.Npflimflam.Communicate
+-- Remote Path: game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
  
 local A_1 =  {
 	["Goal"] = "VIP Server Power", 
 	["power"] = "Give All Ultimate"
 }
-local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+local Event = game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
 Event:FireServer(A_1)
 
 
@@ -575,7 +637,7 @@ local A_1 =  {
 	["Goal"] = "VIP Server Power", 
 	["power"] = "Spawn Dummy"
 }
-local Event = game:GetService("Workspace").Live.Npflimflam.Communicate
+local Event = game:GetService("Workspace").Live.LOCALPLAYEERRRRRRRRRR.Communicate
 Event:FireServer(A_1)
 
 wait(0.3)
