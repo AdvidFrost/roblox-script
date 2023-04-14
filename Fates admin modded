@@ -10301,38 +10301,76 @@ writefile(fileName, "")
 return "cleared whitelisted players"
 end)
 
-AddCommand("airstrike", {"*airstrike"}, "needs genos", {}, function(Caller, Args)
-    local Target = GetPlayer(Args[1]);
-local targetUsername = Target[1]
+AddCommand("deathcounternotice", {"*dcnotice"}, "puts a gui on anyone who has death counter enabled", {}, function(Caller, Args)
+    local Players = game:GetService("Players")
 
--- Find the target player
-local targetPlayer = game:GetService("Players"):FindFirstChild(targetUsername)
-if not targetPlayer then
-    print("Target player not found.")
-    return
+-- Create billboard gui function
+local function createBillboardGui(player)
+    local billboardGui = Instance.new("BillboardGui")
+    local textLabel = Instance.new("TextLabel")
+
+    billboardGui.Adornee = player.Character.Head
+    billboardGui.Size = UDim2.new(4, 0, 4, 0)
+    billboardGui.StudsOffset = Vector3.new(0, 2, 0)
+    billboardGui.AlwaysOnTop = true
+    billboardGui.LightInfluence = 1
+    billboardGui.MaxDistance = math.huge
+
+    textLabel.Parent = billboardGui
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.Text = "HAS DEATH COUNTER"
+    textLabel.Font = Enum.Font.Arcade
+    textLabel.TextColor3 = Color3.fromRGB(139, 0, 0)
+    textLabel.TextScaled = true
+
+    billboardGui.Parent = player.Character.Head
 end
 
--- Calculate the offset to teleport the player
-local direction = (targetPlayer.Character.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Unit
-local offset = direction * 115 + Vector3.new(0, 80, 0)
-
--- Teleport the local player to be 115 studs away from the target player and 80 studs in the air
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position + offset, targetPlayer.Character.HumanoidRootPart.Position)
-
--- Wait for 0.1 seconds
-wait(0.1)
-
--- Equip the tool named "Jet Dive" in the player's backpack
-local toolName = "Jet Dive"
-local backpack = game.Players.LocalPlayer:WaitForChild("Backpack")
-local tool = backpack:FindFirstChild(toolName)
-if not tool then
-    print("Tool not found.")
-    return
+-- Remove billboard gui function
+local function removeBillboardGui(player)
+    if player.Character and player.Character:FindFirstChild("Head") then
+        local billboardGui = player.Character.Head:FindFirstChildOfClass("BillboardGui")
+        if billboardGui then
+            billboardGui:Destroy()
+        end
+    end
 end
-tool.Parent = game.Players.LocalPlayer.Character
-game.Players.LocalPlayer.Character.Humanoid:EquipTool(tool)
-ExecuteCommand("refresh", {}, LocalPlayer)
+
+-- Check for counter and create or remove billboard gui
+local function checkCounter(player)
+    while wait(1) do
+        if player.Character and player.Character:FindFirstChild("Counter") then
+            if not player.Character.Head:FindFirstChildOfClass("BillboardGui") then
+                createBillboardGui(player)
+                print(player.Name .. " has a Counter in their character.")
+            end
+        else
+            removeBillboardGui(player)
+        end
+    end
+end
+
+-- Initialize and set up events
+local function initialize()
+    for _, player in ipairs(Players:GetPlayers()) do
+        coroutine.wrap(checkCounter)(player)
+    end
+
+    Players.PlayerAdded:Connect(function(player)
+        player.CharacterAdded:Connect(function()
+            coroutine.wrap(checkCounter)(player)
+        end)
+
+        player.CharacterRemoving:Connect(function()
+            removeBillboardGui(player)
+        end)
+    end)
+end
+
+-- Start the script
+initialize()
+return "enabled"
 end)
 
 AddCommand("attackwl", {"*attackwl"}, "makes so whitelisted players arent attacked by the fightbot", {}, function(Caller, Args)
