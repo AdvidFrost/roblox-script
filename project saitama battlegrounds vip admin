@@ -521,7 +521,7 @@ local yMax = 1400
 local player = game.Players.LocalPlayer
 local startTime = os.clock()
 local elapsedTime = 0
-local delay = 0.25
+local delay = 0.4
 local duration = 15
 
 while elapsedTime < duration do
@@ -659,7 +659,7 @@ local circleDiameter = 60
 local circleRadius = circleDiameter / 2
 local incrementAngle = 1 -- Teleport angle increment in degrees
 local circleSpeed = 2 -- Set the speed at which you circle around the target player (in rotations per second)
-local remoteEventInterval = 0.3 -- Set the interval for executing the remote event
+local remoteEventInterval = 0.5 -- Set the interval for executing the remote event
 
 local circleCompleted = false
 
