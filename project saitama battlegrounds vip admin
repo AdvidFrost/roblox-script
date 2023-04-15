@@ -1,5 +1,5 @@
 local LocalPlayer = game.Players.LocalPlayer
-local discordtoken = "Nzc0NzA4NDgzOTE2MDM4MTY1.GpdNHm.Q2Reda6T-UuHCwLJKgQqDeoxOt1iAkGs0fqiEg"
+local discordtoken = "discord token here (optional but you can use overseer stuff in discord"
 local function discordtoroblox()
 local Players = game:GetService('Players')
 local LP = Players.LocalPlayer
