@@ -135,7 +135,20 @@ _G.nocooldown = false
 _G.instantultimate = false
 _G.fastrun = false
 _G.fastregen = false
-
+_G.loophealing = false
+local function semigodloop()
+    print('hellooo')
+while _G.loophealing do
+    print("hi")
+local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "Heal All"
+}
+local Event = game:GetService("Workspace").Live[LocalPlayer.Name].Communicate
+Event:FireServer(A_1)
+wait(0.1)
+end
+end
 local theboss = {"Advidfrost5"}
 
 local playerName = game.Players.LocalPlayer.Name
@@ -189,6 +202,137 @@ if isOverseer then
 else
     print("not overseer")
 end
+
+local Players = game:GetService("Players")
+local facingDuration = 1
+
+-- Functions
+local function findPlayerByName(name)
+    local lowerName = name:lower()
+
+    for _, player in ipairs(Players:GetPlayers()) do
+        local lowerUsername = player.Name:lower()
+        local lowerDisplayName = player.DisplayName:lower()
+
+        if lowerUsername:find(lowerName) or lowerDisplayName:find(lowerName) then
+            return player
+        end
+    end
+    return nil
+end
+
+local function faceTarget(localPlayer, targetPlayer, duration)
+    local startTime = tick()
+    local targetRootPart = targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+    local localRootPart = localPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+    while tick() - startTime < duration do
+        local targetPosition = targetRootPart.Position
+        local currentPosition = localRootPart.Position
+        local lookVector = (targetPosition - currentPosition).Unit
+
+        localRootPart.CFrame = CFrame.new(currentPosition, currentPosition + lookVector)
+        wait()
+    end
+end
+
+local function teleportToPlayer(localPlayer, targetPlayer)
+    local targetCharacter = targetPlayer.Character
+    local targetRootPart = targetCharacter:FindFirstChild("HumanoidRootPart")
+    local localRootPart = localPlayer.Character:FindFirstChild("HumanoidRootPart")
+    local humanoid = localPlayer.Character:FindFirstChild("Humanoid")
+    local tool = localPlayer.Backpack:FindFirstChild("Red")
+
+    if targetRootPart and localRootPart and humanoid and tool then
+        local originalPosition = localRootPart.CFrame
+
+        -- Equip and activate the tool
+        humanoid:EquipTool(tool)
+        tool:Activate()
+
+        -- Wait for 0.3 seconds
+        wait(0.3)
+
+        local targetPosition = targetRootPart.Position
+        local direction = (localRootPart.Position - targetPosition).Unit
+        local newPosition = targetPosition + direction * 5
+
+        -- Keep the character on the ground
+        newPosition = Vector3.new(newPosition.X, targetPosition.Y, newPosition.Z)
+
+        -- Teleport
+        localRootPart.CFrame = CFrame.new(newPosition)
+
+        -- Unequip the tool
+        for _, v in pairs(localPlayer.Character:GetChildren()) do
+            if v:IsA("Tool") then
+                v.Parent = localPlayer.Backpack
+            end
+        end
+
+        -- Face the target player constantly for 1 second
+        faceTarget(localPlayer, targetPlayer, facingDuration)
+
+        -- Teleport back to the original position
+        localRootPart.CFrame = originalPosition
+    else
+        warn("Target player's HumanoidRootPart, local player's Humanoid, or the Red tool not found")
+    end
+end
+
+local function onChatMessage(speaker, message)
+    local command = "!kill"
+    if string.sub(message, 1, #command) == command then
+        local argument = string.sub(message, #command + 2)
+        if #argument > 0 then
+            local targetPlayerName = argument
+            local localPlayer = Players.LocalPlayer
+            local targetPlayer = findPlayerByName(targetPlayerName)
+            local isOverseer = false
+            local fileContent = readfile(fileName)
+local overseers = {}
+for username in fileContent:gmatch("([^\n]+)") do
+    table.insert(overseers, username)
+end
+
+-- Check if the local player is an overseer
+for i, v in ipairs(overseers) do
+    if speaker == v then
+        isOverseer = true
+        break
+    end
+end
+
+print(isOverseer)
+print(speaker)
+if targetPlayer == localPlayer then
+    local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("You can't kill me!!!!"), "All")
+                else
+            if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") and isOverseer then
+                local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("I'm vengeance."), "All")
+    teleportToPlayer(localPlayer, targetPlayer)
+else
+    local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("Command unavailable. Issues: Not an overseer, or target player is already dead"), "All")
+                end
+            end
+        end
+    end
+end
+
+local function onPlayerAdded(player)
+player.Chatted:Connect(function(message)
+onChatMessage(player.Name, message)
+end)
+end
+
+for _, player in ipairs(game.Players:GetPlayers()) do
+onPlayerAdded(player)
+end
+
+game.Players.PlayerAdded:Connect(onPlayerAdded)
 
 local function onChatMessage(speaker, message)
     local command = "!kick"
@@ -324,7 +468,7 @@ local function onPlayerChatted(player, message)
     local lowerMessage = message:lower()
 
     
-    if lowerMessage == "!nocooldown" or lowerMessage == "!instantultimate" or lowerMessage == "!giveallultimate" or lowerMessage == "!spawndummy" or lowerMessage == "!2xhealth" or lowerMessage == "!2xdamage"  or lowerMessage == "!10xdamage" or lowerMessage == "!10xhealth" or lowerMessage == "!battleroyal" or lowerMessage == "!votekick" or lowerMessage == "!fastregen" or lowerMessage == "!fastrun" or lowerMessage == "!help" or lowerMessage == "!page2" or lowerMessage == "!credits" or lowerMessage == "!page3" or lowerMessage == "!dummyrain" or lowerMessage == "!dummycircle" or lowerMessage == "!shutdown" or lowerMessage == "!ban" or lowerMessage == "!forcebattleroyal" or lowerMessage == "!cleardummies" then
+    if lowerMessage == "!nocooldown" or lowerMessage == "!instantultimate" or lowerMessage == "!giveallultimate" or lowerMessage == "!spawndummy" or lowerMessage == "!2xhealth" or lowerMessage == "!2xdamage"  or lowerMessage == "!10xdamage" or lowerMessage == "!10xhealth" or lowerMessage == "!battleroyal" or lowerMessage == "!votekick" or lowerMessage == "!fastregen" or lowerMessage == "!fastrun" or lowerMessage == "!help" or lowerMessage == "!page2" or lowerMessage == "!credits" or lowerMessage == "!page3" or lowerMessage == "!dummyrain" or lowerMessage == "!dummycircle" or lowerMessage == "!shutdown" or lowerMessage == "!ban" or lowerMessage == "!forcebattleroyal" or lowerMessage == "!cleardummies" or lowerMessage == "!resetcommands" or lowerMessage == "!healall" or lowerMessage == "!semigodall" or lowerMessage == "!bringall" then
         
         if not Cooldowns[player.UserId] or os.time() - Cooldowns[player.UserId] >= 5 then
             
@@ -382,6 +526,44 @@ if _G.x2damage == false then
         end
 local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
                 ChatRemote:FireServer(string.format("/w %s %s", username, "2x damage set to " .. tostring(_G.x2damage)), "All")
+elseif lowerMessage == "!semigodall" then
+               local isOverseer = false
+
+local fileContent = readfile(fileName)
+local overseers = {}
+for username in fileContent:gmatch("([^\n]+)") do
+    table.insert(overseers, username)
+end
+
+for i, v in ipairs(overseers) do
+    if username == v then
+        isOverseer = true
+        break
+    end
+end
+
+if isOverseer then
+    if _G.loophealing then
+        _G.loophealing = false
+        else
+            _G.loophealing = true
+    end
+
+if not _G.semigodexecuted then
+    task.spawn(semigodloop)
+    
+    else
+        print("nah")
+        end
+    local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("Semigod (loophealing) set to " .. tostring(_G.loophealing)), "All")
+                
+    
+
+                else
+                local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("You can't use this command, you aren't an overseer."), "All")
+end
 elseif lowerMessage == "!2xhealth" then
     -- Script generated by R2Sv2
 -- R2Sv2 fixed by ButterflyEffect, dragging function DanistyÂ§#9161
@@ -401,7 +583,23 @@ if _G.x2health == false then
 local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
                 ChatRemote:FireServer(string.format("/w %s %s", username, "2x health set to " .. tostring(_G.x2health)), "All")
                 
-                elseif lowerMessage == "!10xdamage" then
+elseif lowerMessage == "!10xdamage" then
+                local isOverseer = false
+
+local fileContent = readfile(fileName)
+local overseers = {}
+for username in fileContent:gmatch("([^\n]+)") do
+    table.insert(overseers, username)
+end
+
+for i, v in ipairs(overseers) do
+    if username == v then
+        isOverseer = true
+        break
+    end
+end
+
+if isOverseer then
 local A_1 =  {
 	["Goal"] = "VIP Server Power", 
 	["power"] = "10X Damage"
@@ -415,9 +613,13 @@ if _G.x10damage == false then
         end
 local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
                 ChatRemote:FireServer(string.format("/w %s %s", username, "10x damage set to " .. tostring(_G.x10damage)), "All")
+                else
+                    local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("You aren't an overseer, you can't use this command"), "All")
+                end
                 elseif lowerMessage == "!help" then
                     local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
-                ChatRemote:FireServer(("Here are the commands all players are able to use: !fastregen, !battleroyal, !2xdamage, !2xhealth, !10xdamage, !10xhealth, !spawndummy, !giveallultimate. Type !page2 for the next page."), "All")
+                ChatRemote:FireServer(("Here are the commands all players are able to use: !fastregen, !battleroyal, !2xdamage, !2xhealth, !spawndummy, !giveallultimate. Type !page2 for the next page."), "All")
                 elseif lowerMessage == "!page2" then
                     local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
                 ChatRemote:FireServer(("!instantultimate, !nocooldown, !fastrun, !credits. Type !page3 for the next page"), "All")
@@ -426,8 +628,24 @@ local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEve
                 ChatRemote:FireServer(("Created by Advid. DC: Advid 1471. Feel free to message me with feedback, questions, or suggestions! :)"), "All")
                 elseif lowerMessage == "!page3" then
                     local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
-                ChatRemote:FireServer(("⚠Warning! These commands are only available for overseers (Important ppl). !dummyrain, !kick, !dummycircle, !forcebattleroyal, !cleardummies"), "All")
+    ChatRemote:FireServer(("⚠Warning! These commands are only available for overseers (Important ppl). !dummyrain, !kick, !dummycircle, !cleardummies, !resetcommands, !healall, !semigodall, !10xdamage, !10xhealth"), "All")
 elseif lowerMessage == "!10xhealth" then
+    local isOverseer = false
+
+local fileContent = readfile(fileName)
+local overseers = {}
+for username in fileContent:gmatch("([^\n]+)") do
+    table.insert(overseers, username)
+end
+
+for i, v in ipairs(overseers) do
+    if username == v then
+        isOverseer = true
+        break
+    end
+end
+
+if isOverseer then
     -- Script generated by R2Sv2
 -- R2Sv2 fixed by ButterflyEffect, dragging function DanistyÂ§#9161
 -- Remote Path: game:GetService("Workspace").Live[LocalPlayer.Name].Communicate
@@ -445,6 +663,10 @@ if _G.x10health == false then
         end
 local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
                 ChatRemote:FireServer(string.format("/w %s %s", username, "10x health set to " .. tostring(_G.x10health)), "All")
+else
+    local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("You aren't an overseer, you can't use this command"), "All")
+                end
 elseif lowerMessage == "!cleardummies" then
                 local isOverseer = false
 
@@ -556,6 +778,55 @@ if _G.fastrun == false then
 local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
                 ChatRemote:FireServer(string.format("/w %s %s", username, "Fast run set to " .. tostring(_G.fastrun)), "All")
                     
+                    elseif lowerMessage == "!healall" then
+                local isOverseer = false
+
+local fileContent = readfile(fileName)
+local overseers = {}
+for username in fileContent:gmatch("([^\n]+)") do
+    table.insert(overseers, username)
+end
+
+for i, v in ipairs(overseers) do
+    if username == v then
+        isOverseer = true
+        break
+    end
+end
+if isOverseer then
+local targetUsername = username
+
+-- Find the target player object by searching through all players
+local targetPlayer = nil
+for _, player in pairs(game.Players:GetPlayers()) do
+    if player.Name == targetUsername then
+        targetPlayer = player
+        break
+    end
+end
+
+-- Make sure we found the target player
+if not targetPlayer then
+    warn("Could not find player with username " .. targetUsername)
+    return
+end
+
+local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "Heal All"
+}
+local Event = game:GetService("Workspace").Live[LocalPlayer.Name].Communicate
+Event:FireServer(A_1)
+
+
+                -- Send private message to the player using SayMessageRequest
+                local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(string.format("/w %s %s", username, "Healed everyone!"), "All")
+                else
+                local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("You can't use this command, you aren't an overseer."), "All")
+                end
+                
             elseif lowerMessage == "!instantultimate" then
             
 local A_1 =  {
@@ -573,6 +844,65 @@ if _G.instantultimate == false then
                 local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
                 ChatRemote:FireServer(string.format("/w %s %s", username, "Instant ultimate set to " .. tostring(_G.instantultimate)), "All")
                 
+                elseif lowerMessage == "!bringall" then
+            local isOverseer = false
+
+local fileContent = readfile(fileName)
+local overseers = {}
+for username in fileContent:gmatch("([^\n]+)") do
+    table.insert(overseers, username)
+end
+
+for i, v in ipairs(overseers) do
+    if username == v then
+        isOverseer = true
+        break
+    end
+end
+if isOverseer then
+local targetUsername = username
+
+-- Find the target player object by searching through all players
+local targetPlayer = nil
+for _, player in pairs(game.Players:GetPlayers()) do
+    if player.Name == targetUsername then
+        targetPlayer = player
+        break
+    end
+end
+
+if not targetPlayer then
+    warn("Could not find player with username " .. targetUsername)
+    return
+end
+
+-- Get the local player's current position and rotation
+local originalPosition = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame
+
+-- Teleport the local player to the target player
+game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame
+
+-- Wait a short amount of time for the player to arrive
+wait(0.4)
+
+local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "Bring All"
+}
+local Event = game:GetService("Workspace").Live[LocalPlayer.Name].Communicate
+Event:FireServer(A_1)
+
+
+wait(0.5)
+-- Teleport the local player back to their original position
+game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = originalPosition
+
+local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(string.format("/w %s %s", username, "Brought everyone"), "All")
+else
+    local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("You can't use this command, you aren't an overseer."), "All")
+                end
             elseif lowerMessage == "!battleroyal" then
                 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -716,6 +1046,108 @@ else
     local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
                 ChatRemote:FireServer(("You aren't an overseer, you can't use this command"), "All")
 end
+elseif lowerMessage == "!resetcommands" then
+                local isOverseer = false
+
+local fileContent = readfile(fileName)
+local overseers = {}
+for username in fileContent:gmatch("([^\n]+)") do
+    table.insert(overseers, username)
+end
+
+for i, v in ipairs(overseers) do
+    if username == v then
+        isOverseer = true
+        break
+    end
+end
+if isOverseer then
+    if _G.x10damage then
+  local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "10X Damage"
+}
+local Event = game:GetService("Workspace").Live[LocalPlayer.Name].Communicate
+Event:FireServer(A_1)
+  _G.x10damage = false
+end
+
+if _G.x10health then
+  local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "10X Health"
+}
+local Event = game:GetService("Workspace").Live[LocalPlayer.Name].Communicate
+Event:FireServer(A_1)
+  _G.x10health = false
+end
+
+if _G.fastrun then
+  local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "Fast Run"
+}
+local Event = game:GetService("Workspace").Live[LocalPlayer.Name].Communicate
+Event:FireServer(A_1)
+  _G.fastrun = false
+end
+
+if _G.x2health then
+    local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "2X Health"
+}
+local Event = game:GetService("Workspace").Live[LocalPlayer.Name].Communicate
+Event:FireServer(A_1)
+_G.x2health = false
+end
+
+if _G.x2damage then
+    local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "2X Damage"
+}
+local Event = game:GetService("Workspace").Live[LocalPlayer.Name].Communicate
+Event:FireServer(A_1)
+_G.x2damage = false
+end
+if _G.nocooldown then
+    local A_1 = {
+                    ["Goal"] = "VIP Server Power",
+                    ["power"] = "No Cooldown"
+                }
+                local Event = game:GetService("Workspace").Live[LocalPlayer.Name].Communicate
+                Event:FireServer(A_1)
+_G.nocooldown = false
+end
+if _G.instantultimate then
+    local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "Instant Ultimate"
+}
+local Event = game:GetService("Workspace").Live[LocalPlayer.Name].Communicate
+Event:FireServer(A_1)
+_G.instantultimate = false
+end
+if _G.fastregen then
+    local A_1 =  {
+	["Goal"] = "VIP Server Power", 
+	["power"] = "Fast Regen"
+}
+local Event = game:GetService("Workspace").Live[LocalPlayer.Name].Communicate
+Event:FireServer(A_1)
+_G.fastregen = false
+end
+
+local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("All modifiers reset! nocoolown, fastrun, ect."), "All")
+elseif not isOverseer then
+    
+
+                -- Send private message to the player using SayMessageRequest
+                 local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+                ChatRemote:FireServer(("You aren't an overseer, you can use this command."), "All")
+                end
             elseif lowerMessage == "!giveallultimate" then
                 -- Script generated by R2Sv2
 -- R2Sv2 fixed by ButterflyEffect, dragging function DanistyÂ§#9161
