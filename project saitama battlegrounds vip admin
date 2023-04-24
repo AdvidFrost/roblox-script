@@ -628,7 +628,7 @@ local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEve
                 ChatRemote:FireServer(("Created by Advid. DC: Advid 1471. Feel free to message me with feedback, questions, or suggestions! :)"), "All")
                 elseif lowerMessage == "!page3" then
                     local ChatRemote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
-    ChatRemote:FireServer(("⚠Warning! These commands are only available for overseers (Important ppl). !dummyrain, !kick, !dummycircle, !cleardummies, !resetcommands, !healall, !semigodall, !10xdamage, !10xhealth"), "All")
+    ChatRemote:FireServer(("⚠Warning! These commands are only available for overseers (Important ppl). !dummyrain, !kick, !kill, dummycircle, !cleardummies, !resetcommands, !healall, !semigodall, !10xdamage, !10xhealth"), "All")
 elseif lowerMessage == "!10xhealth" then
     local isOverseer = false
 
@@ -911,7 +911,7 @@ local ChatRemote = ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageReque
 local voteCounter = 0
 local voteList = {}
 local requiredVotes = math.round(Players.NumPlayers * 0.75)
-local message = "A battle royal vote has been started, 0/" .. requiredVotes .. " votes needed, type !vote yes to accept the vote. This message expires in 60 seconds."
+local message = "A battle royal vote has begun, 0/" .. requiredVotes .. " votes needed, type !vote yes to accept the vote. This message expires in 60 seconds."
 local voteActive = true
 
 local function onPlayerAdded(player)
