@@ -1,3 +1,5 @@
+local usediscordservice = false
+if usediscordservice then
 local LocalPlayer = game.Players.LocalPlayer
 local discordtoken = "discord token here (optional but you can use overseer stuff in discord"
 local function discordtoroblox()
@@ -125,6 +127,7 @@ task.spawn(function()
 end)
 
 Client:login(discordtoken)
+end
 end
 
 _G.x10damage = false
