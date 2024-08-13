@@ -1,0 +1,258 @@
+-- Load the Mercury Library
+local Mercury = loadstring(game:HttpGet("https://raw.githubusercontent.com/deeeity/mercury-lib/master/src.lua"))()
+
+-- Create the GUI
+local GUI = Mercury:Create{
+    Name = "Realm Rampage",
+    Size = UDim2.fromOffset(600, 400),
+    Theme = Mercury.Themes.Dark,
+    Link = "https://github.com/advidfrost/skibidirampage"
+}
+
+-- Create tabs with appropriate icons
+local PlayerTab = GUI:Tab{
+    Name = "Player",
+    Icon = "rbxassetid://18107224538"
+}
+
+local TeleportsTab = GUI:Tab{
+    Name = "Teleports",
+    Icon = "rbxassetid://12941020168"
+}
+
+local MiscTab = GUI:Tab{
+    Name = "Misc",
+    Icon = "rbxassetid://6034509993"
+}
+
+local CreditsTab = GUI:Tab{
+    Name = "Credits",
+    Icon = "rbxassetid://6026568198"
+}
+
+-- Create toggles for each accessory
+local toggleStates = {}
+local accessoryNames = {"CANTM1", "NoBlock", "Freeze", "M1ING", "Cooldown", "ForwardCD", "NoJump"}
+
+for _, name in ipairs(accessoryNames) do
+    PlayerTab:Toggle{
+        Name = "Destroy " .. name,
+        StartingState = false,
+        Description = "Toggle to destroy " .. name .. " accessory",
+        Callback = function(state)
+            toggleStates[name] = state
+            print(name .. " toggle is now " .. tostring(state))
+        end
+    }
+    toggleStates[name] = false
+end
+
+-- Add combo toggle and dropdown
+local comboEnabled = false
+local comboValue = 1
+
+PlayerTab:Toggle{
+    Name = "Enable Combo Loop",
+    StartingState = false,
+    Description = "Toggle to enable the combo loop",
+    Callback = function(state)
+        comboEnabled = state
+        print("Combo loop is now " .. tostring(state))
+    end
+}
+
+PlayerTab:Dropdown{
+    Name = "Combo Value",
+    StartingText = "Select Combo Value...",
+    Description = "Set the combo value to loop",
+    Items = {
+        {1, 1},
+        {2, 2},
+        {3, 3},
+        {4, 4}
+    },
+    Callback = function(item)
+        comboValue = item
+        print("Combo value set to " .. tostring(item))
+    end
+}
+
+-- Add walkspeed modifier
+local walkspeedEnabled = false
+local walkspeedValue = 16
+
+PlayerTab:Toggle{
+    Name = "Enable Walkspeed Modifier",
+    StartingState = false,
+    Description = "Toggle to enable custom walkspeed",
+    Callback = function(state)
+        walkspeedEnabled = state
+        print("Walkspeed modifier is now " .. tostring(state))
+    end
+}
+
+PlayerTab:Slider{
+    Name = "Walkspeed Value",
+    Default = 16,
+    Min = 16,
+    Max = 300,
+    Callback = function(value)
+        walkspeedValue = value
+        print("Walkspeed value set to " .. tostring(value))
+    end
+}
+
+-- Add velocity fling
+local flingEnabled = false
+local flingPower = 500
+
+MiscTab:Toggle{
+    Name = "Enable Fling",
+    StartingState = false,
+    Description = "Toggle to enable velocity fling",
+    Callback = function(state)
+        flingEnabled = state
+        print("Fling is now " .. tostring(state))
+    end
+}
+
+MiscTab:Slider{
+    Name = "Fling Power",
+    Default = 500,
+    Min = 100,
+    Max = 1000,
+    Callback = function(value)
+        flingPower = value
+        print("Fling power set to " .. tostring(value))
+    end
+}
+
+MiscTab:Button{
+    Name = "Load IY Reborn",
+    Description = "Loads the Infinite Yield Reborn script.",
+    Callback = function()
+        loadstring(game:HttpGet("https://github.com/fuckusfm/infiniteyield-reborn/raw/master/source"))()
+        print("Loaded Infinite Yield Reborn")
+    end
+}
+
+-- Add teleport buttons in Teleports tab
+TeleportsTab:Button{
+    Name = "weird area (laggy)",
+    Description = "Teleports you to somewhere idek",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        if player.Character then
+            player.Character:MoveTo(Vector3.new(-239, 10015, 14826))
+            print("Teleporting to weird area...")
+        end
+    end
+}
+
+TeleportsTab:Button{
+    Name = "red land",
+    Description = "wth is this",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        if player.Character then
+            player.Character:MoveTo(Vector3.new(-1000035, 33, -2))
+            print("Teleporting to red land!!")
+        end
+    end
+}
+
+TeleportsTab:Button{
+    Name = "Middle of the Map",
+    Description = "Teleports you to the middle of the map",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        if player.Character then
+            player.Character:MoveTo(Vector3.new(-449, 35, -448))
+            print("Teleporting to the middle of the map...")
+        end
+    end
+}
+
+-- Add credits
+CreditsTab:Button{
+    Name = "Credits",
+    Description = "Script created by advidfrost",
+    Callback = function()
+        print("Credits: advidfrost")
+        GUI:Notification{
+            Title = "Credits",
+            Text = "Script created by advidfrost",
+            Duration = 3,
+        }
+    end
+}
+
+-- Function to destroy accessories
+local function destroyAccessories()
+    local player = game.Players.LocalPlayer
+    local character = player.Character
+    if character then
+        for _, accessory in pairs(character:GetChildren()) do
+            if accessory:IsA("Accessory") and toggleStates[accessory.Name] then
+                print("Destroying " .. accessory.Name)
+                accessory:Destroy()
+            end
+        end
+    end
+end
+
+-- Function to set combo attribute
+local function setComboAttribute()
+    local player = game.Players.LocalPlayer
+    if player.Character then
+        player.Character:SetAttribute("Combo", comboValue)
+    end
+end
+
+-- Function to set walkspeed
+local function setWalkspeed()
+    local player = game.Players.LocalPlayer
+    if player.Character and player.Character:FindFirstChild("Humanoid") then
+        player.Character.Humanoid.WalkSpeed = walkspeedValue
+    end
+end
+
+-- Velocity-based fling function
+local function velocityFling()
+    local player = game.Players.LocalPlayer
+    local character = player.Character
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        local hrp = character.HumanoidRootPart
+        local oldVelocity = hrp.Velocity
+        
+        hrp.Velocity = Vector3.new(flingPower, flingPower, flingPower)
+        game:GetService("RunService").RenderStepped:Wait()
+        hrp.Velocity = oldVelocity
+    end
+end
+
+-- Start the loop to check and apply various features
+spawn(function()
+    while wait(0.01) do
+        for name, state in pairs(toggleStates) do
+            if state then
+                destroyAccessories()
+            end
+        end
+        if comboEnabled then
+            setComboAttribute()
+        end
+        if walkspeedEnabled then
+            setWalkspeed()
+        end
+        if flingEnabled then
+            velocityFling()
+        end
+    end
+end)
+
+-- Add credit
+GUI:Credit{
+    Name = "advidfrost",
+    Description = "Created this sigma script",
+}
