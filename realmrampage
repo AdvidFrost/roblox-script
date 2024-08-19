@@ -5,11 +5,14 @@ local window = Flux:Window("Realm Rampage", "join discord :)", Color3.fromRGB(25
 local PlayerTab = window:Tab("Player", "rbxassetid://18107224538")
 local TeleportsTab = window:Tab("Teleports", "rbxassetid://12941020168")
 local MiscTab = window:Tab("Misc", "rbxassetid://6034509993")
+local EmotesTab = window:Tab("Emotes", "rbxassetid://11932783331")
 local CreditsTab = window:Tab("Credits", "rbxassetid://6026568198")
 
 local toggleStates = {}
 
 -- Player Tab
+PlayerTab:Label("State Toggles")
+
 PlayerTab:Toggle("Fast M1", "Toggle to m1 really fast (best with no freeze)", false, function(state)
     toggleStates.CANTM1 = state
 end)
@@ -49,6 +52,8 @@ PlayerTab:Dropdown("Combo Value", {"1", "2", "3", "4"}, function(selected)
     comboValue = tonumber(selected)
 end)
 
+PlayerTab:Label("Movement Modifiers")
+
 local walkspeedEnabled = false
 local walkspeedValue = 16
 
@@ -59,6 +64,73 @@ end)
 PlayerTab:Slider("Walkspeed Value", "Set custom walkspeed value", 16, 300, 16, function(value)
     walkspeedValue = value
 end)
+
+local jumpHeightEnabled = false
+local jumpHeightValue = 7.2
+
+PlayerTab:Toggle("Enable Jump Height Modifier", "Toggle to enable custom jump height", false, function(state)
+    jumpHeightEnabled = state
+end)
+
+PlayerTab:Slider("Jump Height Value", "Set custom jump height value", 7.2, 50, 7.2, function(value)
+    jumpHeightValue = value
+end)
+
+PlayerTab:Label("Domain Clash Helper")
+
+local domainClashEnabled = false
+
+PlayerTab:Toggle("Enable Domain Clash Helper", "Toggle to always win domain clashes", false, function(state)
+    domainClashEnabled = state
+    if state then
+        loadDomainClashHelper()
+    end
+end)
+
+-- Function to load Domain Clash Helper
+function loadDomainClashHelper()
+    local player = game.Players.LocalPlayer
+    local UIS = game:GetService("UserInputService")
+    local lastMovementTime = 0
+
+    local function sendNotification(message)
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Spacebar Spam";
+            Text = message;
+            Duration = 2;
+        })
+    end
+
+    sendNotification("Domain Clash Helper Activated")
+
+    local keyFrame = player:WaitForChild("PlayerGui"):WaitForChild("MainUI")
+                          :WaitForChild("Domain"):WaitForChild("Clashing")
+                          :WaitForChild("Key")
+
+    local lastPosition = keyFrame.AbsolutePosition
+
+    local function spamSpacebar()
+        local endTime = tick() + 3
+        while tick() < endTime and domainClashEnabled do
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.Space, false, game)
+            wait(0.2)
+        end
+        game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.Space, false, game)
+    end
+
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if not domainClashEnabled then return end
+        local currentTime = tick()
+        local currentPosition = keyFrame.AbsolutePosition
+
+        if currentPosition ~= lastPosition and (currentTime - lastMovementTime) > 30 then
+            spamSpacebar()
+            lastMovementTime = currentTime
+        end
+
+        lastPosition = currentPosition
+    end)
+end
 
 -- Teleports Tab
 local function teleportTo(x, y, z)
@@ -83,6 +155,56 @@ end)
 -- Misc Tab
 MiscTab:Button("Load IY Reborn", "Loads the Infinite Yield Reborn script", function()
     loadstring(game:HttpGet("https://github.com/fuckusfm/infiniteyield-reborn/raw/master/source"))()
+end)
+
+local EmoteNames = {}
+for _, emote in pairs(game:GetService("ReplicatedStorage").Emotes:GetChildren()) do
+    table.insert(EmoteNames, emote.Name)
+end
+
+local SelectedEmote = EmoteNames[1]
+local LoopEmotes = false
+
+EmotesTab:Dropdown("Select Emote", EmoteNames, function(selected)
+    SelectedEmote = selected
+end)
+
+EmotesTab:Toggle("Loop Emotes", "Toggle to loop the selected emote", false, function(state)
+    LoopEmotes = state
+end)
+
+local function PlayEmote()
+    local args = {
+        [1] = {
+            ["Name"] = SelectedEmote,
+            ["Type"] = "PlayEmote"
+        }
+    }
+    game:GetService("ReplicatedStorage"):WaitForChild("Replicate"):FireServer(unpack(args))
+end
+
+local function WaitForEmoteToFinish()
+    local character = game.Players.LocalPlayer.Character
+    if character then
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.AnimationPlayed:Wait()
+        end
+    end
+end
+
+EmotesTab:Button("Play Emote", "Click to play the selected emote", function()
+    if LoopEmotes then
+        spawn(function()
+            while LoopEmotes do
+                PlayEmote()
+                WaitForEmoteToFinish()
+                wait(0.1) -- Small delay to prevent potential issues
+            end
+        end)
+    else
+        PlayEmote()
+    end
 end)
 
 -- Credits Tab
@@ -141,6 +263,9 @@ local function updateCharacter()
         end
         if walkspeedEnabled and player.Character:FindFirstChild("Humanoid") then
             player.Character.Humanoid.WalkSpeed = walkspeedValue
+        end
+        if jumpHeightEnabled and player.Character:FindFirstChild("Humanoid") then
+            player.Character.Humanoid.JumpHeight = jumpHeightValue
         end
     end
 end
