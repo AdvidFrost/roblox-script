@@ -132,6 +132,43 @@ function loadDomainClashHelper()
     end)
 end
 
+PlayerTab:Label("Black Flash Helper")
+
+local blackFlashEnabled = false
+local blackFlashDelay = 0.5
+
+PlayerTab:Toggle("Enable Black Flash Helper", "Toggle to auto-press R after manual R press", false, function(state)
+    blackFlashEnabled = state
+end)
+
+PlayerTab:Slider("Black Flash Delay", "Set delay for auto R press (seconds)", 0, 100, 41, function(value)
+    blackFlashDelay = value / 100
+end)
+
+local UserInputService = game:GetService("UserInputService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
+-- Flag to prevent the script from triggering on its own virtual input
+local ignoreNextPress = false
+
+-- Function to simulate key press
+local function simulateKeyPress()
+    ignoreNextPress = true
+    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.R, false, game)
+    wait(0.05) -- Short delay to simulate a key press
+    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.R, false, game)
+    ignoreNextPress = false
+end
+
+-- Connect the input event
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if input.KeyCode == Enum.KeyCode.R and not gameProcessed and not ignoreNextPress and blackFlashEnabled then
+        -- Wait for the specified delay before simulating the key press
+        wait(blackFlashDelay)
+        simulateKeyPress()
+    end
+end)
+
 -- Teleports Tab
 local function teleportTo(x, y, z)
     local player = game.Players.LocalPlayer
@@ -145,7 +182,7 @@ TeleportsTab:Button("Weird Area (Laggy)", "Teleports you to somewhere idek", fun
 end)
 
 TeleportsTab:Button("Red Land", "wth is this", function()
-    teleportTo(-1000035, 33, -2)
+    teleportTo(-899533, 38, -44)
 end)
 
 TeleportsTab:Button("Middle of the Map", "Teleports you to the middle of the map", function()
@@ -204,6 +241,25 @@ EmotesTab:Button("Play Emote", "Click to play the selected emote", function()
         end)
     else
         PlayEmote()
+    end
+end)
+
+EmotesTab:Label("Other Features")
+
+EmotesTab:Button("Give All Emotes", "Click to get all emotes, emotes in your wheel stay after leaving!", function()
+    local allEmotes = {}
+    for _, emote in pairs(game:GetService("ReplicatedStorage").Emotes:GetChildren()) do
+        table.insert(allEmotes, emote.Name)
+    end
+    
+    local formattedEmotes = '["' .. table.concat(allEmotes, '","') .. '"]'
+    local player = game.Players.LocalPlayer
+    
+    if player then
+        player:SetAttribute("OwnedEmotes", formattedEmotes)
+        Flux:Notification("All emotes added to locker!", "OK")
+    else
+        Flux:Notification("Failed to add emotes. Player not found.", "OK")
     end
 end)
 
