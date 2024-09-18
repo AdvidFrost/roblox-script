@@ -956,6 +956,8 @@ local function onScriptLoaded()
 if not onSolara then
     Flux:Notification("join discord pls", "wow okay")
     inviteToDiscord()
+else do
+Flux:Notification("join discord pls", "wow okay")
 end
 
 
