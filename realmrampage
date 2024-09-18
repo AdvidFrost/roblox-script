@@ -1,3 +1,4 @@
+onSolara = true
 local Flux = loadstring(game:HttpGet("https://raw.githubusercontent.com/weakhoes/Roblox-UI-Libs/main/Flux%20Lib/Flux%20Lib%20Source.lua"))()
 
 local window = Flux:Window("Realm Rampage", "join discord :)", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightControl)
@@ -958,6 +959,8 @@ if onSolara == false then
     inviteToDiscord()
 else do
 Flux:Notification("script loaded", "nice")
+end
+end
 end
 
 
