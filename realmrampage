@@ -6,9 +6,70 @@ local PlayerTab = window:Tab("Player", "rbxassetid://18107224538")
 local TeleportsTab = window:Tab("Teleports", "rbxassetid://12941020168")
 local MiscTab = window:Tab("Misc", "rbxassetid://6034509993")
 local EmotesTab = window:Tab("Emotes", "rbxassetid://11932783331")
+local AnimationsTab = window:Tab("Animations", "rbxassetid://10709769841")
+local DomainTab = window:Tab("Domain", "rbxassetid://6026568198")
 local CreditsTab = window:Tab("Credits", "rbxassetid://6026568198")
 
+local function inviteToDiscord()
+    local inviteCode = "TyBwFtbhrz"
+    if syn and syn.request then
+        syn.request({
+            Url = "http://127.0.0.1:6463/rpc?v=1",
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json",
+                ["Origin"] = "https://discord.com"
+            },
+            Body = game:GetService("HttpService"):JSONEncode({
+                cmd = "INVITE_BROWSER",
+                args = {
+                    code = inviteCode
+                },
+                nonce = game:GetService("HttpService"):GenerateGUID(false)
+            }),
+        })
+    elseif http and http.request then
+        http.request({
+            Url = "http://127.0.0.1:6463/rpc?v=1",
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json",
+                ["Origin"] = "https://discord.com"
+            },
+            Body = game:GetService("HttpService"):JSONEncode({
+                cmd = "INVITE_BROWSER",
+                args = {
+                    code = inviteCode
+                },
+                nonce = game:GetService("HttpService"):GenerateGUID(false)
+            }),
+        })
+    else
+        setclipboard("https://discord.gg/" .. inviteCode)
+        Flux:Notification("Discord invite copied to clipboard!", "OK")
+    end
+end
+
+local respawnCooldown = false
+local respawnTimer = 0
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local DESTINATION = Vector3.new(-185, 10006, 14811)
 local toggleStates = {}
+
+local function handleRespawnCooldown()
+    respawnCooldown = true
+    respawnTimer = 2  -- 2-second cooldown
+    
+    spawn(function()
+        while respawnTimer > 0 do
+            wait(0.1)
+            respawnTimer = respawnTimer - 0.1
+        end
+        respawnCooldown = false
+    end)
+end
 
 -- Player Tab
 PlayerTab:Label("State Toggles")
@@ -76,72 +137,43 @@ PlayerTab:Slider("Jump Height Value", "Set custom jump height value", 7.2, 50, 7
     jumpHeightValue = value
 end)
 
-PlayerTab:Label("Domain Clash Helper")
-
-local domainClashEnabled = false
-
-PlayerTab:Toggle("Enable Domain Clash Helper", "Toggle to always win domain clashes", false, function(state)
-    domainClashEnabled = state
-    if state then
-        loadDomainClashHelper()
-    end
-end)
-
--- Function to load Domain Clash Helper
-function loadDomainClashHelper()
+local function gotopos(x, y, z)
     local player = game.Players.LocalPlayer
-    local UIS = game:GetService("UserInputService")
-    local lastMovementTime = 0
-
-    local function sendNotification(message)
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "Spacebar Spam";
-            Text = message;
-            Duration = 2;
-        })
+    if player.Character then
+        player.Character:MoveTo(Vector3.new(x, y, z))
     end
-
-    sendNotification("Domain Clash Helper Activated")
-
-    local keyFrame = player:WaitForChild("PlayerGui"):WaitForChild("MainUI")
-                          :WaitForChild("Domain"):WaitForChild("Clashing")
-                          :WaitForChild("Key")
-
-    local lastPosition = keyFrame.AbsolutePosition
-
-    local function spamSpacebar()
-        local endTime = tick() + 3
-        while tick() < endTime and domainClashEnabled do
-            game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.Space, false, game)
-            wait(0.2)
-        end
-        game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.Space, false, game)
-    end
-
-    game:GetService("RunService").RenderStepped:Connect(function()
-        if not domainClashEnabled then return end
-        local currentTime = tick()
-        local currentPosition = keyFrame.AbsolutePosition
-
-        if currentPosition ~= lastPosition and (currentTime - lastMovementTime) > 30 then
-            spamSpacebar()
-            lastMovementTime = currentTime
-        end
-
-        lastPosition = currentPosition
-    end)
 end
 
-PlayerTab:Label("Black Flash Helper")
+TeleportsTab:Button("Weird Area (Laggy)", "Teleports you to somewhere idek", function()
+print('test')
+    gotopos(-194, 10008, 14811)
+end)
+
+TeleportsTab:Button("Red Land", "wth is this", function()
+print('test')
+    gotopos(-899533, 38, -44)
+end)
+
+TeleportsTab:Button("Middle of the Map", "Teleports you to the middle of the map", function()
+    gotopos(526, 301, -291)
+    print('test')
+end)
+
+MiscTab:Label("Infinite Yield Reborn")
+MiscTab:Button("Load IY Reborn", "Loads the Infinite Yield Reborn script", function()
+    loadstring(game:HttpGet("https://storage.iyr.lol/legacy-iyr/source"))()
+end)
+
+MiscTab:Label("Black Flash Helper")
 
 local blackFlashEnabled = false
 local blackFlashDelay = 0.5
 
-PlayerTab:Toggle("Enable Black Flash Helper", "Toggle to auto-press R after manual R press", false, function(state)
+MiscTab:Toggle("Enable Black Flash Helper", "Toggle to auto-press R after manual R press", false, function(state)
     blackFlashEnabled = state
 end)
 
-PlayerTab:Slider("Black Flash Delay", "Set delay for auto R press (seconds)", 0, 100, 41, function(value)
+MiscTab:Slider("Black Flash Delay", "Set delay for auto R press (seconds)", 0, 100, 41, function(value)
     blackFlashDelay = value / 100
 end)
 
@@ -169,30 +201,238 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
--- Teleports Tab
-local function teleportTo(x, y, z)
-    local player = game.Players.LocalPlayer
-    if player.Character then
-        player.Character:MoveTo(Vector3.new(x, y, z))
+MiscTab:Label("Skill Bring")
+
+local regularBringEnabled = false
+local allBringEnabled = false
+local selectedLocation = "Default"
+
+MiscTab:Toggle("Regular Bring", "Toggle for regular brings", false, function(state)
+    regularBringEnabled = state
+    if state then
+        loadRegularBringScript()
+    end
+end)
+
+MiscTab:Toggle("All Bring", "Toggle for all brings", false, function(state)
+    allBringEnabled = state
+    if state then
+        loadAllBringScript()
+    end
+end)
+
+MiscTab:Dropdown("Locations", {"void", "skyblock"}, function(selected)
+    selectedLocation = selected
+    updateBringDestination(selected)
+end)
+
+-- Regular Bring Script
+function loadRegularBringScript()
+    local LocalPlayer = Players.LocalPlayer
+
+    local ANIMATION_IDS = {
+        ["17334373908"] = {waitBefore = 1, waitAt = 2},
+        ["18132953876"] = {waitBefore = 1.5, waitAt = 1.5},
+        ["17147384246"] = {waitBefore = 1.5, waitAt = 1.5},
+        ["17173007436"] = {waitBefore = 1.5, waitAt = 1.5},
+        ["124252923387937"] = {waitBefore = 0.3, waitAt = 1.5},
+        ["94942503786924"] = {waitBefore = 0.5, waitAt = 2},
+        ["104531813000057"] = {waitBefore = 0.5, waitAt = 2},
+        ["17657186726"] = {waitBefore = 0.5, waitAt = 2},
+        ["17647684136"] = {waitBefore = 0.3, waitAt = 2},
+        ["18485162457"] = {waitBefore = 0.5, waitAt = 2}
+    }
+
+    local isTeleporting = false
+    local originalPosition = nil
+
+    local function teleportSequence(waitBefore, waitAt)
+        if respawnCooldown or not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then 
+            print("Teleport sequence canceled: Cooldown active or Character/HumanoidRootPart not found")
+            return 
+        end
+        
+        isTeleporting = true
+        originalPosition = LocalPlayer.Character.HumanoidRootPart.Position
+        
+        print("Teleport sequence started. Waiting before teleport:", waitBefore)
+        task.wait(waitBefore)
+        
+        print("Teleporting to destination")
+        LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(DESTINATION))
+        
+        print("Waiting at destination:", waitAt)
+        task.wait(waitAt)
+        
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            print("Returning to original position")
+            LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(originalPosition))
+        else
+            print("Failed to return: Character or HumanoidRootPart not found")
+        end
+        
+        isTeleporting = false
+        print("Teleport sequence completed")
+    end
+
+    local function onAnimationPlayed(animTrack)
+        if isTeleporting or not regularBringEnabled or respawnCooldown then return end
+        
+        local animationId = animTrack.Animation.AnimationId:match("%d+")
+        print("Animation played:", animationId)
+        
+        if ANIMATION_IDS[animationId] then
+            print("Matching animation found. Starting teleport sequence")
+            teleportSequence(ANIMATION_IDS[animationId].waitBefore, ANIMATION_IDS[animationId].waitAt)
+        end
+    end
+
+    local function setupAnimationDetection()
+        local character = LocalPlayer.Character
+        if not character then 
+            print("Character not found. Waiting for character...")
+            character = LocalPlayer.CharacterAdded:Wait()
+            handleRespawnCooldown()  -- Add cooldown when character is added
+        end
+        
+        local humanoid = character:WaitForChild("Humanoid")
+        print("Humanoid found. Setting up animation detection")
+        
+        humanoid.AnimationPlayed:Connect(onAnimationPlayed)
+    end
+
+    setupAnimationDetection()
+    LocalPlayer.CharacterAdded:Connect(function(char)
+        setupAnimationDetection()
+        handleRespawnCooldown()  -- Add cooldown when character is added
+    end)
+end
+
+-- All Bring Script
+function loadAllBringScript()
+    local LocalPlayer = Players.LocalPlayer
+
+    local ANIMATION_IDS = {
+        ["18400938867"] = {
+            startDelay = 0,
+            teleportDuration = 2,
+            endDelay = 0,
+            returnDelay = 6
+        },
+        ["17806727401"] = {
+            startDelay = 5,
+            teleportDuration = 2.1,
+            endDelay = 0,
+            returnDelay = 1
+        }
+    }
+    local TELEPORT_DELAY = 0.1
+    local TELEPORT_DISTANCE = 7
+
+    local isTeleporting = false
+    local originalPosition = nil
+
+    local function getTeleportPosition(targetPlayer)
+        local targetCharacter = targetPlayer.Character
+        if not targetCharacter then return nil end
+        
+        local targetRoot = targetCharacter:FindFirstChild("HumanoidRootPart")
+        if not targetRoot then return nil end
+        
+        local direction = (targetRoot.Position - LocalPlayer.Character.HumanoidRootPart.Position).Unit
+        return targetRoot.Position + direction * TELEPORT_DISTANCE
+    end
+
+    local function teleportToPlayers(config)
+        if respawnCooldown or not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then 
+            print("Teleport sequence canceled: Cooldown active or Character/HumanoidRootPart not found")
+            return 
+        end
+        
+        originalPosition = LocalPlayer.Character.HumanoidRootPart.Position
+        isTeleporting = true
+        
+        print("Starting teleport sequence. Waiting for start delay:", config.startDelay)
+        task.wait(config.startDelay)
+        
+        local startTime = tick()
+        print("Teleporting to players")
+        while tick() - startTime < config.teleportDuration do
+            local playerList = Players:GetPlayers()
+            for _, player in ipairs(playerList) do
+                if player ~= LocalPlayer then
+                    local teleportPosition = getTeleportPosition(player)
+                    if teleportPosition then
+                        LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(teleportPosition))
+                        task.wait(TELEPORT_DELAY)
+                    end
+                end
+            end
+        end
+        
+        print("Finished teleporting to players. Waiting for end delay:", config.endDelay)
+        task.wait(config.endDelay)
+        
+        print("Teleporting to set destination")
+        LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(DESTINATION))
+        
+        print("Waiting for return delay:", config.returnDelay)
+        task.wait(config.returnDelay)
+        
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            print("Returning to original position")
+            LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(originalPosition))
+        else
+            print("Failed to return: Character or HumanoidRootPart not found")
+        end
+        
+        isTeleporting = false
+        print("Teleport sequence completed")
+    end
+
+    local function onAnimationPlayed(animTrack)
+        if isTeleporting or not allBringEnabled or respawnCooldown then return end
+        
+        local animationId = animTrack.Animation.AnimationId:match("%d+")
+        print("Animation played:", animationId)
+        
+        if ANIMATION_IDS[animationId] then
+            print("Matching animation found. Starting teleport sequence")
+            teleportToPlayers(ANIMATION_IDS[animationId])
+        end
+    end
+
+    local function setupAnimationDetection()
+        local character = LocalPlayer.Character
+        if not character then 
+            print("Character not found. Waiting for character...")
+            character = LocalPlayer.CharacterAdded:Wait()
+            handleRespawnCooldown()  -- Add cooldown when character is added
+        end
+        
+        local humanoid = character:WaitForChild("Humanoid")
+        print("Humanoid found. Setting up animation detection")
+        
+        humanoid.AnimationPlayed:Connect(onAnimationPlayed)
+    end
+
+    setupAnimationDetection()
+    LocalPlayer.CharacterAdded:Connect(function(char)
+        setupAnimationDetection()
+        handleRespawnCooldown()  -- Add cooldown when character is added
+    end)
+end
+
+function updateBringDestination(location)
+    if location == "void" then
+        DESTINATION = Vector3.new(9999999,9999999999,9999999999)
+    elseif location == "skyblock" then
+        DESTINATION = Vector3.new(-185, 10006, 14811)
     end
 end
 
-TeleportsTab:Button("Weird Area (Laggy)", "Teleports you to somewhere idek", function()
-    teleportTo(-239, 10015, 14826)
-end)
+MiscTab:Label("placeholder")
 
-TeleportsTab:Button("Red Land", "wth is this", function()
-    teleportTo(-899533, 38, -44)
-end)
-
-TeleportsTab:Button("Middle of the Map", "Teleports you to the middle of the map", function()
-    teleportTo(-449, 35, -448)
-end)
-
--- Misc Tab
-MiscTab:Button("Load IY Reborn", "Loads the Infinite Yield Reborn script", function()
-    loadstring(game:HttpGet("https://github.com/fuckusfm/infiniteyield-reborn/raw/master/source"))()
-end)
 
 local EmoteNames = {}
 for _, emote in pairs(game:GetService("ReplicatedStorage").Emotes:GetChildren()) do
@@ -263,6 +503,350 @@ EmotesTab:Button("Give All Emotes", "Click to get all emotes, emotes in your whe
     end
 end)
 
+AnimationsTab:Label("Idle Animations")
+
+local idleAnimationEnabled = false
+local selectedIdleAnimation = "Cool Stance"
+local idleAnimations = {
+    ["Cool Stance"] = {
+        id = 17418658417,
+        loopStart = 0.0,    -- Start time in seconds
+        loopEnd = 2.0,      -- End time in seconds
+        forwardSpeed = 1,
+        reverseSpeed = -1
+    },
+    ["Menacing"] = {
+        id = 17484770831,
+        loopStart = 0.7,
+        loopEnd = 0.8,
+        forwardSpeed = 0.2,
+        reverseSpeed = -0.2
+    },
+    ["Majestic"] = {
+        id = 17798742655,
+        loopStart = 0.2,
+        loopEnd = 0.4,
+        forwardSpeed = 0.4,
+        reverseSpeed = -0.4
+    },
+    ["Dio"] = {
+        id = 18455969319,
+        loopStart = 0.3,
+        loopEnd = 0.55,
+        forwardSpeed = 0.4,
+        reverseSpeed = -0.4
+    },
+    ["MAHORAGA!!!!"] = {
+        id = 17228130181,
+        loopStart = 1,
+        loopEnd = 1.3,
+        forwardSpeed = 0.4,
+        reverseSpeed = -0.4
+    },
+    ["Honored"] = {
+        id = 17118074381,
+        loopStart = 1,
+        loopEnd = 1.2,
+        forwardSpeed = 0.6,
+        reverseSpeed = -0.6
+    },
+    ["Flight"] = {
+        id = 18417381632,
+        loopStart = 0.0,
+        loopEnd = 2.0,
+        forwardSpeed = 1,
+        reverseSpeed = -1
+    }
+}
+
+
+local customIdleAnimTrack = nil
+local idleIsAnimating = false
+local idleIsReversing = false
+local humanoidConnection = nil
+local heartbeatConnection = nil
+local animator = nil  -- Moved outside functions for access
+
+-- Function to play the custom idle animation track
+local function playCustomIdleAnimationTrack()
+    -- Ensure the latest selectedAnimation
+    local selectedAnimation = idleAnimations[selectedIdleAnimation]
+    if not selectedAnimation then
+        warn("Selected animation not found.")
+        return
+    end
+
+    -- Create and load the animation
+    local animation = Instance.new("Animation")
+    animation.AnimationId = "rbxassetid://" .. selectedAnimation.id
+    customIdleAnimTrack = animator:LoadAnimation(animation)
+
+    customIdleAnimTrack.Priority = Enum.AnimationPriority.Idle
+
+    -- We handle the looping ourselves
+    customIdleAnimTrack.Looped = false
+
+    -- Set initial TimePosition and speed
+    customIdleAnimTrack.TimePosition = selectedAnimation.loopStart
+    customIdleAnimTrack:AdjustSpeed(selectedAnimation.forwardSpeed)
+
+    -- Start the animation
+    customIdleAnimTrack:Play()
+
+    idleIsAnimating = true
+    idleIsReversing = false
+
+    -- Connect to Heartbeat to monitor and manage ping-pong
+    heartbeatConnection = game:GetService("RunService").Heartbeat:Connect(function(deltaTime)
+        if not customIdleAnimTrack or not customIdleAnimTrack.IsPlaying then
+            return
+        end
+
+        local currentTime = customIdleAnimTrack.TimePosition
+
+        if not idleIsReversing then
+            if currentTime >= selectedAnimation.loopEnd then
+                idleIsReversing = true
+                customIdleAnimTrack:AdjustSpeed(selectedAnimation.reverseSpeed)
+                print("Idle Animation: Switching to reverse. Current Time:", currentTime)
+            end
+        else
+            if currentTime <= selectedAnimation.loopStart then
+                idleIsReversing = false
+                customIdleAnimTrack:AdjustSpeed(selectedAnimation.forwardSpeed)
+                print("Idle Animation: Switching to forward. Current Time:", currentTime)
+            end
+        end
+    end)
+
+    -- Disconnect the Heartbeat when animation stops
+    customIdleAnimTrack.Stopped:Connect(function()
+        print("Custom idle animation stopped.")
+        if heartbeatConnection then
+            heartbeatConnection:Disconnect()
+            heartbeatConnection = nil
+        end
+        idleIsAnimating = false
+    end)
+end
+
+-- Function to start the custom idle animation with ping-pong looping
+-- Function to start the custom idle animation with ping-pong looping
+local function startCustomIdleAnimation()
+    -- Stop any existing custom idle animation
+    if customIdleAnimTrack then
+        print("Stopping existing custom idle animation.")
+        customIdleAnimTrack:Stop()
+        customIdleAnimTrack = nil
+    end
+
+    -- Disconnect any existing heartbeatConnection
+    if heartbeatConnection then
+        heartbeatConnection:Disconnect()
+        heartbeatConnection = nil
+    end
+
+    idleIsAnimating = true
+    idleIsReversing = false
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character
+
+    if not character then
+        warn("Character not found.")
+        return
+    end
+
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not humanoid then
+        warn("Humanoid not found in character.")
+        return
+    end
+
+    animator = humanoid:FindFirstChildOfClass("Animator")
+    if not animator then
+        animator = Instance.new("Animator", humanoid)
+    end
+
+    -- Connect to Humanoid.Running to manage animation according to movement
+    if humanoidConnection then
+        humanoidConnection:Disconnect()
+        humanoidConnection = nil
+    end
+
+    humanoidConnection = humanoid.Running:Connect(function(speed)
+        if speed > 0 then
+            -- Character is moving, stop the custom idle animation
+            if customIdleAnimTrack and customIdleAnimTrack.IsPlaying then
+                customIdleAnimTrack:Stop()
+                customIdleAnimTrack = nil
+            end
+            -- Disconnect the Heartbeat when animation stops
+            if heartbeatConnection then
+                heartbeatConnection:Disconnect()
+                heartbeatConnection = nil
+            end
+        else
+            -- Character is idle
+            if not customIdleAnimTrack or not customIdleAnimTrack.IsPlaying then
+                -- Recreate and play the custom idle animation
+                playCustomIdleAnimationTrack()
+            end
+        end
+    end)
+
+    -- Start the animation if the character is currently idle
+    if humanoid.MoveDirection.Magnitude == 0 then
+        playCustomIdleAnimationTrack()
+    end
+end
+
+-- Function to stop the custom idle animation
+local function stopCustomIdleAnimation()
+    if customIdleAnimTrack then
+        customIdleAnimTrack:Stop()
+        customIdleAnimTrack:Destroy()
+        customIdleAnimTrack = nil
+    end
+    if humanoidConnection then
+        humanoidConnection:Disconnect()
+        humanoidConnection = nil
+    end
+    if heartbeatConnection then
+        heartbeatConnection:Disconnect()
+        heartbeatConnection = nil
+    end
+    idleIsAnimating = false
+    idleIsReversing = false
+    print("Custom idle animation stopped.")
+end
+
+AnimationsTab:Toggle("Enable Custom Idle Animation", "Toggle to use custom idle animation", false, function(state)
+    idleAnimationEnabled = state
+    if idleAnimationEnabled then
+        -- Stop any custom animation if it's playing
+        if currentAnimTrack then
+            print("Stopping custom animation to enable idle animation.")
+            currentAnimTrack:Stop()
+            currentAnimTrack = nil
+            isAnimating = false
+        end
+
+        -- Start the custom idle animation
+        startCustomIdleAnimation()
+    else
+        -- Stop the custom idle animation
+        stopCustomIdleAnimation()
+    end
+end)
+
+game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
+    if isAnimating then
+        print("Character added. Replaying custom animation.")
+        playPingPongAnimation()
+    elseif idleAnimationEnabled then
+        print("Character added. Restarting custom idle animation.")
+        startCustomIdleAnimation()
+    end
+end)
+
+-- Dropdown to select the idle animation
+local animationNames = {}
+for name, _ in pairs(idleAnimations) do
+    table.insert(animationNames, name)
+end
+
+AnimationsTab:Dropdown("Select Animation", animationNames, function(selected)
+    selectedIdleAnimation = selected
+    if idleAnimationEnabled then
+        -- Restart the custom idle animation with the new animation
+        startCustomIdleAnimation()
+    end
+end)
+
+DomainTab:Label("Domain Clash Helper")
+
+local domainClashEnabled = false
+
+DomainTab:Toggle("Enable Domain Clash Helper", "Toggle to always win domain clashes", false, function(state)
+    domainClashEnabled = state
+    if state then
+        loadDomainClashHelper()
+    end
+end)
+
+-- Function to load Domain Clash Helper
+function loadDomainClashHelper()
+    local player = game.Players.LocalPlayer
+    local UIS = game:GetService("UserInputService")
+    local lastMovementTime = 0
+
+    local function sendNotification(message)
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Spacebar Spam";
+            Text = message;
+            Duration = 2;
+        })
+    end
+
+    sendNotification("Domain Clash Helper Activated")
+
+    local keyFrame = player:WaitForChild("PlayerGui"):WaitForChild("MainUI")
+                          :WaitForChild("Domain"):WaitForChild("Clashing")
+                          :WaitForChild("Key")
+
+    local lastPosition = keyFrame.AbsolutePosition
+
+    local function spamSpacebar()
+        local endTime = tick() + 3
+        while tick() < endTime and domainClashEnabled do
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.Space, false, game)
+            wait(0.2)
+        end
+        game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.Space, false, game)
+    end
+
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if not domainClashEnabled then return end
+        local currentTime = tick()
+        local currentPosition = keyFrame.AbsolutePosition
+
+        if currentPosition ~= lastPosition and (currentTime - lastMovementTime) > 30 then
+            spamSpacebar()
+            lastMovementTime = currentTime
+        end
+
+        lastPosition = currentPosition
+    end)
+end
+
+DomainTab:Label("Anti-Domain")
+
+local antiTimestopEnabled = false
+
+DomainTab:Toggle("Anti-Timestop", "move in timestop and stuff like that", false, function(state)
+    antiTimestopEnabled = state
+end)
+
+-- Function to continuously remove InTimestop state
+local function removeInTimestop()
+    while antiTimestopEnabled do
+        if game.Players.LocalPlayer.Character then
+            game.Players.LocalPlayer.Character:SetAttribute("InTimestop", false)
+        end
+        wait(0.01)
+    end
+end
+
+-- Start the anti-timestop loop when enabled
+spawn(function()
+    while wait(0.01) do
+        if antiTimestopEnabled then
+            removeInTimestop()
+        end
+    end
+end)
+
 -- Credits Tab
 CreditsTab:Label("Script created by advidfrost")
 
@@ -306,6 +890,7 @@ CreditsTab:Button("Join the Discord", "Click to join our Discord server", functi
     end
 end)
 
+
 local function updateCharacter()
     local player = game.Players.LocalPlayer
     if player.Character then
@@ -323,11 +908,61 @@ local function updateCharacter()
         if jumpHeightEnabled and player.Character:FindFirstChild("Humanoid") then
             player.Character.Humanoid.JumpHeight = jumpHeightValue
         end
+        updateIdleAnimation()
     end
 end
+
+local function inviteToDiscord()
+    local inviteCode = "TyBwFtbhrz"
+    if syn and syn.request then
+        syn.request({
+            Url = "http://127.0.0.1:6463/rpc?v=1",
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json",
+                ["Origin"] = "https://discord.com"
+            },
+            Body = game:GetService("HttpService"):JSONEncode({
+                cmd = "INVITE_BROWSER",
+                args = {
+                    code = inviteCode
+                },
+                nonce = game:GetService("HttpService"):GenerateGUID(false)
+            }),
+        })
+    elseif http and http.request then
+        http.request({
+            Url = "http://127.0.0.1:6463/rpc?v=1",
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json",
+                ["Origin"] = "https://discord.com"
+            },
+            Body = game:GetService("HttpService"):JSONEncode({
+                cmd = "INVITE_BROWSER",
+                args = {
+                    code = inviteCode
+                },
+                nonce = game:GetService("HttpService"):GenerateGUID(false)
+            }),
+        })
+    else
+        setclipboard("https://discord.gg/" .. inviteCode)
+        Flux:Notification("Discord invite copied to clipboard!", "OK")
+    end
+end
+
+local function onScriptLoaded()
+if not onSolara then
+    Flux:Notification("join discord pls", "wow okay")
+    inviteToDiscord()
+end
+
 
 spawn(function()
     while wait(0.01) do
         updateCharacter()
     end
 end)
+
+onScriptLoaded()
