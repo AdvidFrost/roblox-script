@@ -1,14 +1,251 @@
+local executor = identifyexecutor()
+    print(executor)
 local Flux = loadstring(game:HttpGet("https://raw.githubusercontent.com/weakhoes/Roblox-UI-Libs/main/Flux%20Lib/Flux%20Lib%20Source.lua"))()
 
-local window = Flux:Window("Realm Rampage", "join discord :)", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightControl)
+local window = Flux:Window("Realm Rampage", "join discord :)    (" .. executor .. ")", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightControl)
 
 local PlayerTab = window:Tab("Player", "rbxassetid://18107224538")
 local TeleportsTab = window:Tab("Teleports", "rbxassetid://12941020168")
 local MiscTab = window:Tab("Misc", "rbxassetid://6034509993")
 local EmotesTab = window:Tab("Emotes", "rbxassetid://11932783331")
 local AnimationsTab = window:Tab("Animations", "rbxassetid://10709769841")
-local DomainTab = window:Tab("Domain", "rbxassetid://6026568198")
+local DomainTab = window:Tab("Domain", "rbxassetid://87373733603687")
+local AutoCounterTab = window:Tab("AutoCounter", "rbxassetid://18226013553") -- Replace with an appropriate icon asset id
 local CreditsTab = window:Tab("Credits", "rbxassetid://6026568198")
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local localPlayer = Players.LocalPlayer
+
+-- Variables for AutoCounter
+local scanDelayValue = 1  -- default value in milliseconds
+local scanDistanceValue = 7  -- default value for scan radius
+local autoCounterEnabled = false
+local debugVisualizationEnabled = false
+
+-- AutoCounter Tab
+AutoCounterTab:Toggle("Enable Auto Counter", "Toggle to turn Auto Counter on/off", false, function(state)
+    autoCounterEnabled = state
+    if autoCounterEnabled then
+        startScanning()
+    else
+        _G.scanningLoopRunning = false  -- Stop the scanning loop
+    end
+end)
+
+AutoCounterTab:Toggle("radius sphere", "show radius sphere (debugging)", false, function(state)
+    debugVisualizationEnabled = state
+    if debugVisualizationEnabled then
+        createScanRadiusVisualization()
+    else
+        removeScanRadiusVisualization()
+    end
+end)
+
+AutoCounterTab:Slider("Scan Delay (ms)", "Delay between scans in milliseconds", 1, 300, 1, function(value)
+    scanDelayValue = value
+end)
+
+AutoCounterTab:Slider("Scan Range", "Range to scan for players", 1, 25, 7, function(value)
+    scanDistanceValue = value
+    -- Update the scan radius sphere's size, if visualization is enabled
+    if debugVisualizationEnabled and scanRadiusSphere then
+        scanRadiusSphere.Size = Vector3.new(scanDistanceValue * 2, scanDistanceValue * 2, scanDistanceValue * 2)
+    end
+end)
+
+-- Variables and functions for AutoCounter script
+local targetAccessories = {      -- List of accessory names to detect on other players
+    "M1ING",
+    "FowardDashing",
+    "Cooldown"
+}
+
+-- Mapping of Character Attributes to Tool Names
+local toolActions = {
+    ["MenacingVampire"] = "Dio Counter",
+    ["DisgracedOne"]    = "Cleave Dance"
+}
+
+local scanRadiusSphere               -- Variable to hold the visualization sphere
+
+-- Utility Function: Debugging Output (Optional)
+local function debugPrint(message)
+    if debugVisualizationEnabled then
+        print("[AutoCounter] " .. message)
+    end
+end
+
+-- Function to Create scan radius visualization
+function createScanRadiusVisualization()
+    if not debugVisualizationEnabled then return end
+
+    -- Create a new Part to represent the scan radius
+    scanRadiusSphere = Instance.new("Part")
+    scanRadiusSphere.Name = "ScanRadiusVisualizer"
+    scanRadiusSphere.Shape = Enum.PartType.Ball
+    scanRadiusSphere.Material = Enum.Material.Neon
+    scanRadiusSphere.Color = Color3.fromRGB(0, 255, 0)  -- Green color for visibility
+    scanRadiusSphere.Transparency = 0.7              -- Semi-transparent
+    scanRadiusSphere.CanCollide = false
+    scanRadiusSphere.Anchored = true
+    scanRadiusSphere.Size = Vector3.new(scanDistanceValue * 2, scanDistanceValue * 2, scanDistanceValue * 2)
+    scanRadiusSphere.Parent = workspace
+
+    -- Optionally, lock the visualization to the camera or player
+end
+
+-- Function to Update scan radius visualization position
+local function updateScanRadiusVisualization()
+    if not debugVisualizationEnabled or not scanRadiusSphere then return end
+
+    if localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        scanRadiusSphere.Position = localPlayer.Character.HumanoidRootPart.Position
+    end
+end
+
+-- Function to Remove scan radius visualization
+function removeScanRadiusVisualization()
+    if scanRadiusSphere then
+        scanRadiusSphere:Destroy()
+        scanRadiusSphere = nil
+    end
+end
+
+-- Function to Equip and Then Unequip a Tool
+local function equipAndUnequipTool(toolName)
+    if not toolName then
+        debugPrint("No tool name provided for equip/unequip action.")
+        return
+    end
+
+    -- Attempt to find the tool in Backpack or Character
+    local tool = localPlayer.Backpack:FindFirstChild(toolName) or
+                 (localPlayer.Character and localPlayer.Character:FindFirstChild(toolName))
+
+    if tool then
+        local humanoid = localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            -- Equip the tool
+            humanoid:EquipTool(tool)
+            debugPrint("Equipped tool: " .. toolName)
+
+            -- Wait briefly before unequipping
+            wait(0.1)
+
+            -- Unequip the tool
+            humanoid:UnequipTools()
+            debugPrint("Unequipped tool: " .. toolName)
+        else
+            debugPrint("Humanoid not found in character.")
+        end
+    else
+        debugPrint("Tool '" .. toolName .. "' not found in Backpack or Character.")
+    end
+end
+
+-- Function to Perform Action Based on Character Attribute
+local function performAction(characterAttribute)
+    local toolName = toolActions[characterAttribute]
+    if toolName then
+        equipAndUnequipTool(toolName)
+    else
+        debugPrint("No action defined for Character attribute: " .. tostring(characterAttribute))
+    end
+end
+
+-- Function to Scan Nearby Players for Target Accessories
+local function scanNearbyPlayers()
+    if not (localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")) then
+        debugPrint("Local character or HumanoidRootPart not found.")
+        return
+    end
+
+    local localPosition = localPlayer.Character.HumanoidRootPart.Position
+
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= localPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local otherPosition = player.Character.HumanoidRootPart.Position
+            local distance = (localPosition - otherPosition).Magnitude
+
+            if distance <= scanDistanceValue then
+                -- Check for any target accessory on the other player's character
+                for _, accessoryName in ipairs(targetAccessories) do
+                    if player.Character:FindFirstChild(accessoryName) then
+                        debugPrint("Detected accessory '" .. accessoryName .. "' on player '" .. player.Name .. "'.")
+
+                        -- Retrieve the local player's "Character" attribute
+                        local characterAttribute = localPlayer:GetAttribute("Character") or "Unknown"
+                        debugPrint("Local player's Character attribute: " .. tostring(characterAttribute))
+
+                        -- Perform the corresponding action
+                        performAction(characterAttribute)
+
+                        -- Exit after handling the first detected accessory
+                        return
+                    end
+                end
+            end
+        end
+    end
+
+    -- Update the visualization's position if enabled
+    updateScanRadiusVisualization()
+end
+
+-- Function to Start the Scanning Loop
+function startScanning()
+    -- Prevent multiple scanning loops
+    if _G.scanningLoopRunning then
+        debugPrint("Scanning loop is already running.")
+        return
+    end
+
+    _G.scanningLoopRunning = true
+    debugPrint("Starting scanning loop.")
+
+    while _G.scanningLoopRunning and autoCounterEnabled and localPlayer.Character and localPlayer.Character.Parent do
+        scanNearbyPlayers()
+        wait(scanDelayValue / 1000)
+    end
+
+    debugPrint("Scanning loop has stopped.")
+end
+
+-- Function to Handle Character Spawn
+local function onCharacterAdded(character)
+    debugPrint("Character spawned. Initializing AutoCounter.")
+
+    -- Ensure HumanoidRootPart is loaded
+    character:WaitForChild("HumanoidRootPart")
+
+    -- Create visualization if enabled
+    if debugVisualizationEnabled then
+        createScanRadiusVisualization()
+    end
+
+    -- Start the scanning loop if enabled
+    if autoCounterEnabled then
+        startScanning()
+    end
+end
+
+-- Function to Handle Character Removal (e.g., when dying)
+local function onCharacterRemoving()
+    debugPrint("Character is being removed. Stopping AutoCounter.")
+    _G.scanningLoopRunning = false
+
+    -- Remove visualization if enabled
+    removeScanRadiusVisualization()
+end
+
+-- Initial setup: Connect events and handle existing character
+if localPlayer.Character then
+    onCharacterAdded(localPlayer.Character)
+end
+
+localPlayer.CharacterAdded:Connect(onCharacterAdded)
+localPlayer.CharacterRemoving:Connect(onCharacterRemoving)
 
 local function inviteToDiscord()
     local inviteCode = "TyBwFtbhrz"
@@ -76,6 +313,7 @@ PlayerTab:Label("State Toggles")
 
 PlayerTab:Toggle("Fast M1", "Toggle to m1 really fast (best with no freeze)", false, function(state)
     toggleStates.CANTM1 = state
+    toggleStates.NoM1Fr = state
 end)
 
 PlayerTab:Toggle("Can block", "Makes you able to block while stunned I think", false, function(state)
@@ -105,7 +343,7 @@ end)
 local comboEnabled = false
 local comboValue = 1
 
-PlayerTab:Toggle("Enable Combo Loop", "Toggle to enable the combo loop", false, function(state)
+PlayerTab:Toggle("Enable Combo Loop", "makes ur punch only 1 of 4 types", false, function(state)
     comboEnabled = state
 end)
 
@@ -160,7 +398,7 @@ TeleportsTab:Button("Middle of the Map", "Teleports you to the middle of the map
 end)
 
 MiscTab:Label("Infinite Yield Reborn")
-MiscTab:Button("Load IY Reborn", "Loads the Infinite Yield Reborn script", function()
+MiscTab:Button("Load IY Reborn", "loads iy (great script)", function()
     loadstring(game:HttpGet("https://storage.iyr.lol/legacy-iyr/source"))()
 end)
 
@@ -169,11 +407,11 @@ MiscTab:Label("Black Flash Helper")
 local blackFlashEnabled = false
 local blackFlashDelay = 0.5
 
-MiscTab:Toggle("Enable Black Flash Helper", "Toggle to auto-press R after manual R press", false, function(state)
+MiscTab:Toggle("Enable Black Flash Helper", "normally nails a blackflash for u", false, function(state)
     blackFlashEnabled = state
 end)
 
-MiscTab:Slider("Black Flash Delay", "Set delay for auto R press (seconds)", 0, 100, 41, function(value)
+MiscTab:Slider("Black Flash Delay", "sets delay for blackflash (ms)", 0, 100, 38, function(value)
     blackFlashDelay = value / 100
 end)
 
@@ -207,14 +445,14 @@ local regularBringEnabled = false
 local allBringEnabled = false
 local selectedLocation = "Default"
 
-MiscTab:Toggle("Regular Bring", "Toggle for regular brings", false, function(state)
+MiscTab:Toggle("Regular Bring", "teleports one person with most moves", false, function(state)
     regularBringEnabled = state
     if state then
         loadRegularBringScript()
     end
 end)
 
-MiscTab:Toggle("All Bring", "Toggle for all brings", false, function(state)
+MiscTab:Toggle("All Bring", "only for sukuna combo and katakuri rn", false, function(state)
     allBringEnabled = state
     if state then
         loadAllBringScript()
@@ -317,13 +555,13 @@ function loadAllBringScript()
             startDelay = 0,
             teleportDuration = 2,
             endDelay = 0,
-            returnDelay = 6
+            returnDelay = 8
         },
         ["17806727401"] = {
             startDelay = 5,
-            teleportDuration = 2.1,
+            teleportDuration = 1.5,
             endDelay = 0,
-            returnDelay = 1
+            returnDelay = 1.5
         }
     }
     local TELEPORT_DELAY = 0.1
@@ -630,8 +868,6 @@ local function playCustomIdleAnimationTrack()
     end)
 end
 
--- Function to start the custom idle animation with ping-pong looping
--- Function to start the custom idle animation with ping-pong looping
 local function startCustomIdleAnimation()
     -- Stop any existing custom idle animation
     if customIdleAnimTrack then
@@ -640,10 +876,14 @@ local function startCustomIdleAnimation()
         customIdleAnimTrack = nil
     end
 
-    -- Disconnect any existing heartbeatConnection
+    -- Disconnect any existing connections
     if heartbeatConnection then
         heartbeatConnection:Disconnect()
         heartbeatConnection = nil
+    end
+    if humanoidConnection then
+        humanoidConnection:Disconnect()
+        humanoidConnection = nil
     end
 
     idleIsAnimating = true
@@ -657,23 +897,21 @@ local function startCustomIdleAnimation()
         return
     end
 
-    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    -- Wait for the humanoid to exist
+    local humanoid = character:WaitForChild("Humanoid")
     if not humanoid then
         warn("Humanoid not found in character.")
         return
     end
 
+    -- Ensure we have a valid animator
     animator = humanoid:FindFirstChildOfClass("Animator")
     if not animator then
-        animator = Instance.new("Animator", humanoid)
+        animator = Instance.new("Animator")
+        animator.Parent = humanoid
     end
 
     -- Connect to Humanoid.Running to manage animation according to movement
-    if humanoidConnection then
-        humanoidConnection:Disconnect()
-        humanoidConnection = nil
-    end
-
     humanoidConnection = humanoid.Running:Connect(function(speed)
         if speed > 0 then
             -- Character is moving, stop the custom idle animation
@@ -721,7 +959,7 @@ local function stopCustomIdleAnimation()
     print("Custom idle animation stopped.")
 end
 
-AnimationsTab:Toggle("Enable Custom Idle Animation", "Toggle to use custom idle animation", false, function(state)
+AnimationsTab:Toggle("Enable Custom Idle Animation", "Toggle to play a custom idle animation", false, function(state)
     idleAnimationEnabled = state
     if idleAnimationEnabled then
         -- Stop any custom animation if it's playing
@@ -741,12 +979,28 @@ AnimationsTab:Toggle("Enable Custom Idle Animation", "Toggle to use custom idle 
 end)
 
 game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
-    if isAnimating then
-        print("Character added. Replaying custom animation.")
-        playPingPongAnimation()
-    elseif idleAnimationEnabled then
+    -- Wait for the humanoid to be added to the character
+    local humanoid = character:WaitForChild("Humanoid")
+
+    if idleAnimationEnabled then
         print("Character added. Restarting custom idle animation.")
         startCustomIdleAnimation()
+    end
+end)
+
+game.Players.LocalPlayer.CharacterRemoving:Connect(function(character)
+    -- Stop animations and disconnect events
+    if customIdleAnimTrack then
+        customIdleAnimTrack:Stop()
+        customIdleAnimTrack = nil
+    end
+    if humanoidConnection then
+        humanoidConnection:Disconnect()
+        humanoidConnection = nil
+    end
+    if heartbeatConnection then
+        heartbeatConnection:Disconnect()
+        heartbeatConnection = nil
     end
 end)
 
@@ -908,7 +1162,6 @@ local function updateCharacter()
         if jumpHeightEnabled and player.Character:FindFirstChild("Humanoid") then
             player.Character.Humanoid.JumpHeight = jumpHeightValue
         end
-        updateIdleAnimation()
     end
 end
 
@@ -953,7 +1206,9 @@ local function inviteToDiscord()
 end
 
 local function onScriptLoaded()
-    if onSolara ~= true then
+    local executor = identifyexecutor()
+    
+    if executor ~= "Solara" then
         Flux:Notification("join discord pls", "wow okay")
         inviteToDiscord()
     else
